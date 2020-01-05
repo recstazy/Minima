@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyBase : MonoBehaviour
+public class EnemyBase : MonoBehaviour, IDamageble
 {
     #region Fields
 
     [SerializeField]
     private List<string> targetTags = new List<string>();
+
+    [SerializeField]
+    private HealthSystem healthSystem;
 
     #endregion
 
@@ -24,13 +27,8 @@ public class EnemyBase : MonoBehaviour
         }
     }
 
-    void Start()
+    public void ApplyDamage(float amount)
     {
-        
-    }
-
-    void Update()
-    {
-        
+        healthSystem.ApplyDamage(amount);
     }
 }

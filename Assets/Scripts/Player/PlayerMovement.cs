@@ -8,7 +8,6 @@ public class PlayerMovement : MovementComponent
     #region Fields
 
     private InputHandler inputHandler;
-    private int activeInputsCount = 0;
 
     #endregion
 
@@ -33,22 +32,11 @@ public class PlayerMovement : MovementComponent
     {
         if (isActive)
         {
-            activeInputsCount++;
-            MoveOnDirection(CurrentDirection + direction);
+            MoveOnDirection(direction);
         }
         else
         {
-            activeInputsCount--;
-
-            if (activeInputsCount <= 0)
-            {
-                activeInputsCount = 0;
-                StopMoving();
-            }
-            else
-            {
-                MoveOnDirection(CurrentDirection - direction);
-            }
+            StopMoving();
         }
     }
 

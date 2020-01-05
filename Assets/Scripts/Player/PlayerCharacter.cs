@@ -2,23 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerCharacter : MonoBehaviour
+public class PlayerCharacter : MonoBehaviour, IDamageble
 {
     #region Fields
-    
+
+    [SerializeField]
+    private HealthSystem healthSystem;
+
     #endregion
 
     #region Properties
-    
+
     #endregion
 
-    void Start()
+    public void ApplyDamage(float amount)
     {
-        
-    }
-
-    void Update()
-    {
-        
+        healthSystem.ApplyDamage(amount);
     }
 }

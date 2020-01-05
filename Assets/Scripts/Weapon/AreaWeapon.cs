@@ -12,21 +12,14 @@ public class AreaWeapon : WeaponComponent
     [SerializeField]
     private CircleCollider2D damageCollider;
 
+    [SerializeField]
+    private float damage = 50;
+
     #endregion
 
     #region Properties
     
     #endregion
-
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
 
     public override void UseWeapon()
     {
@@ -45,7 +38,7 @@ public class AreaWeapon : WeaponComponent
 
         foreach (var o in overlapped)
         {
-            Destroy(o.gameObject);
+            o.gameObject.ApplyDamage(damage);
         }
     }
 }

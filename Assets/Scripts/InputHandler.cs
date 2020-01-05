@@ -9,6 +9,28 @@ public class InputHandler : MonoBehaviour
 
     public event System.Action OnActionPressed;
 
+    #region Fields
+
+    private int activeInputsCount = 0;
+    private Vector2 currentDirection;
+
+    [SerializeField]
+    private KeyCode UpButton = KeyCode.W;
+
+    [SerializeField]
+    private KeyCode DownButton = KeyCode.S;
+
+    [SerializeField]
+    private KeyCode RightButton = KeyCode.D;
+
+    [SerializeField]
+    private KeyCode LeftButton = KeyCode.A;
+
+    [SerializeField]
+    private KeyCode ActionButton = KeyCode.Space;
+
+    #endregion
+
     void Update()
     {
         ProcessInput();
@@ -18,51 +40,81 @@ public class InputHandler : MonoBehaviour
     {
         #region Movement
 
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetKeyDown(UpButton))
         {
-            OnInputChanged?.Invoke(Vector2.up, true);
+            InputChanged(Vector2.up, true);
         }
 
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (Input.GetKeyDown(DownButton))
         {
-            OnInputChanged?.Invoke(Vector2.down, true);
+            InputChanged(Vector2.down, true);
         }
 
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (Input.GetKeyDown(RightButton))
         {
-            OnInputChanged?.Invoke(Vector2.right, true);
+            InputChanged(Vector2.right, true);
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if (Input.GetKeyDown(LeftButton))
         {
-            OnInputChanged?.Invoke(Vector2.left, true);
+            InputChanged(Vector2.left, true);
         }
 
-        if (Input.GetKeyUp(KeyCode.UpArrow))
+        if (Input.GetKeyUp(UpButton))
         {
-            OnInputChanged?.Invoke(Vector2.up, false);
+            InputChanged(Vector2.up, false);
         }
 
-        if (Input.GetKeyUp(KeyCode.DownArrow))
+        if (Input.GetKeyUp(DownButton))
         {
-            OnInputChanged?.Invoke(Vector2.down, false);
+            InputChanged(Vector2.down, false);
         }
 
-        if (Input.GetKeyUp(KeyCode.RightArrow))
+        if (Input.GetKeyUp(RightButton))
         {
-            OnInputChanged?.Invoke(Vector2.right, false);
+            InputChanged(Vector2.right, false);
         }
 
-        if (Input.GetKeyUp(KeyCode.LeftArrow))
+        if (Input.GetKeyUp(LeftButton))
         {
-            OnInputChanged?.Invoke(Vector2.left, false);
+            InputChanged(Vector2.left, false);
         }
 
         #endregion
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(ActionButton))
         {
             OnActionPressed?.Invoke();
         }
+    }
+
+    private void InputChanged(Vector2 direction, bool isActive)
+    {
+        bool isActiveResult;
+
+        if (isActive)
+        {
+            activeInputsCount++;
+            currentDirection += direction;
+            isActiveResult = true;
+        }
+        else
+        {
+            activeInputsCount--;
+
+            if (activeInputsCount <= 0)
+            {
+                activeInputsCount = 0;
+                currentDirection = Vector2.zero;
+                isActiveResult = false;
+            }
+            else
+            {
+                currentDirection -= direction;
+                isActiveResult = true;
+            }
+        }
+
+        OnInputChanged?.Invoke(currentDirection, isActiveResult);
     }
 }
