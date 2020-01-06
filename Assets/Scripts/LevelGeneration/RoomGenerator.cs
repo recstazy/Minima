@@ -31,7 +31,8 @@ namespace Minima.LevelGeneration
 
         protected virtual void GenerateRoom()
         {
-            roomDraft.WallsGenerator.CreateWalls(roomDraft);
+            roomDraft.Initialize();
+            roomDraft.WallsGenerator.CreateWalls();
         }
 
     }

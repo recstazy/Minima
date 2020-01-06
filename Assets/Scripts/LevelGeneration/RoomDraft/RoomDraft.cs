@@ -27,5 +27,12 @@ namespace Minima.LevelGeneration
 
         #endregion
 
+        public void Initialize()
+        {
+            Corners.Initialize();
+            Exits.Initialize();
+            WallsGenerator.Initialize(this);
+        }
+
     }
 }

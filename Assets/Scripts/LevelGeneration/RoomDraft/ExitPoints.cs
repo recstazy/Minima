@@ -11,6 +11,9 @@ namespace Minima.LevelGeneration
         [SerializeField]
         private List<Transform> exits = new List<Transform>();
 
+        [SerializeField]
+        private bool randomizeExits;
+
         #endregion
 
         #region Properties
@@ -18,5 +21,24 @@ namespace Minima.LevelGeneration
         public List<Transform> Exits { get => exits; }
 
         #endregion
+
+        public void Initialize()
+        {
+            if (randomizeExits)
+            {
+                OffsetExits();
+            }
+        }
+
+        private void OffsetExits()
+        {
+
+        }
+
+        private void DragExit(Transform exit)
+        {
+
+        }
+
     }
 }

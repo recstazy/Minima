@@ -11,38 +11,42 @@ namespace Minima.LevelGeneration
         [SerializeField]
         private GameObject wallPrefab;
 
-        private RoomDraft roomDraft;
-        private Dictionary<Transform, Transform> cornerPairs = new Dictionary<Transform, Transform>();
+        protected RoomDraft roomDraft;
+        protected Dictionary<Transform, Transform> cornerPairs = new Dictionary<Transform, Transform>();
 
         #endregion
 
-        public void CreateWalls(RoomDraft roomDraft)
+        public virtual void Initialize(RoomDraft roomDraft)
         {
             this.roomDraft = roomDraft;
-            ConnectCorners();
         }
 
-        private GameObject InstantiateWall(Vector2 position)
+        public virtual void CreateWalls()
+        {
+            ConnectCorners(roomDraft.Corners.Corners);
+        }
+
+        protected GameObject InstantiateWall(Vector2 position)
         {
             var wall = Instantiate(wallPrefab, position, Quaternion.identity, transform);
             return wall;
         }
 
-        private void ConnectCorners()
+        protected void ConnectCorners(List<Transform> corners)
         {
-            FindCornerPairs();
+            FindCornerPairs(corners);
 
             foreach(var p in cornerPairs)
             {
-                CreateWallBetweenCorners(p.Key, p.Value);
+                CreateWallBetweenPoints(p.Key, p.Value);
             }
         }
 
-        private void FindCornerPairs()
+        protected void FindCornerPairs(List<Transform> corners)
         {
-            foreach (var c in roomDraft.Corners.Corners)
+            foreach (var c in corners)
             {
-                var nearestCorner = GetNearestCorner(c);
+                var nearestCorner = GetNearestCorner(c, corners);
 
                 if (nearestCorner != null)
                 {
@@ -51,12 +55,12 @@ namespace Minima.LevelGeneration
             }
         }
 
-        private Transform GetNearestCorner(Transform corner)
+        protected Transform GetNearestCorner(Transform corner, List<Transform> corners)
         {
             float minDistance = 0f;
             Transform nearestCorner = null;
 
-            foreach (var c in roomDraft.Corners.Corners)
+            foreach (var c in corners)
             {
                 if (c != corner && !CornerPairExists(c, corner))
                 {
@@ -73,7 +77,7 @@ namespace Minima.LevelGeneration
             return nearestCorner;
         }
 
-        private bool CornerPairExists(Transform cornerA, Transform cornerB)
+        protected bool CornerPairExists(Transform cornerA, Transform cornerB)
         {
             if (cornerPairs.ContainsKey(cornerA))
             {
@@ -93,11 +97,14 @@ namespace Minima.LevelGeneration
             return false;
         }
 
-        private void CreateWallBetweenCorners(Transform cornerA, Transform cornerB)
+        protected void CreateWallBetweenPoints(Transform pointA, Transform pointB)
         {
-            var position = cornerA.position + ((cornerB.position - cornerA.position) / 2);
+            var position = pointA.position + ((pointB.position - pointA.position) / 2);
+            var wall = InstantiateWall(position);
 
-            InstantiateWall(position);
+            var wallScale = new Vector2(Vector2.Distance(pointA.position, pointB.position), 1f);
+            wall.transform.localScale = wallScale;
+            wall.transform.right = (pointB.position - wall.transform.position).normalized;
         }
     }
 }
