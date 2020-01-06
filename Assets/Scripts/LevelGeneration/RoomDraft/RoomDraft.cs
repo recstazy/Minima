@@ -21,18 +21,25 @@ namespace Minima.LevelGeneration
 
         #region Properties
 
-        public CornerPoints Corners { get => corners; }
-        public ExitPoints Exits { get => exits; }
+        public List<WallCorner> Corners { get => corners.Corners; }
+        public List<ExitCorner> Exits { get => exits.Exits; }
         public WallsGenerator WallsGenerator { get => wallsGenerator; }
 
         #endregion
 
         public void Initialize()
         {
-            Corners.Initialize();
-            Exits.Initialize();
+            corners.Initialize();
+            exits.Initialize();
             WallsGenerator.Initialize(this);
         }
 
+        public void DeleteExit(int number)
+        {
+            var exit = Exits[number];
+            Exits.Remove(exit);
+            exit.PreviousCorner.NextCorner = exit.NextCorner;
+            Destroy(exit.gameObject);
+        }
     }
 }

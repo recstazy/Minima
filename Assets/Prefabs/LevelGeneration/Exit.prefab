@@ -1,5 +1,52 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &519787793152994539
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8111191757537158669}
+  - component: {fileID: 6422087852761586701}
+  m_Layer: 0
+  m_Name: ExitSnapArea
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8111191757537158669
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519787793152994539}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2857668213167258431}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &6422087852761586701
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519787793152994539}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 7.5
 --- !u!1 &2857668213167258419
 GameObject:
   m_ObjectHideFlags: 0
@@ -9,10 +56,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2857668213167258431}
-  - component: {fileID: 145410885037516395}
+  - component: {fileID: 4363733220566725629}
   - component: {fileID: 2857668213167258416}
   - component: {fileID: 2857668213167258417}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Exit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29,11 +76,12 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 8111191757537158669}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &145410885037516395
+--- !u!114 &4363733220566725629
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,10 +90,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2857668213167258419}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84782676206df8644b0e3af6aee220ec, type: 3}
+  m_Script: {fileID: 11500000, guid: 2cd25d17c3aca944db325c1e75cdb75e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isExit: 1
+  nextCorner: {fileID: 0}
+  snapArea: {fileID: 6422087852761586701}
 --- !u!212 &2857668213167258416
 SpriteRenderer:
   m_ObjectHideFlags: 0

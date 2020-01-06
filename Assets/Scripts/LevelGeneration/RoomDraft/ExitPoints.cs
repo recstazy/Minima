@@ -9,7 +9,7 @@ namespace Minima.LevelGeneration
         #region Fields
 
         [SerializeField]
-        private List<WallCorner> exits = new List<WallCorner>();
+        private List<ExitCorner> exits = new List<ExitCorner>();
 
         [SerializeField]
         private bool randomizeExits = true;
@@ -21,7 +21,7 @@ namespace Minima.LevelGeneration
 
         #region Properties
 
-        public List<WallCorner> Exits { get => exits; }
+        public List<ExitCorner> Exits { get => exits; }
 
         #endregion
 

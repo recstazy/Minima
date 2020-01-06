@@ -35,7 +35,9 @@ namespace Minima.LevelGeneration
         protected RoomGenerator InstantiateGenerator(Vector2 position)
         {
             var generator = Instantiate(roomGeneratorPrefab, position, Quaternion.identity, roomsParent);
-            return generator.GetComponent<RoomGenerator>();
+            var roomGenerator = generator.GetComponent<RoomGenerator>();
+            roomGenerator.Initialize();
+            return roomGenerator;
         }
 
         void Update()

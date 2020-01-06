@@ -20,7 +20,7 @@ namespace Minima.LevelGeneration
         public override void Initialize(RoomDraft roomDraft)
         {
             base.Initialize(roomDraft);
-            cornerPoints = roomDraft.Corners.Corners.Concat(roomDraft.Exits.Exits).ToList();
+            cornerPoints = roomDraft.Corners.Concat(roomDraft.Exits).ToList();
         }
 
         public override void CreateWalls()
@@ -28,14 +28,12 @@ namespace Minima.LevelGeneration
             ConnectCorners(cornerPoints);
         }
 
-        protected override bool CustomConnectionPredicate(WallCorner cornerA, WallCorner cornerB)
+        protected override void ConnectCorners(List<WallCorner> corners)
         {
-            if (cornerA.IsExit && cornerB.IsExit)
+            foreach (var c in cornerPoints)
             {
-                return false;
+                CreateWallBetweenPoints(c, c.NextCorner);
             }
-
-            return true;
         }
     }
 }

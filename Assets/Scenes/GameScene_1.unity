@@ -227,7 +227,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 25
+  orthographic size: 130
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -281,7 +281,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1332271541}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.21098205, y: 1.7064594, z: -30.684752}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1400033323}
@@ -320,7 +320,9 @@ MonoBehaviour:
   roomsParent: {fileID: 99376109}
   roomGeneratorPrefab: {fileID: 7963234438967846403, guid: f5ddb31deef6b4b4cb2dc79f2184f722,
     type: 3}
-  roomsCount: 1
+  roomRawOffset: 30
+  roomsCount: 10
+  generatorExitsPerRoom: 2
 --- !u!4 &1400033323
 Transform:
   m_ObjectHideFlags: 0
@@ -329,7 +331,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1400033321}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.17676249, y: -4.667748, z: 10.72772}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 99376109}

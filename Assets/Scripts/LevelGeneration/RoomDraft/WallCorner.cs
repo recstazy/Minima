@@ -2,40 +2,57 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WallCorner : MonoBehaviour
+namespace Minima.LevelGeneration
 {
-    #region Fields
-
-    [SerializeField]
-    private bool isExit;
-
-    private Transform thisTransform;
-
-    #endregion
-
-    #region Properties
-    
-    public Vector3 position { get => ThisTransform.position; set => ThisTransform.position = value; }
-    public Vector3 localPosition { get => ThisTransform.localPosition; set => ThisTransform.localPosition = value; }
-    public Quaternion rotation { get => ThisTransform.rotation; set => ThisTransform.rotation = value; }
-    public Vector3 localScale { get => ThisTransform.localScale; set => ThisTransform.localScale = value; }
-
-    public bool IsExit { get => isExit; }
-    public WallCorner NearestCorner { get; set; }
-
-    public Transform ThisTransform
+    public class WallCorner : MonoBehaviour
     {
-        get
-        { 
-            if (thisTransform == null)
-            {
-                thisTransform = transform;
-            }
+        #region Fields
 
-            return thisTransform;
+        
+
+        [SerializeField]
+        private WallCorner nextCorner;
+
+        private Transform thisTransform;
+
+        #endregion
+
+        #region Properties
+
+        public Vector3 position { get => ThisTransform.position; set => ThisTransform.position = value; }
+        public Vector3 localPosition { get => ThisTransform.localPosition; set => ThisTransform.localPosition = value; }
+        public Quaternion rotation { get => ThisTransform.rotation; set => ThisTransform.rotation = value; }
+        public Vector3 localScale { get => ThisTransform.localScale; set => ThisTransform.localScale = value; }
+
+        public bool IsExit 
+        {
+            get
+            {
+                return this is ExitCorner;
+            }
+        }
+
+        public WallCorner NextCorner { get => nextCorner; set => nextCorner = value; }
+        public WallCorner PreviousCorner { get; set; }
+
+        public Transform ThisTransform
+        {
+            get
+            {
+                if (thisTransform == null)
+                {
+                    thisTransform = transform;
+                }
+
+                return thisTransform;
+            }
+        }
+
+        #endregion
+
+        protected virtual void Awake()
+        {
+            NextCorner.PreviousCorner = this;
         }
     }
-
-    #endregion
-
 }
