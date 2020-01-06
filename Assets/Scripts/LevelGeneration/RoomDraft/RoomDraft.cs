@@ -34,10 +34,10 @@ namespace Minima.LevelGeneration
             WallsGenerator.Initialize(this);
         }
 
-        public void DeleteExit(int number)
+        public void DeleteExit(ExitCorner exit)
         {
-            var exit = Exits[number];
             Exits.Remove(exit);
+
             exit.PreviousCorner.NextCorner = exit.NextCorner;
             Destroy(exit.gameObject);
         }

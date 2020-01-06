@@ -95,6 +95,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextCorner: {fileID: 0}
   snapArea: {fileID: 6422087852761586701}
+  connectPoints: []
 --- !u!212 &2857668213167258416
 SpriteRenderer:
   m_ObjectHideFlags: 0

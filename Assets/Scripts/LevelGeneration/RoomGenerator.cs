@@ -40,14 +40,12 @@ namespace Minima.LevelGeneration
                 e.ThisRoom = this;
                 e.Initialize();
             }
-
-            GenerateRoom();
         }
 
         public void GenerateRoom()
         {
-            //DeleteExits();
-            //Generate();
+            DeleteExits();
+            Generate();
         }
 
         private RoomDraft InstantiateDraft()
@@ -64,10 +62,19 @@ namespace Minima.LevelGeneration
 
         private void DeleteExits()
         {
-            for (int i = 4 - exitsCount; i > 0; i--)
+            var exitsToDelete = new List<ExitCorner>();
+
+            foreach (var e in RoomDraft.Exits)
             {
-                var number = Random.Range(0, RoomDraft.Exits.Count);
-                RoomDraft.DeleteExit(number);
+                if (e.NextRoom == null)
+                {
+                    exitsToDelete.Add(e);
+                }
+            }
+
+            foreach (var e in exitsToDelete)
+            {
+                RoomDraft.DeleteExit(e);
             }
         }
     }

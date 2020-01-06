@@ -12,12 +12,16 @@ namespace Minima.LevelGeneration
         [SerializeField]
         private CircleCollider2D snapArea;
 
+        [SerializeField]
+        private List<WallCorner> connectPoints;
+
         #endregion
 
         #region Properties
 
         public RoomGenerator ThisRoom { get; set; }
         public RoomGenerator NextRoom { get; set; }
+        public List<WallCorner> ConnectPoints { get; }
 
         #endregion
 
