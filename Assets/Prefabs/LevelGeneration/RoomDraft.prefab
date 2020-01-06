@@ -48,13 +48,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   corners:
-  - {fileID: 2785663622804889314}
-  - {fileID: 2785663623105610617}
-  - {fileID: 2785663623338636084}
-  - {fileID: 2785663622258201471}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   randomizeCorners: 1
-  maxOffset: 3
-  maxOffsetFromCenter: 3
+  maxOffset: 5
+  maxOffsetFromCenter: 5
 --- !u!1 &2763896842356885165
 GameObject:
   m_ObjectHideFlags: 0
@@ -153,10 +153,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   exits:
-  - {fileID: 140508316008370196}
-  - {fileID: 140508315932781483}
-  - {fileID: 140508316934497575}
-  - {fileID: 140508316097456617}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  randomizeExits: 1
+  maxOffset: 5
 --- !u!1 &6693653433195949843
 GameObject:
   m_ObjectHideFlags: 0
@@ -167,6 +169,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7026354891215809689}
   - component: {fileID: 5840075876781295889}
+  - component: {fileID: 2553417403275821754}
   m_Layer: 0
   m_Name: Walls
   m_TagString: Untagged
@@ -198,6 +201,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 058e2f85e52e41843b82796baedc49bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wallPrefab: {fileID: 7729777722762061127, guid: 5a7261d4f7866cf44a4e44ad8b668613,
+    type: 3}
+--- !u!114 &2553417403275821754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6693653433195949843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c5611da189b93641bd63eb87d4d6c82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   wallPrefab: {fileID: 7729777722762061127, guid: 5a7261d4f7866cf44a4e44ad8b668613,

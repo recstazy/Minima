@@ -9,7 +9,7 @@ namespace Minima.LevelGeneration
     {
         #region Fields
 
-        protected List<Transform> cornerPoints = new List<Transform>();
+        protected List<WallCorner> cornerPoints = new List<WallCorner>();
 
         #endregion
 
@@ -26,6 +26,16 @@ namespace Minima.LevelGeneration
         public override void CreateWalls()
         {
             ConnectCorners(cornerPoints);
+        }
+
+        protected override bool CustomConnectionPredicate(WallCorner cornerA, WallCorner cornerB)
+        {
+            if (cornerA.IsExit && cornerB.IsExit)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

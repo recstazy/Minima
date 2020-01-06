@@ -9,7 +9,7 @@ namespace Minima.LevelGeneration
         #region Fields
 
         [SerializeField]
-        private List<Transform> corners = new List<Transform>();
+        private List<WallCorner> corners = new List<WallCorner>();
 
         [SerializeField]
         private bool randomizeCorners = true;
@@ -24,7 +24,7 @@ namespace Minima.LevelGeneration
 
         #region Properties
 
-        public List<Transform> Corners { get => corners; }
+        public List<WallCorner> Corners { get => corners; }
 
         #endregion
 
@@ -44,7 +44,7 @@ namespace Minima.LevelGeneration
             }
         }
 
-        private void DragCorner(Transform corner)
+        private void DragCorner(WallCorner corner)
         {
             Vector2 centerDirection = -corner.localPosition;
             Vector2 rawOffset = GetAvailableOffsetDirection(centerDirection) * Random.Range(0f, maxOffsetFromCenter);
