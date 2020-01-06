@@ -2,23 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelGeneratorBase : MonoBehaviour
+namespace Minima.LevelGeneration
 {
-    #region Fields
-    
-    #endregion
-
-    #region Properties
-    
-    #endregion
-
-    void Start()
+    public class LevelGeneratorBase : MonoBehaviour
     {
-        
-    }
+        #region Fields
 
-    void Update()
-    {
-        
+        #endregion
+
+        #region Properties
+
+        #endregion
+
+        void Start()
+        {
+
+        }
+
+        void Update()
+        {
+
+        }
     }
 }
