@@ -13,12 +13,7 @@ namespace Minima.LevelGeneration
         private Transform roomsParent;
 
         [SerializeField]
-        private int roomsCount = 1;
-
-        [SerializeField]
         private GameObject roomGeneratorPrefab;
-
-        private List<RoomGenerator> roomGenerators = new List<RoomGenerator>();
 
         #endregion
 
@@ -31,28 +26,15 @@ namespace Minima.LevelGeneration
             GenerateLevel();
         }
 
-        private void GenerateLevel()
+        protected virtual void GenerateLevel()
         {
-            CreateGenerators();
-
-            foreach (var g in roomGenerators)
-            {
-                g.GenerateRoom();
-            }
+            var generator = InstantiateGenerator(Vector2.zero);
+            generator.GenerateRoom();
         }
 
-        void CreateGenerators()
+        protected RoomGenerator InstantiateGenerator(Vector2 position)
         {
-            for (int i = 0; i < roomsCount; i++)
-            {
-                var generator = InstantiateGenerator();
-                roomGenerators.Add(generator);
-            }
-        }
-
-        private RoomGenerator InstantiateGenerator()
-        {
-            var generator = Instantiate(roomGeneratorPrefab, Vector3.zero, Quaternion.identity, roomsParent);
+            var generator = Instantiate(roomGeneratorPrefab, position, Quaternion.identity, roomsParent);
             return generator.GetComponent<RoomGenerator>();
         }
 
