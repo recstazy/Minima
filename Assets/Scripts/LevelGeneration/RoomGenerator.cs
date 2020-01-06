@@ -15,21 +15,27 @@ namespace Minima.LevelGeneration
         [Range(1, 4)]
         private int exitsCount = 2;
 
-
-        [SerializeField]
         private RoomDraft roomDraft;
+
         #endregion
 
         #region Properties
 
         #endregion
 
-        private void Awake()
+        public void GenerateRoom()
         {
-            GenerateRoom();
+            roomDraft = InstantiateDraft();
+            Generate();
         }
 
-        protected virtual void GenerateRoom()
+        private RoomDraft InstantiateDraft()
+        {
+            var draft = Instantiate(roomDraftPrefab, Vector3.zero, Quaternion.identity, this.transform);
+            return draft.GetComponent<RoomDraft>();
+        }
+
+        protected virtual void Generate()
         {
             roomDraft.Initialize();
             roomDraft.WallsGenerator.CreateWalls();
