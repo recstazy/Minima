@@ -9,6 +9,9 @@ namespace Minima.LevelGeneration
         #region Fields
 
         [SerializeField]
+        private GameObject cornerPrefab;
+
+        [SerializeField]
         private List<WallCorner> corners = new List<WallCorner>();
 
         [SerializeField]
@@ -30,10 +33,23 @@ namespace Minima.LevelGeneration
 
         public void Initialize()
         {
+            foreach (var c in corners)
+            {
+                c.BindPrevious();
+            }
+
             if (randomizeCorners)
             {
                 OffsetCorners();
             }
+        }
+
+        public WallCorner CreateNewCorner(Vector2 position)
+        {
+            var newCorner = Instantiate(cornerPrefab, position, Quaternion.identity, this.transform);
+            WallCorner corner = newCorner.GetComponent<WallCorner>();
+            corners.Add(corner);
+            return corner;
         }
 
         private void OffsetCorners()
@@ -69,7 +85,5 @@ namespace Minima.LevelGeneration
 
             return result.normalized;
         }
-
-        
     }
 }

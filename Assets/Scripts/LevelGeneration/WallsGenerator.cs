@@ -13,8 +13,6 @@ namespace Minima.LevelGeneration
         private GameObject wallPrefab;
 
         protected RoomDraft roomDraft;
-        protected Dictionary<WallCorner, WallCorner> cornerPairs = new Dictionary<WallCorner, WallCorner>();
-        private List<WallCorner> cornersSorted = new List<WallCorner>();
 
         #endregion
 
@@ -38,14 +36,14 @@ namespace Minima.LevelGeneration
         {
         }
 
-        protected void CreateWallBetweenPoints(WallCorner pointA, WallCorner pointB)
+        protected virtual void CreateWallBetweenCorners(WallCorner cornerA, WallCorner cornerB)
         {
-            var position = pointA.position + ((pointB.position - pointA.position) / 2);
+            var position = cornerA.position + ((cornerB.position - cornerA.position) / 2);
             var wall = InstantiateWall(position);
 
-            var wallScale = new Vector2(Vector2.Distance(pointA.position, pointB.position), 1f);
+            var wallScale = new Vector2(Vector2.Distance(cornerA.position, cornerB.position), 1f);
             wall.transform.localScale = wallScale;
-            wall.transform.right = (pointB.position - wall.transform.position).normalized;
+            wall.transform.right = (cornerB.position - wall.transform.position).normalized;
         }
 
     }

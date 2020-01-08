@@ -35,6 +35,8 @@ namespace Minima.LevelGeneration
         public void Initialize()
         {
             RoomDraft = InstantiateDraft();
+            RoomDraft.Initialize();
+
             foreach (var e in RoomDraft.Exits)
             {
                 e.ThisRoom = this;
@@ -45,7 +47,7 @@ namespace Minima.LevelGeneration
         public void GenerateRoom()
         {
             DeleteExits();
-            Generate();
+            GenerateWalls();
         }
 
         private RoomDraft InstantiateDraft()
@@ -54,9 +56,8 @@ namespace Minima.LevelGeneration
             return draft.GetComponent<RoomDraft>();
         }
 
-        protected virtual void Generate()
+        protected virtual void GenerateWalls()
         {
-            RoomDraft.Initialize();
             RoomDraft.WallsGenerator.CreateWalls();
         }
 

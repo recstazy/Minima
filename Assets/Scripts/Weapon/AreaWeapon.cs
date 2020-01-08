@@ -4,7 +4,16 @@ using UnityEngine;
 
 public class AreaWeapon : WeaponComponent
 {
+    protected enum DamageTarget
+    { 
+        Player,
+        Enemy,
+    }
+
     #region Fields
+
+    [SerializeField]
+    private DamageTarget damageTarget;
 
     [SerializeField]
     private ParticleSystem AreaParticles;

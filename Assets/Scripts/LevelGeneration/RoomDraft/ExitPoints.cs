@@ -27,6 +27,11 @@ namespace Minima.LevelGeneration
 
         public void Initialize()
         {
+            foreach (var e in exits)
+            {
+                e.BindPrevious();
+            }
+
             if (randomizeExits)
             {
                 OffsetExits();

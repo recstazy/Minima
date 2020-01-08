@@ -8,8 +8,6 @@ namespace Minima.LevelGeneration
     {
         #region Fields
 
-        
-
         [SerializeField]
         private WallCorner nextCorner;
 
@@ -50,7 +48,7 @@ namespace Minima.LevelGeneration
 
         #endregion
 
-        protected virtual void Awake()
+        public virtual void BindPrevious()
         {
             NextCorner.PreviousCorner = this;
         }

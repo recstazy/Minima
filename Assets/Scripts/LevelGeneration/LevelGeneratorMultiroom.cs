@@ -30,10 +30,12 @@ namespace Minima.LevelGeneration
         protected override void GenerateLevel()
         {
             CreateGenerators(InstantiateGenerator(Vector2.zero));
-            Debug.Log("end");
             GenerateRooms();
         }
 
+        /// <summary>
+        /// Recurcively create rooms
+        /// </summary>
         protected virtual bool CreateGenerators(RoomGenerator roomGenerator)
         {
             roomGenerators.Add(roomGenerator);
@@ -41,7 +43,6 @@ namespace Minima.LevelGeneration
 
             if (roomGenerators.Count >= roomsCount)
             {
-                Debug.Log("false");
                 return false;
             }
 
