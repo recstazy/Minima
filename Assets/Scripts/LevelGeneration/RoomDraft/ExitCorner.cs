@@ -23,6 +23,8 @@ namespace Minima.LevelGeneration
         public RoomGenerator NextRoom { get; set; }
         public List<WallCorner> ConnectPoints { get; }
 
+        public ExitCorner NextExit { get; set; }
+
         #endregion
 
         public void Initialize()
@@ -46,11 +48,14 @@ namespace Minima.LevelGeneration
 
                 if (found != null)
                 {
-                    var foundCorner = found.GetComponent<ExitCorner>();
-                    if (foundCorner.NextRoom == null)
+                    var foundExit = found.GetComponent<ExitCorner>();
+                    if (foundExit.NextRoom == null)
                     {
-                        foundCorner.NextRoom = ThisRoom;
-                        NextRoom = foundCorner.ThisRoom;
+                        foundExit.NextRoom = ThisRoom;
+                        NextRoom = foundExit.ThisRoom;
+
+                        foundExit.NextExit = this;
+                        NextExit = foundExit;
                     }
                 }
             }

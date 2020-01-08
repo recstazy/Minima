@@ -31,6 +31,7 @@ namespace Minima.LevelGeneration
         {
             CreateGenerators(InstantiateGenerator(Vector2.zero));
             GenerateRooms();
+            SnapRooms();
         }
 
         /// <summary>
@@ -68,6 +69,19 @@ namespace Minima.LevelGeneration
             {
                 g.ExitsCount = Random.Range(4, 4);
                 g.GenerateRoom();
+            }
+        }
+
+        private void SnapRooms()
+        {
+            foreach (var g in roomGenerators)
+            {
+                var room = g.RoomDraft;
+
+                foreach (var e in room.Exits)
+                {
+                    e.NextRoom.transform.position += e.position - e.NextExit.position;
+                }
             }
         }
 
