@@ -13,7 +13,10 @@ namespace Minima.LevelGeneration
         private CircleCollider2D snapArea;
 
         [SerializeField]
-        private List<WallCorner> connectPoints;
+        private float snapAreaRadius;
+
+        [SerializeField]
+        private float exitWidth;
 
         #endregion
 
@@ -31,6 +34,12 @@ namespace Minima.LevelGeneration
         {
             BindNearestExit();
         }
+
+        //public override Vector2 GetWallEndPoint(WallCorner fromPoint)
+        //{
+        //    var rVector = fromPoint.position - ThisRoom.transform.position;
+
+        //}
 
         private void BindNearestExit()
         {
@@ -60,5 +69,15 @@ namespace Minima.LevelGeneration
                 }
             }
         }
+
+        #region EditorFunctions
+
+        private void OnValidate()
+        {
+            localScale = new Vector3(exitWidth, localScale.y, localScale.z);
+            snapArea.radius = snapAreaRadius / localScale.x;
+        }
+
+        #endregion
     }
 }

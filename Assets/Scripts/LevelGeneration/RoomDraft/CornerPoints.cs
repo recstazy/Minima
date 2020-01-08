@@ -28,7 +28,7 @@ namespace Minima.LevelGeneration
         #region Properties
 
         public List<WallCorner> Corners { get => corners; }
-
+        
         #endregion
 
         public void Initialize()

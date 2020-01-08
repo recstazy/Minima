@@ -19,7 +19,6 @@ public static class StaticHelpers
         }
     }
 
-    
     private static System.Random random = new System.Random();
     /// <summary>
     /// Copiet this from StackOverflow

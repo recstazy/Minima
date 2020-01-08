@@ -52,5 +52,10 @@ namespace Minima.LevelGeneration
         {
             NextCorner.PreviousCorner = this;
         }
+
+        public virtual Vector2 GetWallEndPoint(WallCorner fromPoint)
+        {
+            return position;
+        }
     }
 }
