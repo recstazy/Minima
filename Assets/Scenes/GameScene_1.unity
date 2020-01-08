@@ -441,6 +441,16 @@ PrefabInstance:
       propertyPath: InitialModule.startSize.scalar
       value: 0.3
       objectReference: {fileID: 0}
+    - target: {fileID: 4601056734282181997, guid: 74204d7a27ccf804faa4ad1ccf40c287,
+        type: 3}
+      propertyPath: targets.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4601056734282181997, guid: 74204d7a27ccf804faa4ad1ccf40c287,
+        type: 3}
+      propertyPath: targets.Array.data[0]
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 74204d7a27ccf804faa4ad1ccf40c287, type: 3}
 --- !u!4 &4601056733421352984 stripped
@@ -515,6 +525,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6844262298042361977, guid: 190e629a0f0172444bb0500229ce020a,
+        type: 3}
+      propertyPath: damageTarget
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 190e629a0f0172444bb0500229ce020a, type: 3}

@@ -10,7 +10,7 @@ public class AgressionTrigger : MonoBehaviour, IEnemyTargetable
 
     #region Fields
 
-    private List<string> targetTags = new List<string>();
+    private List<DamageTarget> targetTypes = new List<DamageTarget>();
 
     #endregion
 
@@ -20,22 +20,36 @@ public class AgressionTrigger : MonoBehaviour, IEnemyTargetable
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (targetTags.Contains(collision.tag))
+        var layer = collision.gameObject.layer;
+
+        if (GetTargetLayers().Contains(layer))
         {
             OnTargetTriggered?.Invoke(collision.gameObject);
         }
     }
 
-    public void AddToTargets(string tag)
+    public void AddToTargets(DamageTarget target)
     {
         if (tag != "")
         {
-            targetTags.Add(tag);
+            targetTypes.Add(target);
         }
     }
 
-    public void UpdateTargets(List<string> targets)
+    public void UpdateTargets(List<DamageTarget> targets)
     {
-        targetTags = targets;
+        targetTypes = targets;
+    }
+
+    private List<int> GetTargetLayers()
+    {
+        List<int> targetLayers = new List<int>();
+
+        foreach (var t in targetTypes)
+        {
+            targetLayers.Add((int)t);
+        }
+
+        return targetLayers;
     }
 }

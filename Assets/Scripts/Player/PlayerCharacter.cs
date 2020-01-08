@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerCharacter : MonoBehaviour, IDamageble
+public class PlayerCharacter : Character
 {
     #region Fields
-
-    [SerializeField]
-    private HealthSystem healthSystem;
 
     #endregion
 
@@ -15,8 +12,4 @@ public class PlayerCharacter : MonoBehaviour, IDamageble
 
     #endregion
 
-    public void ApplyDamage(float amount)
-    {
-        healthSystem.ApplyDamage(amount);
-    }
 }

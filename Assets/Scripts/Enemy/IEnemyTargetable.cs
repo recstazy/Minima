@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IEnemyTargetable
 {
-    void UpdateTargets(List<string> targets);
+    void UpdateTargets(List<DamageTarget> targets);
 }

@@ -4,12 +4,6 @@ using UnityEngine;
 
 public class AreaWeapon : WeaponComponent
 {
-    protected enum DamageTarget
-    { 
-        Player,
-        Enemy,
-    }
-
     #region Fields
 
     [SerializeField]
@@ -41,12 +35,13 @@ public class AreaWeapon : WeaponComponent
         List<Collider2D> overlapped = new List<Collider2D>();
         var filter = new ContactFilter2D();
         filter.useLayerMask = true;
-        filter.SetLayerMask(LayerMask.GetMask("Enemy"));
+        filter.SetLayerMask(LayerMask.GetMask(damageTarget.ToString()));
 
         int count = damageCollider.OverlapCollider(filter, overlapped);
 
         foreach (var o in overlapped)
         {
+            Debug.Log("Damage to " + o.name);
             o.gameObject.ApplyDamage(damage);
         }
     }
