@@ -17,6 +17,9 @@ namespace Minima.LevelGeneration
         [SerializeField]
         private WallsGenerator wallsGenerator;
 
+        [SerializeField]
+        private SpawnGenerator spawnGenerator;
+
         #endregion
 
         #region Properties
@@ -24,6 +27,7 @@ namespace Minima.LevelGeneration
         public List<WallCorner> Corners { get => corners.Corners; }
         public List<ExitCorner> Exits { get => exits.Exits; }
         public WallsGenerator WallsGenerator { get => wallsGenerator; }
+        public SpawnGenerator SpawnGenerator { get => spawnGenerator; }
 
         #endregion
 
