@@ -19,7 +19,7 @@ namespace Minima.LevelGeneration
 
         #region Properties
 
-        public int ExitsCount
+        private int ExitsCount
         {
             get => exitsCount;
             set
@@ -29,6 +29,7 @@ namespace Minima.LevelGeneration
         }
 
         public RoomDraft RoomDraft { get; private set; }
+        bool exitsDeleted = false;
 
         #endregion
 
@@ -51,6 +52,23 @@ namespace Minima.LevelGeneration
             RoomDraft.HideExits();
         }
 
+        public void SetExitsCount(int count)
+        {
+            if (!exitsDeleted)
+            {
+                ExitsCount = count;
+
+                for (int i = 0; i < 4 - ExitsCount; i++)
+                {
+                    int n = Random.Range(0, RoomDraft.Exits.Count);
+                    var exitToDelete = RoomDraft.Exits[n];
+                    RoomDraft.DeleteExit(exitToDelete);
+                }
+
+                exitsDeleted = true;
+            }
+        }
+
         private RoomDraft InstantiateDraft()
         {
             var draft = Instantiate(roomDraftPrefab, this.transform.position, Quaternion.identity, this.transform);
@@ -68,7 +86,7 @@ namespace Minima.LevelGeneration
 
             foreach (var e in RoomDraft.Exits)
             {
-                if (e.NextRoom == null)
+                if (e.NextRoom == null || e.NextExit == null)
                 {
                     exitsToDelete.Add(e);
                 }

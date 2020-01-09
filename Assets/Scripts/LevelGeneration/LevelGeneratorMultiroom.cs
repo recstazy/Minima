@@ -18,6 +18,9 @@ namespace Minima.LevelGeneration
         [SerializeField]
         private int generatorExitsPerRoom = 2;
 
+        [SerializeField]
+        private bool randomizeExitsCount = false;
+
         private List<RoomGenerator> roomGenerators = new List<RoomGenerator>();
         private List<ExitCorner> roomsExits = new List<ExitCorner>();
 
@@ -67,7 +70,11 @@ namespace Minima.LevelGeneration
         {
             foreach (var g in roomGenerators)
             {
-                g.ExitsCount = Random.Range(4, 4);
+                if (randomizeExitsCount)
+                {
+                    g.SetExitsCount(Random.Range(1, 4));
+                }
+
                 g.GenerateRoom();
             }
         }

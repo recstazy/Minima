@@ -323,6 +323,8 @@ MonoBehaviour:
   roomRawOffset: 30
   roomsCount: 20
   generatorExitsPerRoom: 2
+  deleteRandomExits: 1
+  deleteExitsCount: 15
 --- !u!4 &1400033323
 Transform:
   m_ObjectHideFlags: 0

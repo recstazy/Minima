@@ -79,7 +79,6 @@ namespace Minima.LevelGeneration
             if (randomizeWidth)
             {
                 var width = Random.Range(minWidth, maxWidth);
-                Debug.Log("random = " + width + " : " + minWidth + " ... " + maxWidth);
                 SetExitWidth(width);
             }
         }
