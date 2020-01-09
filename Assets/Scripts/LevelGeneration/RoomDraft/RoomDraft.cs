@@ -24,6 +24,7 @@ namespace Minima.LevelGeneration
 
         #region Properties
 
+        public bool IsStartRoom { get; set; }
         public List<WallCorner> Corners { get => corners.Corners; }
         public List<ExitCorner> Exits { get => exits.Exits; }
         public WallsGenerator WallsGenerator { get => wallsGenerator; }
@@ -31,11 +32,14 @@ namespace Minima.LevelGeneration
 
         #endregion
 
-        public void Initialize()
+        public void Initialize(bool isStartRoom = false)
         {
+            IsStartRoom = isStartRoom;
+
             corners.Initialize();
             exits.Initialize();
             WallsGenerator.Initialize(this);
+            spawnGenerator.Initialize(this);
         }
 
         public void HideExits()
@@ -52,6 +56,12 @@ namespace Minima.LevelGeneration
 
             exit.PreviousCorner.NextCorner = exit.NextCorner;
             Destroy(exit.gameObject);
+        }
+
+        public WallCorner GetRandomCorner()
+        {
+            int n = Random.Range(0, Corners.Count);
+            return Corners[n];
         }
     }
 }

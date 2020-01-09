@@ -9,6 +9,9 @@ public class EnemyBase : Character
     [SerializeField]
     private List<DamageTarget> targets = new List<DamageTarget>();
 
+    [SerializeField]
+    private bool autoTargetPlayer = true;
+
     #endregion
 
     #region Properties
@@ -19,10 +22,33 @@ public class EnemyBase : Character
     {
         base.Awake();
 
+        if (autoTargetPlayer)
+        {
+            SetPlayerAsTarget();
+        }
+        else
+        {
+            UpdateTargets();
+        }
+    }
+
+    public void AddTarget(DamageTarget target)
+    {
+        targets.Add(target);
+        UpdateTargets();
+    }
+
+    protected virtual void UpdateTargets()
+    {
         var targetable = GetComponentsInChildren<IEnemyTargetable>(true);
         foreach (var t in targetable)
         {
             t.UpdateTargets(targets);
         }
+    }
+
+    private void SetPlayerAsTarget()
+    {
+        AddTarget(DamageTarget.Player);
     }
 }

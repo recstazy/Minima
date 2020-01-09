@@ -41,7 +41,6 @@ public class AreaWeapon : WeaponComponent
 
         foreach (var o in overlapped)
         {
-            Debug.Log("Damage to " + o.name);
             o.gameObject.ApplyDamage(damage);
         }
     }

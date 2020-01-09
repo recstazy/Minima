@@ -50,6 +50,7 @@ namespace Minima.LevelGeneration
             DeleteExits();
             GenerateWalls();
             RoomDraft.HideExits();
+            RoomDraft.SpawnGenerator.GeneratePoints();
         }
 
         public void SetExitsCount(int count)

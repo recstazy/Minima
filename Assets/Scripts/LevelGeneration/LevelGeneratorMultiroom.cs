@@ -75,6 +75,7 @@ namespace Minima.LevelGeneration
                     g.SetExitsCount(Random.Range(1, 4));
                 }
 
+                
                 g.GenerateRoom();
             }
         }

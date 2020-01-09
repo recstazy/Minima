@@ -2,37 +2,67 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnPoint : MonoBehaviour
+namespace Minima.LevelGeneration
 {
-    #region Fields
-
-    [SerializeField]
-    private List<SpawnParams> spawnParams = new List<SpawnParams>();
-
-    Dictionary<EnemyBase, int> spawnParamsCached;
-
-    #endregion
-
-    #region Properties
-
-    public Dictionary<EnemyBase, int> SpawnParams
+    public class SpawnPoint : MonoBehaviour
     {
-        get
-        {
-            if (spawnParamsCached == null)
-            {
-                spawnParamsCached = new Dictionary<EnemyBase, int>();
+        #region Fields
 
-                foreach (var p in spawnParams)
+        [SerializeField]
+        private List<SpawnParams> spawnParams = new List<SpawnParams>();
+
+        [SerializeField]
+        private EnemiesParent enemiesParent;
+
+        Dictionary<EnemyBase, int> spawnParamsCached;
+
+        List<EnemyBase> spawned = new List<EnemyBase>();
+
+        #endregion
+
+        #region Properties
+
+        public Dictionary<EnemyBase, int> SpawnParams
+        {
+            get
+            {
+                if (spawnParamsCached == null)
                 {
-                    spawnParamsCached.Add(p.Prefab.GetComponent<EnemyBase>(), p.Count);
+                    spawnParamsCached = new Dictionary<EnemyBase, int>();
+
+                    foreach (var p in spawnParams)
+                    {
+                        spawnParamsCached.Add(p.Prefab.GetComponent<EnemyBase>(), p.Count);
+                    }
+                }
+
+                return spawnParamsCached;
+            }
+        }
+
+        #endregion
+
+        public void Initialize(EnemiesParent enemiesParent)
+        {
+            this.enemiesParent = enemiesParent;
+        }
+
+        public virtual void Spawn()
+        {
+            foreach (var p in spawnParams)
+            {
+                for (int i = 0; i < p.Count; i++)
+                {
+                    var enemy = InstantiateEnemy(p.Prefab);
+                    spawned.Add(enemy);
                 }
             }
+        }
 
-            return spawnParamsCached;
+        protected EnemyBase InstantiateEnemy(GameObject prefab)
+        {
+            var enemy = Instantiate(prefab, this.transform.position, Quaternion.identity, enemiesParent.transform);
+            return enemy.GetComponent<EnemyBase>();
         }
     }
-
-    #endregion
-    
 }

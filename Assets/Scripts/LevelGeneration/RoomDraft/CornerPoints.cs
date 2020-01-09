@@ -64,12 +64,13 @@ namespace Minima.LevelGeneration
         {
             Vector2 centerDirection = -corner.localPosition;
             Vector2 rawOffset = GetAvailableOffsetDirection(centerDirection) * Random.Range(0f, maxOffsetFromCenter);
+
             Vector2 offset = (centerDirection + rawOffset).normalized * Random.Range(0f, maxOffset);
             Vector2 newPosition = corner.position + new Vector3(offset.x, offset.y, corner.position.z);
             corner.position = newPosition;
         }
 
-        private Vector2 GetAvailableOffsetDirection(Vector2 centerDirection)
+        public Vector2 GetAvailableOffsetDirection(Vector2 centerDirection)
         {
             bool useX = StaticHelpers.RandomBool();
             Vector2 result;
@@ -85,5 +86,6 @@ namespace Minima.LevelGeneration
 
             return result.normalized;
         }
+
     }
 }
