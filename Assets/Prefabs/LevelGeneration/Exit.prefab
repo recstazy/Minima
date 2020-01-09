@@ -133,6 +133,9 @@ MonoBehaviour:
   wallEndPoints:
   - {fileID: 8057465930248953515}
   - {fileID: 768353727504984281}
+  randomizeWidth: 1
+  minWidth: 3
+  maxWidth: 18
 --- !u!212 &2857668213167258416
 SpriteRenderer:
   m_ObjectHideFlags: 0

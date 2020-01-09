@@ -21,6 +21,17 @@ namespace Minima.LevelGeneration
         [SerializeField]
         private List<WallCorner> wallEndPoints = new List<WallCorner>();
 
+        [SerializeField]
+        private bool randomizeWidth = true;
+
+        [SerializeField]
+        [Range(1f, 20f)]
+        private float minWidth = 3f;
+
+        [SerializeField]
+        [Range(1f, 20f)]
+        private float maxWidth = 3f;
+
         #endregion
 
         #region Properties
@@ -35,9 +46,14 @@ namespace Minima.LevelGeneration
 
         #endregion
 
+        private void Awake()
+        {
+            RandomizeExitWidth();
+            Sprite = GetComponent<SpriteRenderer>();
+        }
+
         public void Initialize()
         {
-            Sprite = GetComponent<SpriteRenderer>();
             BindNearestExit();
         }
 
@@ -56,6 +72,22 @@ namespace Minima.LevelGeneration
 
             var nearest = points.Keys.Min();
             return points[nearest];
+        }
+
+        private void RandomizeExitWidth()
+        {
+            if (randomizeWidth)
+            {
+                var width = Random.Range(minWidth, maxWidth);
+                Debug.Log("random = " + width + " : " + minWidth + " ... " + maxWidth);
+                SetExitWidth(width);
+            }
+        }
+
+        public void SetExitWidth(float newWidth)
+        {
+            exitWidth = newWidth;
+            UpdateWidth();
         }
 
         private void BindNearestExit()
@@ -82,17 +114,24 @@ namespace Minima.LevelGeneration
 
                         foundExit.NextExit = this;
                         NextExit = foundExit;
+
+                        foundExit.SetExitWidth(exitWidth);
                     }
                 }
             }
+        }
+
+        private void UpdateWidth()
+        {
+            localScale = new Vector3(exitWidth, 1f, 1f);
+            snapArea.radius = snapAreaRadius / localScale.x;
         }
 
         #region EditorFunctions
 
         private void OnValidate()
         {
-            localScale = new Vector3(exitWidth, localScale.y, localScale.z);
-            snapArea.radius = snapAreaRadius / localScale.x;
+            UpdateWidth();   
         }
 
         #endregion
