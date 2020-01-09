@@ -48,6 +48,7 @@ namespace Minima.LevelGeneration
         {
             DeleteExits();
             GenerateWalls();
+            RoomDraft.HideExits();
         }
 
         private RoomDraft InstantiateDraft()

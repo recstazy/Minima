@@ -18,6 +18,9 @@ namespace Minima.LevelGeneration
         [SerializeField]
         private float exitWidth;
 
+        [SerializeField]
+        private List<WallCorner> wallEndPoints = new List<WallCorner>();
+
         #endregion
 
         #region Properties
@@ -28,18 +31,32 @@ namespace Minima.LevelGeneration
 
         public ExitCorner NextExit { get; set; }
 
+        public SpriteRenderer Sprite { get; private set; }
+
         #endregion
 
         public void Initialize()
         {
+            Sprite = GetComponent<SpriteRenderer>();
             BindNearestExit();
         }
 
-        //public override Vector2 GetWallEndPoint(WallCorner fromPoint)
-        //{
-        //    var rVector = fromPoint.position - ThisRoom.transform.position;
+        public override WallCorner GetWallEndPoint(WallCorner fromPoint)
+        {
+            var points = new Dictionary<float, WallCorner>();
 
-        //}
+            foreach (var e in wallEndPoints)
+            {
+                var distance = Vector2.Distance(e.position, fromPoint.position);
+                if (!points.ContainsKey(distance))
+                {
+                    points.Add(distance, e);
+                }
+            }
+
+            var nearest = points.Keys.Min();
+            return points[nearest];
+        }
 
         private void BindNearestExit()
         {

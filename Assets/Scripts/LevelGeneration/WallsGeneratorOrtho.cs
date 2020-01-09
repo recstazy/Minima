@@ -34,7 +34,7 @@ namespace Minima.LevelGeneration
 
         private Vector2 GetOrthoPosition(WallCorner cornerA, WallCorner cornerB)
         {
-            Vector2 orthoCornerPosition = new Vector2(cornerA.position.x, cornerB.position.y);
+            Vector2 orthoCornerPosition = new Vector2(cornerA.GetWallEndPoint(cornerB).position.x, cornerB.GetWallEndPoint(cornerA).position.y);
             return orthoCornerPosition;
         }
     }

@@ -34,6 +34,14 @@ namespace Minima.LevelGeneration
             WallsGenerator.Initialize(this);
         }
 
+        public void HideExits()
+        {
+            foreach (var e in Exits)
+            {
+                e.Sprite.enabled = false;
+            }
+        }
+
         public void DeleteExit(ExitCorner exit)
         {
             Exits.Remove(exit);

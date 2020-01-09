@@ -38,12 +38,19 @@ namespace Minima.LevelGeneration
 
         protected virtual void CreateWallBetweenCorners(WallCorner cornerA, WallCorner cornerB)
         {
-            var position = cornerA.position + ((cornerB.position - cornerA.position) / 2);
+            Vector2 startPosition = cornerA.GetWallEndPoint(cornerB).position;
+            Vector2 endPosition = cornerB.GetWallEndPoint(cornerA).position;
+
+            var position = startPosition + ((endPosition - startPosition) / 2);
+            //var position = cornerA.position + ((cornerB.position - cornerA.position) / 2);
+
             var wall = InstantiateWall(position);
 
-            var wallScale = new Vector2(Vector2.Distance(cornerA.position, cornerB.position), 1f);
+            var wallScale = new Vector2(Vector2.Distance(startPosition, endPosition), 1f);
             wall.transform.localScale = wallScale;
-            wall.transform.right = (cornerB.position - wall.transform.position).normalized;
+
+            var endPos3 = new Vector3(endPosition.x, endPosition.y);
+            wall.transform.right = (endPos3 - wall.transform.position).normalized;
         }
 
     }
