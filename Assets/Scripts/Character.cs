@@ -13,6 +13,8 @@ public class Character : MonoBehaviour, IDamageble
 
     #region Properties
 
+    public HealthSystem HealthSystem { get => healthSystem; }
+
     #endregion
 
     protected virtual void Awake()

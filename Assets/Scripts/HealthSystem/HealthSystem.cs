@@ -5,6 +5,7 @@ using UnityEngine;
 public class HealthSystem : MonoBehaviour
 {
     public System.Action OnDeath;
+    public System.Action OnHealthChanged;
 
     #region Fields
 
@@ -46,6 +47,7 @@ public class HealthSystem : MonoBehaviour
     public void ApplyDamage(float amount)
     {
         currentHealth -= amount;
+        OnHealthChanged?.Invoke();
 
         if (currentHealth <= 0)
         {
@@ -59,6 +61,7 @@ public class HealthSystem : MonoBehaviour
         if (isAlive)
         {
             currentHealth += amount;
+            OnHealthChanged?.Invoke();
         }
     }
 }

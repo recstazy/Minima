@@ -10,12 +10,16 @@ public enum DamageTarget
 
 public class WeaponComponent : MonoBehaviour
 {
-    
     #region Fields
+
+    [SerializeField]
+    private Character owner;
 
     #endregion
 
     #region Properties
+
+    public Character Owner { get => owner; set => owner = value; }
 
     #endregion
 

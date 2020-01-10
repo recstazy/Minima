@@ -52,6 +52,11 @@ public class CameraFollow : MonoBehaviour
 
     private void Follow()
     {
+        if (followObject == null)
+        {
+            return;
+        }
+
         Vector3 targetPosition;
 
         if (useOffset)
