@@ -50,6 +50,10 @@ namespace Minima.LevelGeneration
             DeleteExits();
             GenerateWalls();
             RoomDraft.HideExits();
+        }
+
+        public void GenerateSpawn()
+        {
             RoomDraft.SpawnGenerator.GeneratePoints();
         }
 

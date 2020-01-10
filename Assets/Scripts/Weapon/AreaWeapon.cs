@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AreaWeapon : WeaponComponent
+public class AreaWeapon : CoolingWeapon
 {
     #region Fields
 
@@ -24,7 +24,7 @@ public class AreaWeapon : WeaponComponent
     
     #endregion
 
-    public override void UseWeapon()
+    protected override void Use()
     {
         AreaParticles.Play();
         DamageArea();
