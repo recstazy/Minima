@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyBase : MonoBehaviour, IDamageble
+public class EnemyBase : Character
 {
     #region Fields
 
     [SerializeField]
-    private List<string> targetTags = new List<string>();
+    private List<DamageTarget> targets = new List<DamageTarget>();
 
     [SerializeField]
-    private HealthSystem healthSystem;
+    private bool autoTargetPlayer = true;
 
     #endregion
 
@@ -18,17 +18,37 @@ public class EnemyBase : MonoBehaviour, IDamageble
 
     #endregion
 
-    private void Awake()
+    protected override void Awake()
+    {
+        base.Awake();
+
+        if (autoTargetPlayer)
+        {
+            SetPlayerAsTarget();
+        }
+        else
+        {
+            UpdateTargets();
+        }
+    }
+
+    public void AddTarget(DamageTarget target)
+    {
+        targets.Add(target);
+        UpdateTargets();
+    }
+
+    protected virtual void UpdateTargets()
     {
         var targetable = GetComponentsInChildren<IEnemyTargetable>(true);
         foreach (var t in targetable)
         {
-            t.UpdateTargets(targetTags);
+            t.UpdateTargets(targets);
         }
     }
 
-    public void ApplyDamage(float amount)
+    private void SetPlayerAsTarget()
     {
-        healthSystem.ApplyDamage(amount);
+        AddTarget(DamageTarget.Player);
     }
 }

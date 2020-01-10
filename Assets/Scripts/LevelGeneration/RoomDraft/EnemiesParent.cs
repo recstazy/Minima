@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerCharacter : Character
+public class EnemiesParent : MonoBehaviour
 {
     #region Fields
-
+    
     #endregion
 
     #region Properties
-
+    
     #endregion
-
 }

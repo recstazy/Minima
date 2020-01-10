@@ -2,14 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum DamageTarget
+{
+    Player = 8,
+    Enemy = 9,
+}
+
 public class WeaponComponent : MonoBehaviour
 {
+    
     #region Fields
 
     #endregion
 
     #region Properties
-    
+
     #endregion
 
     public virtual void UseWeapon()

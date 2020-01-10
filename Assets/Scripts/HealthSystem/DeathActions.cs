@@ -27,6 +27,6 @@ public class DeathActions : MonoBehaviour
 
     protected virtual void PerformDeathActions()
     {
-        Destroy(transform.root.gameObject);
+        Destroy(healthSystem.Owner.gameObject);
     }
 }

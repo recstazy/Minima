@@ -11,6 +11,9 @@ public class HealthSystem : MonoBehaviour
     [SerializeField]
     private float maxHealth = 100f;
 
+    [SerializeField]
+    private Character owner;
+
     private float _currentHealth;
     private bool isAlive = true;
 
@@ -30,6 +33,8 @@ public class HealthSystem : MonoBehaviour
             _currentHealth = Mathf.Clamp(value, 0f, maxHealth);
         }
     }
+
+    public Character Owner { get => owner; set => owner = value; }
 
     #endregion
 

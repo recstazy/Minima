@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AreaWeapon : WeaponComponent
+public class AreaWeapon : CoolingWeapon
 {
     #region Fields
+
+    [SerializeField]
+    private DamageTarget damageTarget;
 
     [SerializeField]
     private ParticleSystem AreaParticles;
@@ -21,7 +24,7 @@ public class AreaWeapon : WeaponComponent
     
     #endregion
 
-    public override void UseWeapon()
+    protected override void Use()
     {
         AreaParticles.Play();
         DamageArea();
@@ -32,7 +35,7 @@ public class AreaWeapon : WeaponComponent
         List<Collider2D> overlapped = new List<Collider2D>();
         var filter = new ContactFilter2D();
         filter.useLayerMask = true;
-        filter.SetLayerMask(LayerMask.GetMask("Enemy"));
+        filter.SetLayerMask(LayerMask.GetMask(damageTarget.ToString()));
 
         int count = damageCollider.OverlapCollider(filter, overlapped);
 

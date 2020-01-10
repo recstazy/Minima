@@ -42,7 +42,7 @@ ParticleSystem:
   serializedVersion: 6
   lengthInSec: 2
   simulationSpeed: 1
-  stopAction: 0
+  stopAction: 2
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
@@ -5012,9 +5012,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8c91053f327db843a547a3a11de6f29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetTags:
-  - PlayerCharacter
   healthSystem: {fileID: 994036669487968467}
+  targets: 
+  autoTargetPlayer: 1
 --- !u!114 &4601056734282181998
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5027,7 +5027,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cec87c960f715549b5baadfbc7139db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  speed: 15
   inertia: 0.88
   currentTarget: {fileID: 0}
   agressionTrigger: {fileID: 4601056732519910671}
