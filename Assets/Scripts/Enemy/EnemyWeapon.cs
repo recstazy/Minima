@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyWeapon : MonoBehaviour, IEnemyTargetable
+public class EnemyWeapon : MonoBehaviour
 {
     #region Fields
 
@@ -14,12 +14,6 @@ public class EnemyWeapon : MonoBehaviour, IEnemyTargetable
     #region Properties
 
     #endregion
-
-    public void UpdateTargets(List<DamageTarget> targets)
-    {
-        ITargetable targetable = weapon as ITargetable;
-        targetable.SetTarget(targets[0]);
-    }
 
     public void Shoot()
     {

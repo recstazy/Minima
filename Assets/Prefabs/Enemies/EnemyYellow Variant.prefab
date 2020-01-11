@@ -122,12 +122,12 @@ PrefabInstance:
     - target: {fileID: 4601056734282181985, guid: 74204d7a27ccf804faa4ad1ccf40c287,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 19.070223
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4601056734282181985, guid: 74204d7a27ccf804faa4ad1ccf40c287,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 41.6008
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4601056734282181985, guid: 74204d7a27ccf804faa4ad1ccf40c287,
         type: 3}
@@ -295,6 +295,16 @@ PrefabInstance:
         type: 3}
       propertyPath: damage
       value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 7764498544064102626, guid: 93a221749b5f5ff4b9d1755116cd5f58,
+        type: 3}
+      propertyPath: coolDownTime
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7764498544064102626, guid: 93a221749b5f5ff4b9d1755116cd5f58,
+        type: 3}
+      propertyPath: damageTarget
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 93a221749b5f5ff4b9d1755116cd5f58, type: 3}

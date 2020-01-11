@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AreaWeapon : CoolingWeapon, ITargetable
+public class AreaWeapon : CoolingWeapon
 {
     #region Fields
 
