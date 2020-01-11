@@ -22,4 +22,10 @@ public struct SpawnParams
 
     #endregion
 
+    public SpawnParams (GameObject prefab, int count = 1)
+    {
+        this.prefab = prefab;
+        this.count = count;
+    }
+
 }

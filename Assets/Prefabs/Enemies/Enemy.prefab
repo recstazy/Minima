@@ -4833,8 +4833,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4601056732519910657}
-  - component: {fileID: 4601056732519910671}
   - component: {fileID: 4601056732519910656}
+  - component: {fileID: 4687920976204578887}
   m_Layer: 0
   m_Name: AgressionTrigger
   m_TagString: Untagged
@@ -4856,18 +4856,6 @@ Transform:
   m_Father: {fileID: 4601056734282181985}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4601056732519910671
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4601056732519910658}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80d25bb43ba004340ab58b7452376b68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!58 &4601056732519910656
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -4884,6 +4872,18 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 10
+--- !u!114 &4687920976204578887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4601056732519910658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8be440232e4090408309be2719c9cc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4601056733867002483
 GameObject:
   m_ObjectHideFlags: 0
@@ -5031,7 +5031,7 @@ MonoBehaviour:
   speed: 15
   inertia: 0.88
   currentTarget: {fileID: 0}
-  agressionTrigger: {fileID: 4601056732519910671}
+  agressionTrigger: {fileID: 4687920976204578887}
 --- !u!50 &4601056734282181984
 Rigidbody2D:
   serializedVersion: 4
@@ -5143,6 +5143,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: HealthSystem
       objectReference: {fileID: 0}
+    - target: {fileID: 356113582072003742, guid: 2cd6a55fb3a114d4fb9dbcb16e64473a,
+        type: 3}
+      propertyPath: owner
+      value: 
+      objectReference: {fileID: 4601056734282181997}
     - target: {fileID: 3842439115060717990, guid: 2cd6a55fb3a114d4fb9dbcb16e64473a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5197,6 +5202,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 161423937917799598, guid: 2cd6a55fb3a114d4fb9dbcb16e64473a,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cd6a55fb3a114d4fb9dbcb16e64473a, type: 3}
