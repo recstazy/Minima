@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1257846769092942693}
-  - component: {fileID: 4394302775099037641}
+  - component: {fileID: 5335019796253877920}
   m_Layer: 0
   m_Name: Spawn
   m_TagString: Untagged
@@ -31,7 +31,7 @@ Transform:
   m_Father: {fileID: 2763896842356885164}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4394302775099037641
+--- !u!114 &5335019796253877920
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -40,12 +40,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 498739044404931072}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e53f8d93d41a32448b5793b3f0977369, type: 3}
+  m_Script: {fileID: 11500000, guid: a878d25f14d9c934e84e695d4f177a9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnParams:
+  - prefab: {fileID: 4601056734282181986, guid: 74204d7a27ccf804faa4ad1ccf40c287,
+      type: 3}
+    count: 2
+  - prefab: {fileID: 9042936540590099952, guid: b78bdeb02ed31ff49b6c4aae604ab380,
+      type: 3}
+    count: 3
   spawnPointPrefab: {fileID: 903070718872153714, guid: 245aa136bc5cdee43aa7e6414a1ebf11,
     type: 3}
-  spawnPointsCount: 4
   spawnableRadius: 2
 --- !u!1 &1628739595645118069
 GameObject:
@@ -203,7 +209,7 @@ MonoBehaviour:
   corners: {fileID: 2763896842237510275}
   exits: {fileID: 2763896842970934329}
   wallsGenerator: {fileID: 7459346419100925081}
-  spawnGenerator: {fileID: 4394302775099037641}
+  spawnGenerator: {fileID: 5335019796253877920}
 --- !u!1 &2763896842970934331
 GameObject:
   m_ObjectHideFlags: 0

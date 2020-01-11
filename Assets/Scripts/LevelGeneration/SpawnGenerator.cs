@@ -9,10 +9,10 @@ namespace Minima.LevelGeneration
         #region Fields
 
         [SerializeField]
-        private GameObject spawnPointPrefab;
+        private List<SpawnParams> spawnParams;
 
         [SerializeField]
-        private int spawnPointsCount = 3;
+        private GameObject spawnPointPrefab;
 
         [SerializeField]
         private float spawnableRadius = 2f;
@@ -43,14 +43,18 @@ namespace Minima.LevelGeneration
 
         public void GeneratePoints()
         {
-            for (int i = 0; i < spawnPointsCount; i++)
+            foreach (var p in spawnParams)
             {
-                var point = CreatePoint(GetPointPosition());
-
-                if (point != null)
+                for (int i = 0; i < p.Count; i++)
                 {
-                    point.Initialize(enemiesParent);
-                    point.Spawn();
+                    var point = CreatePoint(GetPointPosition());
+
+                    if (point != null)
+                    {
+                        point.Initialize(enemiesParent);
+                        point.AddToSpawnParams(new SpawnParams(p.Prefab));
+                        point.Spawn();
+                    }
                 }
             }
         }

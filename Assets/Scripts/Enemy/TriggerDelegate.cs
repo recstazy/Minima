@@ -1,16 +1,16 @@
 ﻿using System.Collections;
-using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AgressionTrigger : MonoBehaviour, IEnemyTargetable
+[RequireComponent(typeof(Collider2D))]
+public class TriggerDelegate : MonoBehaviour, IEnemyTargetable
 {
     public delegate void TargetTriggeredHandler(GameObject target);
     public event TargetTriggeredHandler OnTargetTriggered;
 
     #region Fields
 
-    private List<DamageTarget> targetTypes = new List<DamageTarget>();
+    protected List<DamageTarget> targetTypes = new List<DamageTarget>();
 
     #endregion
 
@@ -18,22 +18,24 @@ public class AgressionTrigger : MonoBehaviour, IEnemyTargetable
 
     #endregion
 
+    private void Awake()
+    {
+        GetComponent<Collider2D>().isTrigger = true;
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         var layer = collision.gameObject.layer;
 
         if (GetTargetLayers().Contains(layer))
         {
-            OnTargetTriggered?.Invoke(collision.gameObject);
+            CallTargetTriggered(collision.gameObject);
         }
     }
 
-    public void AddToTargets(DamageTarget target)
+    protected void CallTargetTriggered(GameObject target)
     {
-        if (tag != "")
-        {
-            targetTypes.Add(target);
-        }
+        OnTargetTriggered?.Invoke(target);
     }
 
     public void UpdateTargets(List<DamageTarget> targets)
@@ -41,7 +43,7 @@ public class AgressionTrigger : MonoBehaviour, IEnemyTargetable
         targetTypes = targets;
     }
 
-    private List<int> GetTargetLayers()
+    protected List<int> GetTargetLayers()
     {
         List<int> targetLayers = new List<int>();
 
