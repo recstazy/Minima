@@ -107,7 +107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthSystem: {fileID: 3573596701040319072}
   sprite: {fileID: 6844262297482999246}
-  minHealthColor: {r: 1, g: 0.24056602, b: 0.39168712, a: 1}
+  minHealthColor: {r: 1, g: 0.4198113, b: 0.53644705, a: 1}
 --- !u!1 &6844262297482999245
 GameObject:
   m_ObjectHideFlags: 0
@@ -135,7 +135,7 @@ Transform:
   m_GameObject: {fileID: 6844262297482999245}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children: []
   m_Father: {fileID: 6844262298024995347}
   m_RootOrder: 0
@@ -319,7 +319,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 1
 --- !u!114 &8859580943042727893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -406,11 +406,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7764498544064102626, guid: 93a221749b5f5ff4b9d1755116cd5f58,
-        type: 3}
-      propertyPath: damageCollider
-      value: 
-      objectReference: {fileID: 3127861}
     - target: {fileID: 7764498544421011770, guid: 93a221749b5f5ff4b9d1755116cd5f58,
         type: 3}
       propertyPath: InitialModule.startSpeed.scalar
@@ -476,16 +471,41 @@ PrefabInstance:
       propertyPath: VelocityModule.radial.scalar
       value: -5
       objectReference: {fileID: 0}
+    - target: {fileID: 7764498544421011770, guid: 93a221749b5f5ff4b9d1755116cd5f58,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 0.6084906
+      objectReference: {fileID: 0}
+    - target: {fileID: 7764498544421011770, guid: 93a221749b5f5ff4b9d1755116cd5f58,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0.91248614
+      objectReference: {fileID: 0}
+    - target: {fileID: 7764498544421011770, guid: 93a221749b5f5ff4b9d1755116cd5f58,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7764498544421011770, guid: 93a221749b5f5ff4b9d1755116cd5f58,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.a
+      value: 0.7607843
+      objectReference: {fileID: 0}
     - target: {fileID: 7764498544421011765, guid: 93a221749b5f5ff4b9d1755116cd5f58,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 5830c2903e3ed274a90ac6833457733e, type: 2}
+      objectReference: {fileID: 2100000, guid: 8bff8204ae34c334cadb006b3176b714, type: 2}
     - target: {fileID: 7764498544421011765, guid: 93a221749b5f5ff4b9d1755116cd5f58,
         type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: 5830c2903e3ed274a90ac6833457733e, type: 2}
+      objectReference: {fileID: 0}
+    - target: {fileID: 7764498544064102626, guid: 93a221749b5f5ff4b9d1755116cd5f58,
+        type: 3}
+      propertyPath: damageCollider
+      value: 
+      objectReference: {fileID: 3127861}
     m_RemovedComponents:
     - {fileID: 7764498544064102626, guid: 93a221749b5f5ff4b9d1755116cd5f58, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 93a221749b5f5ff4b9d1755116cd5f58, type: 3}

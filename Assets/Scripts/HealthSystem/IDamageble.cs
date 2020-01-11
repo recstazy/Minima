@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IDamageble
+public interface IDamagable
 {
     HealthSystem HealthSystem { get; }
-    void ApplyDamage(float amount);
+    void ApplyDamage(float amount, Character from = null);
 }

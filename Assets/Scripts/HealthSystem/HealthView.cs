@@ -16,6 +16,7 @@ public class HealthView : MonoBehaviour
     private Color minHealthColor;
 
     private Color maxHealthColor;
+    private Coroutine blinkCoroutine;
 
     #endregion
 
@@ -30,21 +31,24 @@ public class HealthView : MonoBehaviour
 
     private void Start()
     {
-        healthSystem.OnHealthChanged += UpdateColor;
+        healthSystem.OnHealthChanged += HealthChanged;
     }
 
     private void OnDestroy()
     {
-        healthSystem.OnHealthChanged -= UpdateColor;
+        healthSystem.OnHealthChanged -= HealthChanged;
     }
 
-    private void UpdateColor()
+    private void HealthChanged(HealthChangeType changeType)
     {
         var alpha = healthSystem.CurrentHealth / healthSystem.MaxHealth;
-        var color = Color.Lerp(minHealthColor, maxHealthColor, alpha);
+        var color = Color.Lerp(minHealthColor, maxHealthColor, Mathf.Pow(alpha, 2));
         sprite.color = color;
 
-        StartCoroutine(BlinkWhite(color));
+        if (changeType == HealthChangeType.Restore && blinkCoroutine == null)
+        {
+            blinkCoroutine = StartCoroutine(BlinkWhite(color));
+        }  
     }
 
     private IEnumerator BlinkWhite(Color targetColor)
@@ -52,9 +56,11 @@ public class HealthView : MonoBehaviour
         for (int i = 0; i < 4; i++)
         {
             sprite.color = Color.white;
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.075f);
             sprite.color = targetColor;
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.075f);
         }
+
+        blinkCoroutine = null;
     }
 }

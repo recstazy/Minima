@@ -15,28 +15,24 @@ public class HealingAreaWeapon : AreaWeapon
 
     #endregion
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    protected override List<IDamagable> DamageArea()
     {
-        var damagable = collision.GetComponent<IDamageble>();
-
-        if (damagable != null)
+        var damaged = base.DamageArea();
+        
+        foreach (var d in damaged)
         {
-            damagable.HealthSystem.OnDeath += TargetDead;
+            d.HealthSystem.OnDeath += TargetDead;
         }
+
+        return damaged;
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
+    private void TargetDead(Character killer, Character victim)
     {
-        var damagable = collision.GetComponent<IDamageble>();
-
-        if (damagable != null)
+        if (killer == Owner)
         {
-            damagable.HealthSystem.OnDeath -= TargetDead;
+            Owner.HealthSystem.Restore(hpPerEnemy);
+            victim.HealthSystem.OnDeath -= TargetDead;
         }
-    }
-
-    private void TargetDead()
-    {
-        Owner.HealthSystem.Restore(hpPerEnemy);
     }
 }

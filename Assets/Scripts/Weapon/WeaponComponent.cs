@@ -23,8 +23,5 @@ public class WeaponComponent : MonoBehaviour
 
     #endregion
 
-    public virtual void UseWeapon()
-    {
-
-    }
+    public virtual void UseWeapon() { }
 }

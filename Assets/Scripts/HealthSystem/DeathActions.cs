@@ -17,12 +17,17 @@ public class DeathActions : MonoBehaviour
 
     void Start()
     {
-        healthSystem.OnDeath += PerformDeathActions;
+        healthSystem.OnDeath += TargetDead;
     }
 
     private void OnDestroy()
     {
-        healthSystem.OnDeath -= PerformDeathActions;
+        healthSystem.OnDeath -= TargetDead;
+    }
+
+    protected virtual void TargetDead(Character target, Character victim)
+    {
+        PerformDeathActions();
     }
 
     protected virtual void PerformDeathActions()
