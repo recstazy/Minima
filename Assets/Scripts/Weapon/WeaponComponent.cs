@@ -10,6 +10,8 @@ public enum DamageTarget
 
 public class WeaponComponent : MonoBehaviour
 {
+    public event System.Action OnWeaponUsed;
+
     #region Fields
 
     [SerializeField]
@@ -23,5 +25,13 @@ public class WeaponComponent : MonoBehaviour
 
     #endregion
 
-    public virtual void UseWeapon() { }
+    public virtual void UseWeapon()
+    {
+        CallWeaponUsed();
+    }
+
+    protected void CallWeaponUsed()
+    {
+        OnWeaponUsed?.Invoke();
+    }
 }

@@ -45,12 +45,21 @@ public class EnemyMovement : MovementComponent
         base.Update();
     }
 
+    protected virtual void SetCanMove(bool newCanMove)
+    {
+        canMove = newCanMove;
+
+        if (!canMove)
+        {
+            StopMoving();
+        }
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.transform == currentTarget)
         {
-            canMove = false;
-            StopMoving();
+            SetCanMove(false);
         }
     }
 
@@ -58,7 +67,7 @@ public class EnemyMovement : MovementComponent
     {
         if (collision.transform == currentTarget)
         {
-            canMove = true;
+            SetCanMove(true);
         }
     }
 
