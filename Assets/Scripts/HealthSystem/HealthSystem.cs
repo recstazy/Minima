@@ -2,9 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum HealthChangeType
+{
+    Damage,
+    Restore,
+}
+
+
 public class HealthSystem : MonoBehaviour
 {
-    public System.Action OnDeath;
+    public delegate void DeathHandler(Character killer, Character victim);
+    public event DeathHandler OnDeath;
+
+    public delegate void HpChangeHandler(HealthChangeType changeType);
+    public event HpChangeHandler OnHealthChanged;
 
     #region Fields
 
@@ -43,14 +54,15 @@ public class HealthSystem : MonoBehaviour
         currentHealth = maxHealth;
     }
 
-    public void ApplyDamage(float amount)
+    public void ApplyDamage(float amount, Character from = null)
     {
         currentHealth -= amount;
+        OnHealthChanged?.Invoke(HealthChangeType.Damage);
 
         if (currentHealth <= 0)
         {
             isAlive = false;
-            OnDeath?.Invoke();
+            OnDeath?.Invoke(from, owner);
         }
     }
 
@@ -59,6 +71,7 @@ public class HealthSystem : MonoBehaviour
         if (isAlive)
         {
             currentHealth += amount;
+            OnHealthChanged?.Invoke(HealthChangeType.Restore);
         }
     }
 }

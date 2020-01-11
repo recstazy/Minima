@@ -4,18 +4,18 @@ using UnityEngine;
 
 public static class GameObjectExtensions
 {
-    public static bool ApplyDamage (this GameObject gObject, float amount)
+    public static IDamagable ApplyDamage (this GameObject gObject, float amount, Character from = null)
     {
-        var iDamagable = gObject.GetComponent<IDamageble>();
+        var iDamagable = gObject.GetComponent<IDamagable>();
 
         if (iDamagable != null)
         {
-            iDamagable.ApplyDamage(amount);
-            return true;
+            iDamagable.ApplyDamage(amount, from);
+            return iDamagable;
         }
         else
         {
-            return false;
+            return null;
         }
     }
 }
