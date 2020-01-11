@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Character : MonoBehaviour, IDamageble
+public class Character : MonoBehaviour, IDamagable
 {
     #region Fields
 
@@ -13,6 +13,8 @@ public class Character : MonoBehaviour, IDamageble
 
     #region Properties
 
+    public HealthSystem HealthSystem { get => healthSystem; }
+
     #endregion
 
     protected virtual void Awake()
@@ -20,8 +22,8 @@ public class Character : MonoBehaviour, IDamageble
         healthSystem.Owner = this;
     }
 
-    public void ApplyDamage(float amount)
+    public void ApplyDamage(float amount, Character from = null)
     {
-        healthSystem.ApplyDamage(amount);
+        healthSystem.ApplyDamage(amount, from);
     }
 }

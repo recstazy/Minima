@@ -30,7 +30,7 @@ public class AreaWeapon : CoolingWeapon
         DamageArea();
     }
 
-    void DamageArea()
+    protected virtual List<IDamagable> DamageArea()
     {
         List<Collider2D> overlapped = new List<Collider2D>();
         var filter = new ContactFilter2D();
@@ -39,9 +39,18 @@ public class AreaWeapon : CoolingWeapon
 
         int count = damageCollider.OverlapCollider(filter, overlapped);
 
+        var damaged = new List<IDamagable>();
+
         foreach (var o in overlapped)
         {
-            o.gameObject.ApplyDamage(damage);
+            var iDamagable = o.gameObject.ApplyDamage(damage, Owner);
+            
+            if (iDamagable != null)
+            {
+                damaged.Add(iDamagable);
+            }
         }
+
+        return damaged;
     }
 }

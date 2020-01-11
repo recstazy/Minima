@@ -80,7 +80,7 @@ namespace Minima.LevelGeneration
                 if (IsTriangleSpawnable(c))
                 {
                     var newPoint = StaticHelpers
-                        .GetTriangleCenter(c.position, c.PreviousCorner.position, c.NextCorner.position, true);
+                        .GetTriangleCenter(c.position, c.PreviousCorner.position, c.NextCorner.position);
 
                     if (IsPointInRoom(newPoint))
                     {
@@ -114,7 +114,7 @@ namespace Minima.LevelGeneration
 
         private bool IsPointInRoom(Vector2 point)
         {
-            return StaticHelpers.CheckVisibility(point.ToVector3(), ThisRoom.transform.position, true);
+            return StaticHelpers.CheckVisibility(point.ToVector3(), ThisRoom.transform.position);
         }
     }
 }

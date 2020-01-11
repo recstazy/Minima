@@ -44,6 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ff63ca7f41d7bf43b0ebf39e733ecfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  owner: {fileID: 0}
+  coolDownTime: 0.5
   damageTarget: 1
   AreaParticles: {fileID: 7764498544421011770}
   damageCollider: {fileID: 0}
@@ -4814,7 +4816,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 8bff8204ae34c334cadb006b3176b714, type: 2}
   - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
