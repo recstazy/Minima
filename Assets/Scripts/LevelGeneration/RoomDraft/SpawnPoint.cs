@@ -14,37 +14,24 @@ namespace Minima.LevelGeneration
         [SerializeField]
         private EnemiesParent enemiesParent;
 
-        Dictionary<EnemyBase, int> spawnParamsCached;
-
         List<EnemyBase> spawned = new List<EnemyBase>();
 
         #endregion
 
         #region Properties
 
-        public Dictionary<EnemyBase, int> SpawnParams
-        {
-            get
-            {
-                if (spawnParamsCached == null)
-                {
-                    spawnParamsCached = new Dictionary<EnemyBase, int>();
-
-                    foreach (var p in spawnParams)
-                    {
-                        spawnParamsCached.Add(p.Prefab.GetComponent<EnemyBase>(), p.Count);
-                    }
-                }
-
-                return spawnParamsCached;
-            }
-        }
+        public WallCorner spawnedCorner { get; set; }
 
         #endregion
 
         public void Initialize(EnemiesParent enemiesParent)
         {
             this.enemiesParent = enemiesParent;
+        }
+
+        public void AddToSpawnParams(SpawnParams spawnParams)
+        {
+            this.spawnParams.Add(spawnParams);
         }
 
         public virtual void Spawn()

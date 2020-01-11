@@ -9,10 +9,10 @@ namespace Minima.LevelGeneration
         #region Fields
 
         [SerializeField]
-        private GameObject spawnPointPrefab;
+        private List<SpawnParams> spawnParams;
 
         [SerializeField]
-        private int spawnPointsCount = 3;
+        private GameObject spawnPointPrefab;
 
         [SerializeField]
         private float spawnableRadius = 2f;
@@ -43,14 +43,18 @@ namespace Minima.LevelGeneration
 
         public void GeneratePoints()
         {
-            for (int i = 0; i < spawnPointsCount; i++)
+            foreach (var p in spawnParams)
             {
-                var point = CreatePoint(GetPointPosition());
-
-                if (point != null)
+                for (int i = 0; i < p.Count; i++)
                 {
-                    point.Initialize(enemiesParent);
-                    point.Spawn();
+                    var point = CreatePoint(GetPointPosition());
+
+                    if (point != null)
+                    {
+                        point.Initialize(enemiesParent);
+                        point.AddToSpawnParams(new SpawnParams(p.Prefab));
+                        point.Spawn();
+                    }
                 }
             }
         }
@@ -77,14 +81,15 @@ namespace Minima.LevelGeneration
 
             foreach (var c in corners)
             {
-                if (IsTriangleSpawnable(c))
+                float radius = 0f;
+                if (IsTriangleSpawnable(c, out radius))
                 {
                     var newPoint = StaticHelpers
                         .GetTriangleCenter(c.position, c.PreviousCorner.position, c.NextCorner.position);
 
                     if (IsPointInRoom(newPoint))
                     {
-                        point = newPoint;
+                        point = StaticHelpers.RandomPointInRadius(newPoint, radius);
                         break;
                     }
                 }
@@ -93,16 +98,12 @@ namespace Minima.LevelGeneration
             return point;
         }
 
-        private bool IsTriangleSpawnable(WallCorner corner)
+        private bool IsTriangleSpawnable(WallCorner corner, out float innerRadius)
         {
-            float ab = (corner.NextCorner.position - corner.position).magnitude;
-            float bc = (corner.PreviousCorner.position - corner.NextCorner.position).magnitude;
-            float ac = (corner.PreviousCorner.position - corner.position).magnitude;
+            innerRadius = StaticHelpers.GetInnerTriangleRadius(
+                corner.position, corner.NextCorner.position, corner.PreviousCorner.position);
 
-            float p = 0.5f * (ab + bc + ac);
-            float radius = Mathf.Sqrt(((p - ab) * (p - bc) * (p - ac)) / p); // triangle inner circle radius
-
-            if (radius > spawnableRadius)
+            if (innerRadius > spawnableRadius)
             {
                 return true;
             }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AreaWeapon : CoolingWeapon
+public class AreaWeapon : CoolingWeapon, ITargetable
 {
     #region Fields
 
@@ -21,8 +21,13 @@ public class AreaWeapon : CoolingWeapon
     #endregion
 
     #region Properties
-    
+
     #endregion
+
+    public void SetTarget(DamageTarget target)
+    {
+        damageTarget = target;
+    }
 
     protected override void Use()
     {

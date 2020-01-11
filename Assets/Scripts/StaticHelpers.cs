@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,7 +7,7 @@ public static class StaticHelpers
 {
     public static bool RandomBool()
     {
-        int randomInt = UnityEngine.Random.Range(0, 100);
+        int randomInt = Random.Range(0, 100);
 
         if (randomInt >= 50)
         {
@@ -29,9 +29,9 @@ public static class StaticHelpers
         }
 
         Vector2 ab = b - a;
-        Vector2 p = ab * UnityEngine.Random.Range(0f, 1f); // point on ab
+        Vector2 p = ab * Random.Range(0f, 1f); // point on ab
         Vector2 cp = p - (c - a); // line to p from c
-        Vector2 result = c + cp * UnityEngine.Random.Range(0f, 1f); // point on cp
+        Vector2 result = c + cp * Random.Range(0f, 1f); // point on cp
 
         return result;
     }
@@ -57,6 +57,33 @@ public static class StaticHelpers
         }
 
         return center;
+    }
+
+    public static float GetInnerTriangleRadius(Vector2 a, Vector2 b, Vector2 c)
+    {
+        float ab = (b - a).magnitude;
+        float bc = (c - b).magnitude;
+        float ac = (c - a).magnitude;
+
+        float p = 0.5f * (ab + bc + ac);
+        float radius = Mathf.Sqrt(((p - ab) * (p - bc) * (p - ac)) / p); // triangle inner circle radius
+
+        return radius;
+    }
+
+    public static Vector2 RandomPointInRadius(Vector2 origin, float radius, bool showDebug = false)
+    {
+        float x = Random.Range(0f, 1f);
+        float y = Random.Range(0f, 1f);
+
+        Vector2 offset = new Vector2(x, y) * radius;
+
+        if (showDebug)
+        {
+            Debug.DrawLine(origin, origin + offset, Color.red, 30f);
+        }
+
+        return origin + offset;
     }
 
     public static bool CheckVisibility(Vector2 from, Vector2 to, bool showDebug = false)

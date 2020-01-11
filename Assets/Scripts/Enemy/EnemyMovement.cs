@@ -10,7 +10,7 @@ public class EnemyMovement : MovementComponent
     private Transform currentTarget;
 
     [SerializeField]
-    private AgressionTrigger agressionTrigger;
+    private TriggerDelegate agressionTrigger;
 
     private Transform thisTransform;
     private bool canMove = false;
