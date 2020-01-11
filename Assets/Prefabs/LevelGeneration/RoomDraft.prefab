@@ -45,7 +45,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnPointPrefab: {fileID: 903070718872153714, guid: 245aa136bc5cdee43aa7e6414a1ebf11,
     type: 3}
-  spawnPointsCount: 8
+  spawnPointsCount: 4
   spawnableRadius: 2
 --- !u!1 &1628739595645118069
 GameObject:
