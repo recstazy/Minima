@@ -29,6 +29,16 @@ public class AIControlled : MonoBehaviour
         }
     }
 
+    public void StopMovement()
+    {
+        movementComp.StopMoving();
+    }
+
+    public void ContinueMovement()
+    {
+        movementComp.SetCanMove(true);
+    }
+
     public virtual void Shoot(Character target = null)
     {
         if (Weapon != null)

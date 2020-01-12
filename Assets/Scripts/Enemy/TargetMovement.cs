@@ -10,7 +10,7 @@ public class TargetMovement : MovementComponent
     private Transform currentTarget;
 
     private Transform thisTransform;
-    private bool canMove = false;
+    
     #endregion
 
     #region Properties
@@ -28,36 +28,35 @@ public class TargetMovement : MovementComponent
 
     override protected void Update()
     {
-        if (canMove)
-        {
-            MoveToTarget();
-        }
-        
+        MoveToTarget();
         base.Update();
     }
 
     public void MoveToTarget(Transform target)
     {
         currentTarget = target;
-        SetCanMove(true);
         MoveToTarget();
     }
 
-    protected virtual void SetCanMove(bool newCanMove)
+    public void MoveToTarget()
     {
-        canMove = newCanMove;
-
-        if (!canMove)
+        if (currentTarget != null)
         {
-            StopMoving();
+            var direction = currentTarget.position - thisTransform.position;
+            MoveOnDirection(direction);
         }
+    }
+
+    public override void StopMoving()
+    {
+        SetCanMove(false);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.transform == currentTarget)
         {
-            SetCanMove(false);
+            StopMoving();
         }
     }
 
@@ -65,16 +64,10 @@ public class TargetMovement : MovementComponent
     {
         if (collision.transform == currentTarget)
         {
-            SetCanMove(true);
-        }
-    }
-
-    private void MoveToTarget()
-    {
-        if (currentTarget != null)
-        {
-            var direction = currentTarget.position - thisTransform.position;
-            MoveOnDirection(direction);
+            if (canMove)
+            {
+                MoveToTarget();
+            }
         }
     }
 }
