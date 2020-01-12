@@ -18,4 +18,9 @@ public static class GameObjectExtensions
             return null;
         }
     }
+
+    public static Character GetCharacter(this GameObject gObject)
+    {
+        return gObject.GetComponent<Character>();
+    }
 }

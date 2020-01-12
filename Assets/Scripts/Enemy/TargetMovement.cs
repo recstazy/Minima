@@ -2,15 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyMovement : MovementComponent
+public class TargetMovement : MovementComponent
 {
     #region Fields
 
     [SerializeField]
     private Transform currentTarget;
-
-    [SerializeField]
-    private TriggerDelegate agressionTrigger;
 
     private Transform thisTransform;
     private bool canMove = false;
@@ -27,12 +24,6 @@ public class EnemyMovement : MovementComponent
         base.Start();
 
         thisTransform = transform;
-        agressionTrigger.OnTargetTriggered += TargetTriggered;
-    }
-
-    private void OnDestroy()
-    {
-        agressionTrigger.OnTargetTriggered -= TargetTriggered;
     }
 
     override protected void Update()
@@ -43,6 +34,13 @@ public class EnemyMovement : MovementComponent
         }
         
         base.Update();
+    }
+
+    public void MoveToTarget(Transform target)
+    {
+        currentTarget = target;
+        SetCanMove(true);
+        MoveToTarget();
     }
 
     protected virtual void SetCanMove(bool newCanMove)
@@ -69,12 +67,6 @@ public class EnemyMovement : MovementComponent
         {
             SetCanMove(true);
         }
-    }
-
-    private void TargetTriggered(GameObject target)
-    {
-        currentTarget = target.transform;
-        canMove = true;
     }
 
     private void MoveToTarget()
