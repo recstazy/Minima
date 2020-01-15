@@ -18,6 +18,7 @@ public class CoolingWeapon : WeaponComponent
         if (canFire)
         {
             Use();
+            CallWeaponUsed();
             StartCoroutine(CoolDown());
         }
     }

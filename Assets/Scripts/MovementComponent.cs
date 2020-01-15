@@ -14,13 +14,20 @@ public class MovementComponent : MonoBehaviour
     [Range(0.01f, 0.99f)]
     private float inertia = 0.5f;
 
-    private Vector2 direction;
+    [SerializeField]
+    protected bool rotateToDirection = true;
+
+    protected Vector2 direction;
     new private Rigidbody2D rigidbody;
+    protected Transform thisTransform;
+    protected bool canMove = true;
+
+    private Vector2 movingDirection;
 
     #endregion
 
     #region Properties
-    
+
     public Vector2 CurrentDirection { get => direction; }
 
     #endregion
@@ -28,11 +35,13 @@ public class MovementComponent : MonoBehaviour
     protected virtual void Start()
     {
         rigidbody = GetComponent<Rigidbody2D>();
+        thisTransform = transform;
     }
 
     protected virtual void Update()
     {
-        Move();
+        UpdateSpeed();
+        UpdateRotation();
     }
 
     public void MoveOnDirection(Vector2 newDirection)
@@ -40,9 +49,19 @@ public class MovementComponent : MonoBehaviour
         SetDirection(newDirection);
     }
 
-    public void StopMoving()
+    public virtual void StopMoving()
     {
         SetDirection(Vector2.zero);
+    }
+
+    public virtual void SetCanMove(bool newCanMove)
+    {
+        canMove = newCanMove;
+
+        if (!canMove)
+        {
+            StopMoving();
+        }
     }
 
     protected void SetDirection(Vector2 newDirection)
@@ -50,8 +69,26 @@ public class MovementComponent : MonoBehaviour
         direction = newDirection;
     }
 
-    private void Move()
+    private void UpdateSpeed()
     {
-        rigidbody.velocity = Vector2.Lerp(rigidbody.velocity, direction.normalized * speed, 1 - inertia);
+        if (canMove)
+        {
+            movingDirection = direction;
+        }
+        else
+        {
+            movingDirection = Vector2.zero;
+        }
+
+        rigidbody.velocity = Vector2.Lerp(rigidbody.velocity, movingDirection.normalized * speed, 1 - inertia);
+    }
+
+    private void UpdateRotation()
+    {
+        if (rotateToDirection && direction != Vector2.zero)
+        {
+            thisTransform.right = direction.normalized;
+            Debug.Log(direction);
+        }
     }
 }

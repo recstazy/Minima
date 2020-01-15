@@ -2,21 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyWeapon : MonoBehaviour
+public class AIBase : MonoBehaviour
 {
     #region Fields
 
     [SerializeField]
-    private WeaponComponent weapon;
+    private AIControlled aiControlled;
 
     #endregion
 
     #region Properties
+    
+    public AIControlled AIControlled { get => aiControlled; }
 
     #endregion
-
-    public void Shoot()
-    {
-        weapon.UseWeapon();
-    }
 }

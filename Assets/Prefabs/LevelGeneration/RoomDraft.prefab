@@ -46,10 +46,10 @@ MonoBehaviour:
   spawnParams:
   - prefab: {fileID: 4601056734282181986, guid: 74204d7a27ccf804faa4ad1ccf40c287,
       type: 3}
-    count: 2
-  - prefab: {fileID: 9042936540590099952, guid: b78bdeb02ed31ff49b6c4aae604ab380,
+    count: 4
+  - prefab: {fileID: 3351443242901170636, guid: d9d687012c2516241a5ed067a941b3f5,
       type: 3}
-    count: 3
+    count: 1
   spawnPointPrefab: {fileID: 903070718872153714, guid: 245aa136bc5cdee43aa7e6414a1ebf11,
     type: 3}
   spawnableRadius: 2
