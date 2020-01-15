@@ -219,6 +219,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 20
   inertia: 0.84
+  rotateToDirection: 0
 --- !u!114 &6844262298024995349
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -7,9 +7,7 @@ public class TargetMovement : MovementComponent
     #region Fields
 
     [SerializeField]
-    private Transform currentTarget;
-
-    private Transform thisTransform;
+    protected Transform currentTarget;
     
     #endregion
 
@@ -18,13 +16,6 @@ public class TargetMovement : MovementComponent
     public Transform CurrentTarget { get => currentTarget; }
 
     #endregion
-
-    override protected void Start()
-    {
-        base.Start();
-
-        thisTransform = transform;
-    }
 
     override protected void Update()
     {
@@ -38,18 +29,13 @@ public class TargetMovement : MovementComponent
         MoveToTarget();
     }
 
-    public void MoveToTarget()
+    public virtual void MoveToTarget()
     {
         if (currentTarget != null)
         {
             var direction = currentTarget.position - thisTransform.position;
             MoveOnDirection(direction);
         }
-    }
-
-    public override void StopMoving()
-    {
-        SetCanMove(false);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
