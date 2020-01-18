@@ -42,7 +42,6 @@ namespace Minima.LevelGeneration
             Vector2 endPosition = cornerB.GetWallEndPoint(cornerA).position;
 
             var position = startPosition + ((endPosition - startPosition) / 2);
-            //var position = cornerA.position + ((cornerB.position - cornerA.position) / 2);
 
             var wall = InstantiateWall(position);
 
