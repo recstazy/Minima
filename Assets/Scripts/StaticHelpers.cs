@@ -109,38 +109,6 @@ public static class StaticHelpers
         return hitsCount <= 0;
     }
 
-    public static bool IsPointInCircle(Vector2 center, float radius, Vector2 point)
-    {
-        float distance = Vector2.Distance(point, center);
-
-        if (distance <= radius)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    public static bool IsInRange(this float value, float left, float right, bool includeBounds)
-    {
-        if (includeBounds)
-        {
-            if (value >= left && value <= right)
-            {
-                return true;
-            }
-        }
-        else
-        {
-            if (value > left && value < right)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public static Vector2 ToVector2(this Vector3 vector)
     {
         return new Vector2(vector.x, vector.y);
