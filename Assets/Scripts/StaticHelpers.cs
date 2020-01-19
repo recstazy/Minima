@@ -134,27 +134,26 @@ public static class StaticHelpers
         return false;
     }
 
-    public static bool CheckVisibility(Vector2 from, Vector2 to, bool showDebug = false)
+    private static List<RaycastHit2D> RaycastVisibility(Vector2 from, Vector2 to)
     {
         Vector2 distanceVector = (to - from);
-        Ray ray = new Ray(from, distanceVector.normalized);
-
         List<RaycastHit2D> hits = new List<RaycastHit2D>();
-
         var hitsCount = Physics2D.Raycast(from, distanceVector.normalized, new ContactFilter2D(), hits, distanceVector.magnitude);
 
-        if (showDebug)
-        {
-            Debug.DrawLine(ray.origin, ray.direction * distanceVector.magnitude  + ray.origin, Color.green, 30f);
-            Debug.Log("CheckVisibility: count = " + hitsCount);
+        return hits;
+    }
 
-            foreach (var h in hits)
-            {
-                Debug.Log(h.collider.name);
-            }
-        }
+    public static bool CheckVisibility(Vector2 from, Vector2 to)
+    {
+        var hits = RaycastVisibility(from, to);
+        return hits.Count <= 0;
+    }
 
-        return hitsCount <= 0;
+    public static bool CheckVisibility(Vector2 from, Vector2 to, out List<RaycastHit2D> outHits)
+    {
+        var hits = RaycastVisibility(from, to);
+        outHits = hits;
+        return hits.Count <= 0;
     }
 
     public static Vector2 ToVector2(this Vector3 vector)

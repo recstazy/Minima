@@ -17,6 +17,8 @@ namespace Minima.Navigation
 
         public List<NavTriangle> ConnectedTriangles { get; set; }
 
+        public bool IsValid { get; set; }
+
         #endregion
 
         public NavEdge(NavPoint start, NavPoint end)
@@ -24,11 +26,28 @@ namespace Minima.Navigation
             Start = start;
             End = end;
             ConnectedTriangles = new List<NavTriangle>();
+            IsValid = true;
         }
 
         public bool Intersects(NavEdge otherEdge)
         {
             return StaticHelpers.EdgesIntersect(Start.Position, End.Position, otherEdge.Start.Position, otherEdge.End.Position);
+        }
+
+        public NavPoint GetAnotherEnd(NavPoint start)
+        {
+            if (start == Start)
+            {
+                return End;
+            }
+            else if (start == End)
+            {
+                return Start;
+            }
+            else
+            {
+                return new NavPoint();
+            }
         }
     }
 }

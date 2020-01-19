@@ -12,6 +12,23 @@ namespace Minima.Navigation
 
         public List<NavEdge> ConnectedEdges { get; set; }
 
+        public List<NavPoint> ConnectedPoints
+        {
+            get
+            {
+                var connected = new List<NavPoint>();
+
+                foreach (var e in ConnectedEdges)
+                {
+                    var p = e.GetAnotherEnd(this);
+                    connected.Add(p);
+                }
+
+                return connected;
+            }
+        }
+
+
         #endregion
 
         public NavPoint(Vector2 position)

@@ -53,11 +53,10 @@ namespace Minima.Navigation
 
             if (createEdges)
             {
-                bool success = false;
-                CreateEdge(a, b, out success);
-                CreateEdge(b, c, out success);
-                CreateEdge(c, d, out success);
-                CreateEdge(d, a, out success);
+                CreateEdge(a, b);
+                CreateEdge(b, c);
+                CreateEdge(c, d);
+                CreateEdge(d, a);
             }
         }
 
@@ -72,13 +71,21 @@ namespace Minima.Navigation
 
         protected NavEdge CreateEdge(NavPoint a, NavPoint b, out bool success)
         {
+            var edge = CreateEdge(a, b);
+            success = edge.IsValid;
+
+            return edge;
+        }
+
+        protected NavEdge CreateEdge(NavPoint a, NavPoint b)
+        {
             var edge = new NavEdge(a, b);
 
-            bool visible = StaticHelpers.CheckVisibility(a.Position, b.Position);
+            var hits = new List<RaycastHit2D>();
+            bool visible = StaticHelpers.CheckVisibility(a.Position, b.Position, out hits);
 
             if (!visible)
             {
-                success = false;
                 return new NavEdge();
             }
 
@@ -89,12 +96,10 @@ namespace Minima.Navigation
             {
                 if (edge.Intersects(e))
                 {
-                    success = false;
                     return new NavEdge();
                 }
             }
 
-            success = true;
             edges.Add(edge);
             a.ConnectedEdges.Add(edge);
             b.ConnectedEdges.Add(edge);
@@ -117,6 +122,31 @@ namespace Minima.Navigation
             }
 
             return point;
+        }
+
+        protected List<NavPoint> GetClosestPoints(NavPoint origin, int count, params NavPoint[] except)
+        {
+            var distanceComparer = new NavPointDistanceComparer(origin);
+            var pointsTemp = points.ToList();
+
+            pointsTemp.Remove(origin);
+            pointsTemp = pointsTemp.Except(except).ToList();
+            pointsTemp.Sort(distanceComparer);
+
+            var toRemove = new List<NavPoint>();
+
+            foreach (var p in pointsTemp)
+            {
+                if (!StaticHelpers.CheckVisibility(origin.Position, p.Position))
+                {
+                    toRemove.Add(p);
+                }
+            }
+
+            pointsTemp = pointsTemp.Except(toRemove).ToList();
+            var closest = pointsTemp.Take(count).ToList();
+
+            return closest;
         }
 
         protected List<Collider2D> GetAllObstacles()

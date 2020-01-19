@@ -9,6 +9,9 @@ namespace Minima.Navigation
     {
         #region Fields
 
+        [SerializeField]
+        int preBuildIterations = 2;
+
         protected List<NavTriangle> triangles = new List<NavTriangle>();
 
         #endregion
@@ -40,18 +43,63 @@ namespace Minima.Navigation
 
         protected void CreateTriangles()
         {
-            var edgesTemp = edges.ToList();
+            bool success;
+            int iterations = 0;
 
-            foreach(var e in edgesTemp)
+            do
             {
-                CreateTriangle(e);
+                success = false;
+                var edgesTemp = edges.ToList();
+
+                foreach (var e in edgesTemp)
+                {
+                    var complete = CreateTriangle(e);
+                    if (complete)
+                    {
+                        success = true;
+                    }
+                }
+                iterations++;
+            }
+            while (success && iterations < preBuildIterations);
+
+            AddMissingEdges();
+        }
+
+        private void AddMissingEdges()
+        {
+            foreach (var origin in points.ToList())
+            {
+                var connected = origin.ConnectedPoints;
+                connected.Remove(origin);
+
+                foreach (var nextPoint in connected)
+                {
+                    var nextConnected = nextPoint.ConnectedPoints;
+                    nextConnected.RemoveAll(x => x == origin || x == nextPoint);
+
+                    foreach (var thirdPoint in nextConnected)
+                    {
+                        if (thirdPoint.ConnectedPoints.Contains(origin))
+                        {
+                            continue;
+                        }
+
+                        CreateEdge(origin, thirdPoint);
+
+                        if (origin.ConnectedPoints.Count > 100)
+                        {
+                            throw new System.Exception("NavMeshBuilder: Origin.ConnectedPoints.Count > 100");
+                        }
+                    }
+                }
             }
         }
 
-        protected void CreateTriangle(NavEdge edge)
+        protected bool CreateTriangle(NavEdge edge)
         {
             var point = GetClosestPoint(edge);
-            CreateTriangle(point, edge.Start, edge.End);
+            return CreateTriangle(point, edge.Start, edge.End);
         }
 
         protected void CreateTriangle(NavPoint origin)
@@ -66,41 +114,18 @@ namespace Minima.Navigation
             CreateTriangle(origin, firstPoints[0], firstPoints[1]);
         }
 
-        protected void CreateTriangle(NavPoint a, NavPoint b, NavPoint c)
+        protected bool CreateTriangle(NavPoint a, NavPoint b, NavPoint c)
         {
-            bool success = false;
-            var ab = CreateEdge(a, b, out success);
-            var ac = CreateEdge(a, c, out success);
-            var bc = CreateEdge(b, c, out success);
+            var ab = CreateEdge(a, b);
+            var ac = CreateEdge(a, c);
+            var bc = CreateEdge(b, c);
 
-            var triangle = new NavTriangle(ab, ac, bc);
-
-            triangles.Add(triangle);
-        }
-
-        protected List<NavPoint> GetClosestPoints(NavPoint origin, int count, params NavPoint[] except)
-        {
-            var distanceComparer = new NavPointDistanceComparer(origin);
-            var pointsTemp = points.ToList();
-
-            pointsTemp.Remove(origin);
-            pointsTemp = pointsTemp.Except(except).ToList();
-            pointsTemp.Sort(distanceComparer);
-
-            var toRemove = new List<NavPoint>();
-
-            foreach(var p in pointsTemp)
+            if (!ab.IsValid || !ac.IsValid || !bc.IsValid)
             {
-                if (!StaticHelpers.CheckVisibility(origin.Position, p.Position))
-                {
-                    toRemove.Add(p);
-                }
+                return false;
             }
 
-            pointsTemp = pointsTemp.Except(toRemove).ToList();
-            var closest = pointsTemp.Take(count).ToList();
-
-            return closest;
+            return true;
         }
 
         protected NavPoint GetClosestPoint(NavEdge edge)
