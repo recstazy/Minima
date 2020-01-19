@@ -86,6 +86,54 @@ public static class StaticHelpers
         return origin + offset;
     }
 
+    public static float GetTriangleSurface(Vector2 a, Vector2 b, Vector2 c, bool showDebug = false)
+    {
+        var ab = Vector2.Distance(a, b);
+        float angle = Vector2.Angle(b - a, c - a);
+
+        var hVector = (c - a) * Mathf.Sin(angle);
+        float h = hVector.magnitude;
+
+        if (showDebug)
+        {
+            Debug.DrawLine(a, b, Color.yellow, 15f);
+            Debug.DrawLine(a, c, Color.yellow, 15f);
+            Debug.DrawLine(b, c, Color.yellow, 15f);
+            Debug.DrawLine(c, c - hVector, Color.red, 15f);
+        }
+
+        return (ab * h) / 2;
+
+    }
+
+    /// <summary>
+    /// Returnes true if ab intersects with cd
+    /// </summary>
+    public static bool EdgesIntersect(Vector2 a, Vector2 b, Vector2 c, Vector2 d)
+    {
+        float denominator = (d.y - c.y) * (b.x - a.x) - (d.x - c.x) * (b.y - a.y);
+
+        float u = ((d.x - c.x) * (a.y - c.y) - (d.y - c.y) * (a.x - c.x)) / denominator;
+        float v = ((b.x - a.x) * (a.y - c.y) - (b.y - a.y) * (a.x - c.x)) / denominator;
+
+        if (u.InBounds(0f, 1f) && v.InBounds(0f, 1f))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static bool InBounds(this float value, float left, float right)
+    {
+        if (value >= left && value <= right)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     public static bool CheckVisibility(Vector2 from, Vector2 to, bool showDebug = false)
     {
         Vector2 distanceVector = (to - from);

@@ -25,5 +25,10 @@ namespace Minima.Navigation
             End = end;
             ConnectedTriangles = new List<NavTriangle>();
         }
+
+        public bool Intersects(NavEdge otherEdge)
+        {
+            return StaticHelpers.EdgesIntersect(Start.Position, End.Position, otherEdge.Start.Position, otherEdge.End.Position);
+        }
     }
 }

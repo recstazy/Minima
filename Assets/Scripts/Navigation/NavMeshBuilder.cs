@@ -10,7 +10,6 @@ namespace Minima.Navigation
         #region Fields
 
         protected List<NavTriangle> triangles = new List<NavTriangle>();
-        protected List<NavEdge> edges = new List<NavEdge>();
 
         #endregion
 
@@ -33,55 +32,93 @@ namespace Minima.Navigation
 
         public override void BuildNavMesh()
         {
-            CreateBounds(buildArea);
+            CreateBounds(buildArea, createEdges: true);
             CreateObstaclesBounds();
 
             CreateTriangles();
         }
 
-        void CreateTriangles()
+        protected void CreateTriangles()
         {
-            var firstPoints = GetClosestPoints(points[0], 3);
-            CreateTriangle(firstPoints[0], firstPoints[1], firstPoints[2]);
-            Debug.Log(triangles.Count);
+            var edgesTemp = edges.ToList();
+
+            foreach(var e in edgesTemp)
+            {
+                CreateTriangle(e);
+            }
+        }
+
+        protected void CreateTriangle(NavEdge edge)
+        {
+            var point = GetClosestPoint(edge);
+            CreateTriangle(point, edge.Start, edge.End);
+        }
+
+        protected void CreateTriangle(NavPoint origin)
+        {
+            var firstPoints = GetClosestPoints(origin, 2);
+
+            if (firstPoints.Count < 2)
+            {
+                return;
+            }
+
+            CreateTriangle(origin, firstPoints[0], firstPoints[1]);
         }
 
         protected void CreateTriangle(NavPoint a, NavPoint b, NavPoint c)
         {
-            var ab = new NavEdge(a, b);
-            var ac = new NavEdge(a, c);
-            var bc = new NavEdge(b, c);
+            bool success = false;
+            var ab = CreateEdge(a, b, out success);
+            var ac = CreateEdge(a, c, out success);
+            var bc = CreateEdge(b, c, out success);
 
             var triangle = new NavTriangle(ab, ac, bc);
 
             triangles.Add(triangle);
         }
 
-        protected List<NavPoint> GetClosestPoints(NavPoint origin, int count)
+        protected List<NavPoint> GetClosestPoints(NavPoint origin, int count, params NavPoint[] except)
         {
             var distanceComparer = new NavPointDistanceComparer(origin);
             var pointsTemp = points.ToList();
 
             pointsTemp.Remove(origin);
+            pointsTemp = pointsTemp.Except(except).ToList();
             pointsTemp.Sort(distanceComparer);
 
-            var closest = pointsTemp.Take(count).ToList();
+            var toRemove = new List<NavPoint>();
 
-            foreach (var p in closest)
+            foreach(var p in pointsTemp)
             {
-                Debug.Log(Vector2.Distance(origin.Position, p.Position));
+                if (!StaticHelpers.CheckVisibility(origin.Position, p.Position))
+                {
+                    toRemove.Add(p);
+                }
             }
+
+            pointsTemp = pointsTemp.Except(toRemove).ToList();
+            var closest = pointsTemp.Take(count).ToList();
 
             return closest;
         }
 
+        protected NavPoint GetClosestPoint(NavEdge edge)
+        {
+            var closest = GetClosestPoints(edge.Start, 3, edge.End);
+
+            var comparer = new EdgeDistanceComparer(edge);
+
+            closest.Sort(comparer);
+
+            return closest[0];
+        }
+
         protected void DrawEdges()
         {
-            foreach (var t in triangles)
+            foreach (var e in edges)
             {
-                Debug.DrawLine(t.A.Position, t.B.Position, Color.white, Time.deltaTime);
-                Debug.DrawLine(t.B.Position, t.C.Position, Color.white, Time.deltaTime);
-                Debug.DrawLine(t.A.Position, t.C.Position, Color.white, Time.deltaTime);
+                Debug.DrawLine(e.Start.Position, e.End.Position);
             }
         }
     }

@@ -42,7 +42,7 @@ namespace Minima.Navigation
             AC = ac;
 
             A = AB.Start;
-            B = BC.Start;
+            B = AB.End;
             C = AC.End;
         }
 

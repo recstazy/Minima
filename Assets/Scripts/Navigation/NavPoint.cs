@@ -10,11 +10,14 @@ namespace Minima.Navigation
 
         public Vector2 Position { get; set; }
 
+        public List<NavEdge> ConnectedEdges { get; set; }
+
         #endregion
 
         public NavPoint(Vector2 position)
         {
             Position = position;
+            ConnectedEdges = new List<NavEdge>();
         }
 
         #region Operators
