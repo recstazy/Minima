@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ namespace Minima.Navigation
         #region Fields
 
         protected List<NavTriangle> triangles = new List<NavTriangle>();
+        protected List<NavEdge> edges = new List<NavEdge>();
 
         #endregion
 
@@ -33,6 +35,15 @@ namespace Minima.Navigation
         {
             CreateBounds(buildArea);
             CreateObstaclesBounds();
+
+            CreateTriangles();
+        }
+
+        void CreateTriangles()
+        {
+            var firstPoints = GetClosestPoints(points[0], 3);
+            CreateTriangle(firstPoints[0], firstPoints[1], firstPoints[2]);
+            Debug.Log(triangles.Count);
         }
 
         protected void CreateTriangle(NavPoint a, NavPoint b, NavPoint c)
@@ -44,6 +55,24 @@ namespace Minima.Navigation
             var triangle = new NavTriangle(ab, ac, bc);
 
             triangles.Add(triangle);
+        }
+
+        protected List<NavPoint> GetClosestPoints(NavPoint origin, int count)
+        {
+            var distanceComparer = new NavPointDistanceComparer(origin);
+            var pointsTemp = points.ToList();
+
+            pointsTemp.Remove(origin);
+            pointsTemp.Sort(distanceComparer);
+
+            var closest = pointsTemp.Take(count).ToList();
+
+            foreach (var p in closest)
+            {
+                Debug.Log(Vector2.Distance(origin.Position, p.Position));
+            }
+
+            return closest;
         }
 
         protected void DrawEdges()
