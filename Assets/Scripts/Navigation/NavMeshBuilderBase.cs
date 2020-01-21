@@ -18,6 +18,9 @@ namespace Minima.Navigation
         [SerializeField]
         protected bool showDebug = false;
 
+        [SerializeField]
+        protected float boundOffset = 0.15f;
+
         protected List<NavPoint> points = new List<NavPoint>();
         protected List<NavEdge> edges = new List<NavEdge>();
 
@@ -37,7 +40,7 @@ namespace Minima.Navigation
 
             foreach (var o in obstacles)
             {
-                CreateBounds(o, 0.15f, true);
+                CreateBounds(o, boundOffset, true);
             }
         }
 
@@ -126,8 +129,13 @@ namespace Minima.Navigation
 
         protected List<NavPoint> GetClosestPoints(NavPoint origin, int count, params NavPoint[] except)
         {
+            return GetClosestPoints(points, origin, count, except);
+        }
+
+        protected List<NavPoint> GetClosestPoints(List<NavPoint> sourcePoints, NavPoint origin, int count, params NavPoint[] except)
+        {
             var distanceComparer = new NavPointDistanceComparer(origin);
-            var pointsTemp = points.ToList();
+            var pointsTemp = sourcePoints.ToList();
 
             pointsTemp.Remove(origin);
             pointsTemp = pointsTemp.Except(except).ToList();

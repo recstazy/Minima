@@ -64,6 +64,7 @@ namespace Minima.Navigation
             while (success && iterations < preBuildIterations);
 
             AddMissingEdges();
+            CleanUpPoints();
         }
 
         private void AddMissingEdges()
@@ -91,6 +92,37 @@ namespace Minima.Navigation
                         {
                             throw new System.Exception("NavMeshBuilder: Origin.ConnectedPoints.Count > 100");
                         }
+                    }
+                }
+            }
+        }
+
+        private void CleanUpPoints()
+        {
+            foreach (var p in points.ToList())
+            {
+                if (p.ConnectedEdges.Count == 0)
+                {
+                    var point = GetClosestPoints(p, 1);
+                    var edge = CreateEdge(p, point[0]);
+
+                    if (edge.IsValid)
+                    {
+                        var thirdPoints = GetClosestPoints(edge.End.ConnectedPoints, p, 1);
+                        var thirdEdge = CreateEdge(thirdPoints[0], p);
+
+                        if (thirdEdge.IsValid)
+                        {
+                        }
+                        else
+                        {
+                            edges.Remove(edge);
+                            points.Remove(p);
+                        }
+                    }
+                    else
+                    {
+                        points.Remove(p);
                     }
                 }
             }

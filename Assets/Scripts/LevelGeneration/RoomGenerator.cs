@@ -50,6 +50,7 @@ namespace Minima.LevelGeneration
             DeleteExits();
             GenerateWalls();
             RoomDraft.HideExits();
+            RoomDraft.NavMeshBuilder.BuildNavMesh();
         }
 
         public void GenerateSpawn()
