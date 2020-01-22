@@ -5,12 +5,15 @@ using UnityEngine;
 
 namespace Minima.Navigation
 {
+    /// <summary>
+    /// Use it to test how (O^n) algorithms makes your game suffer
+    /// </summary>
     public class NavMeshBuilder : NavMeshBuilderBase
     {
         #region Fields
 
         [SerializeField]
-        int preBuildIterations = 2;
+        int preBuildIterations = 1;
 
         protected List<NavTriangle> triangles = new List<NavTriangle>();
 
@@ -22,7 +25,7 @@ namespace Minima.Navigation
 
         void Start()
         {
-            BuildNavMesh();
+            //BuildNavMesh();
         }
 
         protected virtual void Update()
@@ -35,10 +38,14 @@ namespace Minima.Navigation
 
         public override void BuildNavMesh()
         {
+            System.DateTime startTime = System.DateTime.Now;
+
             CreateBounds(buildArea, createEdges: true);
             CreateObstaclesBounds();
-
             CreateTriangles();
+
+            System.TimeSpan timeElapsed = System.DateTime.Now - startTime;
+            Debug.Log("NavMesh building took " + timeElapsed);
         }
 
         protected void CreateTriangles()
