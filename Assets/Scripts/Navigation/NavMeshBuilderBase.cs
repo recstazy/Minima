@@ -34,41 +34,12 @@ namespace Minima.Navigation
         {
         }
 
-        protected void CreateObstaclesBounds()
-        {
-            var obstacles = GetAllObstacles();
-
-            foreach (var o in obstacles)
-            {
-                CreateBounds(o, boundOffset, true);
-            }
-        }
-
-        protected void CreateBounds(Collider2D collider, float addToExtents = 0f, bool createEdges = false)
-        {
-            float x = collider.bounds.extents.x + addToExtents;
-            float y = collider.bounds.extents.y + addToExtents;
-
-            var a = CreatePoint(collider.bounds.center + new Vector3(x, y));
-            var b = CreatePoint(collider.bounds.center + new Vector3(-x, y));
-            var c = CreatePoint(collider.bounds.center + new Vector3(-x, -y));
-            var d = CreatePoint(collider.bounds.center + new Vector3(x, -y));
-
-            if (createEdges)
-            {
-                CreateEdge(a, b);
-                CreateEdge(b, c);
-                CreateEdge(c, d);
-                CreateEdge(d, a);
-            }
-        }
-
         protected NavPoint CreatePoint(Vector2 position)
         {
-            var clampedPosition = ClampToBounds(position);
-            var point = new NavPoint(clampedPosition);
+            var point = new NavPoint(position);
             points.Add(point);
             Instantiate(pointPrefab, point.Position, Quaternion.identity, this.transform);
+
             return point;
         }
 
@@ -84,47 +55,11 @@ namespace Minima.Navigation
         {
             var edge = new NavEdge(a, b);
 
-            var hits = new List<RaycastHit2D>();
-            bool visible = StaticHelpers.CheckVisibility(a.Position, b.Position, out hits);
-
-            if (!visible)
-            {
-                return new NavEdge();
-            }
-
-            var except = a.ConnectedEdges.Concat(b.ConnectedEdges).ToList();
-            var checkedEdges = edges.Except(except).ToList();
-
-            foreach (var e in checkedEdges)
-            {
-                if (edge.Intersects(e))
-                {
-                    return new NavEdge();
-                }
-            }
-
             edges.Add(edge);
             a.ConnectedEdges.Add(edge);
             b.ConnectedEdges.Add(edge);
 
             return edge;
-        }
-
-        protected Vector2 ClampToBounds(Vector2 point)
-        {
-            Vector2 bounds = buildArea.bounds.center + buildArea.bounds.extents;
-
-            if (Mathf.Abs(point.x) > bounds.x)
-            {
-                point.x = bounds.x * (point.x / Mathf.Abs(point.x)); // multiply to (1 or -1)
-            }
-            
-            if (Mathf.Abs(point.y) > bounds.y)
-            {
-                point.y = bounds.y * (point.y / Mathf.Abs(point.y));
-            }
-
-            return point;
         }
 
         protected List<NavPoint> GetClosestPoints(NavPoint origin, int count, params NavPoint[] except)
@@ -155,6 +90,17 @@ namespace Minima.Navigation
             var closest = pointsTemp.Take(count).ToList();
 
             return closest;
+        }
+
+        protected NavPoint GetClosestPoint(NavEdge edge)
+        {
+            var closest = GetClosestPoints(edge.Start, 3, edge.End);
+
+            var comparer = new EdgeDistanceComparer(edge);
+
+            closest.Sort(comparer);
+
+            return closest[0];
         }
 
         protected List<Collider2D> GetAllObstacles()

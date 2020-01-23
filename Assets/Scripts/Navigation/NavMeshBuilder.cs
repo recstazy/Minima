@@ -46,18 +46,6 @@ namespace Minima.Navigation
             Debug.Log("NavMesh building took " + timeElapsed);
         }
 
-        
-        protected NavPoint GetClosestPoint(NavEdge edge)
-        {
-            var closest = GetClosestPoints(edge.Start, 3, edge.End);
-
-            var comparer = new EdgeDistanceComparer(edge);
-
-            closest.Sort(comparer);
-
-            return closest[0];
-        }
-
         protected void DrawEdges()
         {
             foreach (var e in edges)
