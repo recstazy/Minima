@@ -55,7 +55,7 @@ namespace Minima.LevelGeneration
         public void OnPostSnap()
         {
             RoomDraft.SpawnGenerator.GeneratePoints();
-            RoomDraft.NavMeshBuilder.BuildDelayed(1f);
+            RoomDraft.NavMeshBuilder.BuildDelayed();
         }
 
         public void SetExitsCount(int count)

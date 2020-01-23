@@ -17,6 +17,8 @@ namespace Minima.Navigation
         private int density = 1;
 
         protected List<NavTriangle> triangles = new List<NavTriangle>();
+        protected List<NavCell> navCells = new List<NavCell>();
+        protected List<List<NavPoint>> pointLines = new List<List<NavPoint>>();
 
         #endregion
 
@@ -53,6 +55,7 @@ namespace Minima.Navigation
 
             GetAllObstacles();
             CreateGrid();
+            CreateSquares();
 
             System.TimeSpan timeElapsed = System.DateTime.Now - startTime;
             Debug.Log("NavMesh building took " + timeElapsed);
@@ -65,18 +68,54 @@ namespace Minima.Navigation
 
             for (float x = -boundX; x <= boundX; x += Step)
             {
+                var line = new List<NavPoint>();
+
                 for (float y = -boundY; y <= boundY; y += Step)
                 {
                     var point = CreatePoint(new Vector2(x, y));
+                    line.Add(point);
+                }
+
+                pointLines.Add(line);
+            }
+        }
+
+        protected void CreateSquares()
+        {
+            for (int i = 0; i < pointLines.Count - 1; i++)
+            {
+                for (int j = 0; j < pointLines[i].Count - 1; j++)
+                {
+                    var a = pointLines[i][j];
+                    var b = pointLines[i][j + 1];
+                    var c = pointLines[i + 1][j + 1];
+                    var d = pointLines[i + 1][j];
+
+                    var cell = CreateCell(a, b, c, d);
+
+                    if (cell.Edge.IsValid)
+                    {
+                        edges.Add(cell.Edge);
+                    }
+
+                    //var debugPoint = CreatePoint(Vector2.Lerp(a.Position, c.Position, 0.5f));
+                    //debugPoint.Sprite.color = Color.red;
                 }
             }
+        }
+
+        protected NavCell CreateCell(NavPoint a, NavPoint b, NavPoint c, NavPoint d)
+        {
+            var cell = new NavCell(a, b, c, d);
+            navCells.Add(cell);
+            return cell;
         }
 
         protected void DrawEdges()
         {
             foreach (var e in edges)
             {
-                Debug.DrawLine(e.Start.Position, e.End.Position);
+                Debug.DrawLine(e.Start.Position, e.End.Position, Color.red);
             }
         }
 

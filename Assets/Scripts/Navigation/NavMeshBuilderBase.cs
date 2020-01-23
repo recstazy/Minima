@@ -40,6 +40,8 @@ namespace Minima.Navigation
             var point = new NavPoint(position);
             point.Activated = CheckPointActivation(point);
             points.Add(point);
+
+            // --- just for debug
             var pointGO = Instantiate(pointPrefab, point.Position, Quaternion.identity, this.transform);
 
             Color color;
@@ -53,7 +55,10 @@ namespace Minima.Navigation
                 color = Color.black;
             }
 
-            pointGO.GetComponent<SpriteRenderer>().color = color;
+            var sprite = pointGO.GetComponent<SpriteRenderer>();
+            point.Sprite = sprite;
+            point.Sprite.color = color;
+            // ---
 
             return point;
         }
