@@ -36,6 +36,7 @@ namespace Minima.LevelGeneration
             GenerateRooms();
             SnapRooms();
             GenerateSpawn();
+
         }
 
         /// <summary>
@@ -128,7 +129,7 @@ namespace Minima.LevelGeneration
         {
             foreach (var g in roomGenerators)
             {
-                g.GenerateSpawn();
+                g.OnPostSnap();
             }
         }
     }

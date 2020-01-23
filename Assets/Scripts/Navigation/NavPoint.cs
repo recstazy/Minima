@@ -28,6 +28,8 @@ namespace Minima.Navigation
             }
         }
 
+        public bool Activated { get; set; }
+
 
         #endregion
 
@@ -35,6 +37,7 @@ namespace Minima.Navigation
         {
             Position = position;
             ConnectedEdges = new List<NavEdge>();
+            Activated = false;
         }
 
         #region Operators

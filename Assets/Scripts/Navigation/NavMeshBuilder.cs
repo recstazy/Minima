@@ -13,7 +13,8 @@ namespace Minima.Navigation
         #region Fields
 
         [SerializeField]
-        int preBuildIterations = 1;
+        [Range(1, 10)]
+        private int density = 1;
 
         protected List<NavTriangle> triangles = new List<NavTriangle>();
 
@@ -21,11 +22,13 @@ namespace Minima.Navigation
 
         #region Properties
 
+        private float Step { get => 1f / density; }
+
         #endregion
 
         void Start()
         {
-            BuildNavMesh();
+            //BuildNavMesh();
         }
 
         protected virtual void Update()
@@ -36,14 +39,37 @@ namespace Minima.Navigation
             }
         }
 
+        /// <summary>
+        /// Because colliders doesn't update their bounds until new frame
+        /// </summary>
+        public void BuildDelayed()
+        {
+            StartCoroutine(DelayedBuild());
+        }
+
         public override void BuildNavMesh()
         {
             System.DateTime startTime = System.DateTime.Now;
 
-            
+            GetAllObstacles();
+            CreateGrid();
 
             System.TimeSpan timeElapsed = System.DateTime.Now - startTime;
             Debug.Log("NavMesh building took " + timeElapsed);
+        }
+
+        protected void CreateGrid()
+        {
+            float boundX = buildArea.bounds.extents.x;
+            float boundY = buildArea.bounds.extents.y;
+
+            for (float x = -boundX; x <= boundX; x += Step)
+            {
+                for (float y = -boundY; y <= boundY; y += Step)
+                {
+                    var point = CreatePoint(new Vector2(x, y));
+                }
+            }
         }
 
         protected void DrawEdges()
@@ -52,6 +78,13 @@ namespace Minima.Navigation
             {
                 Debug.DrawLine(e.Start.Position, e.End.Position);
             }
+        }
+
+        private IEnumerator DelayedBuild()
+        {
+            yield return new WaitForEndOfFrame();
+
+            BuildNavMesh();
         }
     }
 }

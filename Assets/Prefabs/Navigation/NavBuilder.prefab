@@ -105,4 +105,5 @@ MonoBehaviour:
     type: 3}
   buildArea: {fileID: 7293646489621766662}
   showDebug: 1
-  preBuildIterations: 1
+  boundOffset: 0.15
+  density: 1
