@@ -18,9 +18,9 @@ namespace Minima.Navigation
         public NavPoint C { get; set; }
         public NavPoint D { get; set; }
 
-        public NavEdge Edge { get; set; }
+        public NavEdge[] Edges { get; set; } = new NavEdge[2];
 
-        int number = 0;
+        int cellActivation = 0;
 
         #endregion
 
@@ -42,53 +42,77 @@ namespace Minima.Navigation
             array[1] = C.Activated;
             array[0] = D.Activated;
 
-            int integer = GetIntFromBitArray(array);
+            cellActivation = GetIntFromBitArray(array);
 
-            switch (integer)
+            switch (cellActivation)
             {
                 case 0:
                     return;
                 case 1:
-                    Edge = CreateEdge(C, D, D, A);
+                    Edges[0] = CreateEdge(C, D, D, A);
                     break;
                 case 2:
-                    Edge = CreateEdge(B, C, C, D);
+                    Edges[0] = CreateEdge(B, C, C, D);
                     break;
                 case 3:
-                    Edge = CreateEdge(B, C, D, A);
+                    Edges[0] = CreateEdge(B, C, D, A);
                     break;
                 case 4:
-                    Edge = CreateEdge(A, B, B, C);
+                    Edges[0] = CreateEdge(A, B, B, C);
                     break;
                 case 5:
-                    //Edge = CreateEdge();
-                    break;
+                    {
+                        bool includeCenter = !StaticHelpers.CheckVisibility(B.Position, D.Position);
+                        if (includeCenter)
+                        {
+                            Edges[0] = CreateEdge(A, B, B, C);
+                            Edges[1] = CreateEdge(C, D, D, A);
+                        }
+                        else
+                        {
+                            Edges[0] = CreateEdge(A, B, D, A);
+                            Edges[1] = CreateEdge(B, C, C, D);
+                        }
+                        break;
+                    }
                 case 6:
-                    Edge = CreateEdge(A, B, C, D);
+                    Edges[0] = CreateEdge(A, B, C, D);
                     break;
                 case 7:
-                    Edge = CreateEdge(A, B, D, A);
+                    Edges[0] = CreateEdge(A, B, D, A);
                     break;
                 case 8:
-                    Edge = CreateEdge(D, A, A, B);
+                    Edges[0] = CreateEdge(D, A, A, B);
                     break;
                 case 9:
-                    Edge = CreateEdge(C, D, A, B);
+                    Edges[0] = CreateEdge(C, D, A, B);
                     break;
                 case 10:
-                    //Edge = CreateEdge();
-                    break;
+                    {
+                        bool includeCenter = !StaticHelpers.CheckVisibility(B.Position, D.Position);
+                        if (includeCenter)
+                        {
+                            Edges[0] = CreateEdge(A, B, D, A);
+                            Edges[1] = CreateEdge(B, C, C, D);
+                        }
+                        else
+                        {
+                            Edges[0] = CreateEdge(A, B, B, C);
+                            Edges[1] = CreateEdge(C, D, D, A);
+                        }
+                        break;
+                    }
                 case 11:
-                    Edge = CreateEdge(B, C, A, B);
+                    Edges[0] = CreateEdge(B, C, A, B);
                     break;
                 case 12:
-                    Edge = CreateEdge(D, A, B, C);
+                    Edges[0] = CreateEdge(D, A, B, C);
                     break;
                 case 13:
-                    Edge = CreateEdge(C, D, B, C);
+                    Edges[0] = CreateEdge(C, D, B, C);
                     break;
                 case 14:
-                    Edge = CreateEdge(D, A, C, D);
+                    Edges[0] = CreateEdge(D, A, C, D);
                     break;
                 case 15:
                     return;

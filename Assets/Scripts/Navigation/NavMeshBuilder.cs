@@ -93,13 +93,14 @@ namespace Minima.Navigation
 
                     var cell = CreateCell(a, b, c, d);
 
-                    if (cell.Edge.IsValid)
+                    if (cell.Edges[1].IsValid)
                     {
-                        edges.Add(cell.Edge);
+                        edges.Add(cell.Edges[1]);
                     }
-
-                    //var debugPoint = CreatePoint(Vector2.Lerp(a.Position, c.Position, 0.5f));
-                    //debugPoint.Sprite.color = Color.red;
+                    else if (cell.Edges[0].IsValid)
+                    {
+                        edges.Add(cell.Edges[0]);
+                    }
                 }
             }
         }
