@@ -20,6 +20,14 @@ namespace Minima.Navigation
         public NavPoint B { get; }
         public NavPoint C { get; }
 
+        public List<NavEdge> Edges
+        {
+            get
+            {
+                return new List<NavEdge> { AB, BC, AC };
+            }
+        }
+
         public List<NavTriangle> Connected { get => GetConnected(); }
         
         #endregion
@@ -35,15 +43,15 @@ namespace Minima.Navigation
             AC = new NavEdge(a, c);
         }
 
-        public NavTriangle(NavEdge ab, NavEdge bc, NavEdge ac)
+        public NavTriangle(NavEdge edge, NavPoint point)
         {
-            AB = ab;
-            BC = bc;
-            AC = ac;
+            A = edge.Start;
+            B = edge.End;
+            C = point;
 
-            A = AB.Start;
-            B = AB.End;
-            C = AC.End;
+            AB = edge;
+            BC = new NavEdge(B, C);
+            AC = new NavEdge(A, C);
         }
 
         private List<NavTriangle> GetConnected()

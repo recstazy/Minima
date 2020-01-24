@@ -80,6 +80,11 @@ namespace Minima.Navigation
             }
         }
 
+        /*
+         *  A B
+         *  C D
+         */
+
         protected void CreateSquares()
         {
             for (int i = 0; i < pointLines.Count - 1; i++)
@@ -93,13 +98,9 @@ namespace Minima.Navigation
 
                     var cell = CreateCell(a, b, c, d);
 
-                    if (cell.Edges[1].IsValid)
+                    if (cell.Edges.Count > 0)
                     {
-                        edges.Add(cell.Edges[1]);
-                    }
-                    else if (cell.Edges[0].IsValid)
-                    {
-                        edges.Add(cell.Edges[0]);
+                        edges = edges.Concat(cell.Edges).ToList();
                     }
                 }
             }

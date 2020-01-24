@@ -1,26 +1,45 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Minima.Navigation
 {
     public class NavCell
     {
+        private enum Half
+        {
+            Left,
+            Right,
+            Top,
+            Bottom,
+        }
+
+        private enum Corner
+        { 
+            TopLeft,
+            TopRight,
+            BottomLeft,
+            BottomRight,
+        }
+
         #region Fields
 
         #endregion
 
         #region Properties
 
-        // Clockwise
+        // Clockwise from left bottom
         public NavPoint A { get; set; }
         public NavPoint B { get; set; }
         public NavPoint C { get; set; }
         public NavPoint D { get; set; }
 
-        public NavEdge[] Edges { get; set; } = new NavEdge[2];
+        public List<NavTriangle> Triangles { get; private set; } = new List<NavTriangle>();
 
-        int cellActivation = 0;
+        public List<NavEdge> Edges { get; private set; } = new List<NavEdge>();
+
+        int activation = 0;
 
         #endregion
 
@@ -31,96 +50,43 @@ namespace Minima.Navigation
             C = c;
             D = d;
 
-            CreateEdge();
+            SetActivation();
+            Triangulate();
         }
 
-        public void CreateEdge()
+        private void Triangulate()
         {
-            BitArray array = new BitArray(4);
-            array[3] = A.Activated;
-            array[2] = B.Activated;
-            array[1] = C.Activated;
-            array[0] = D.Activated;
-
-            cellActivation = GetIntFromBitArray(array);
-
-            switch (cellActivation)
+            switch (activation)
             {
-                case 0:
-                    return;
-                case 1:
-                    Edges[0] = CreateEdge(C, D, D, A);
-                    break;
-                case 2:
-                    Edges[0] = CreateEdge(B, C, C, D);
-                    break;
                 case 3:
-                    Edges[0] = CreateEdge(B, C, D, A);
-                    break;
-                case 4:
-                    Edges[0] = CreateEdge(A, B, B, C);
-                    break;
-                case 5:
                     {
-                        bool includeCenter = !StaticHelpers.CheckVisibility(B.Position, D.Position);
-                        if (includeCenter)
-                        {
-                            Edges[0] = CreateEdge(A, B, B, C);
-                            Edges[1] = CreateEdge(C, D, D, A);
-                        }
-                        else
-                        {
-                            Edges[0] = CreateEdge(A, B, D, A);
-                            Edges[1] = CreateEdge(B, C, C, D);
-                        }
+                        TriangulateHalf(Half.Bottom);
                         break;
                     }
                 case 6:
-                    Edges[0] = CreateEdge(A, B, C, D);
-                    break;
-                case 7:
-                    Edges[0] = CreateEdge(A, B, D, A);
-                    break;
-                case 8:
-                    Edges[0] = CreateEdge(D, A, A, B);
-                    break;
-                case 9:
-                    Edges[0] = CreateEdge(C, D, A, B);
-                    break;
-                case 10:
                     {
-                        bool includeCenter = !StaticHelpers.CheckVisibility(B.Position, D.Position);
-                        if (includeCenter)
-                        {
-                            Edges[0] = CreateEdge(A, B, D, A);
-                            Edges[1] = CreateEdge(B, C, C, D);
-                        }
-                        else
-                        {
-                            Edges[0] = CreateEdge(A, B, B, C);
-                            Edges[1] = CreateEdge(C, D, D, A);
-                        }
+                        TriangulateHalf(Half.Right);
                         break;
                     }
-                case 11:
-                    Edges[0] = CreateEdge(B, C, A, B);
-                    break;
+                case 9:
+                    {
+                        TriangulateHalf(Half.Left);
+                        break;
+                    }
                 case 12:
-                    Edges[0] = CreateEdge(D, A, B, C);
-                    break;
-                case 13:
-                    Edges[0] = CreateEdge(C, D, B, C);
-                    break;
-                case 14:
-                    Edges[0] = CreateEdge(D, A, C, D);
-                    break;
+                    {
+                        TriangulateHalf(Half.Top);
+                        break;
+                    }
                 case 15:
-                    return;
-                default:
-                    return;
+                    {
+                        TriangulateFull();
+                        break;
+                    }
             }
 
         }
+       
 
         /// <summary>
         /// Creates edge between middles of ab and cd
@@ -133,9 +99,104 @@ namespace Minima.Navigation
             return new NavEdge(ab, cd);
         }
 
+        private NavEdge CreateEdge(NavPoint a, NavPoint b)
+        {
+            return new NavEdge(a, b);
+        }
+
+        private void TriangulateFull()
+        {
+            var middle = CreateEdge(B, D);
+
+            CreateTriangle(middle, A);
+            CreateTriangle(middle, C);
+        }
+
+        private void TriangulateHalf(Half half)
+        {
+            switch (half)
+            {
+                case Half.Left:
+                    {
+                        var bc = new NavPoint(Vector2.Lerp(B.Position, C.Position, 0.5f));
+                        var ad = new NavPoint(Vector2.Lerp(A.Position, D.Position, 0.5f));
+                        
+                        var middle = CreateEdge(ad, B);
+
+                        CreateTriangle(middle, A);
+                        CreateTriangle(middle, bc);
+                        break;
+                    }
+                case Half.Right:
+                    {
+                        var bc = new NavPoint(Vector2.Lerp(B.Position, C.Position, 0.5f)); // B C
+                        var ad = new NavPoint(Vector2.Lerp(A.Position, D.Position, 0.5f)); // A D
+
+                        var middle = CreateEdge(bc, D);
+
+                        CreateTriangle(middle, C);
+                        CreateTriangle(middle, ad);
+                        break;
+                    }
+                case Half.Top:
+                    {
+                        var ab = new NavPoint(Vector2.Lerp(A.Position, B.Position, 0.5f));
+                        var cd = new NavPoint(Vector2.Lerp(C.Position, D.Position, 0.5f));
+                        var middle = CreateEdge(cd, B);
+
+                        CreateTriangle(middle, C);
+                        CreateTriangle(middle, ab);
+
+                        Debug.Log("TOP: " + A.Position + " - " + B.Position + " - " + C.Position + " - " + D.Position);
+
+                        break;
+                    }
+                case Half.Bottom:
+                    {
+                        var ab = new NavPoint(Vector2.Lerp(A.Position, B.Position, 0.5f));
+                        var cd = new NavPoint(Vector2.Lerp(C.Position, D.Position, 0.5f));
+                        var middle = CreateEdge(ab, D);
+
+                        CreateTriangle(middle, A);
+                        CreateTriangle(middle, cd);
+                        break;
+                    }
+            }
+        }
+
+        private void CreateTriangle(NavPoint a, NavPoint b, NavPoint c)
+        {
+            Triangles.Add(new NavTriangle(a, b, c));
+        }
+
+        private void CreateTriangle(NavEdge edge, NavPoint point)
+        {
+            var triangle = new NavTriangle(edge, point);
+            Triangles.Add(triangle);
+
+            if (!Edges.Contains(edge))
+            {
+                Edges.Add(edge);
+            }
+
+            Edges.Add(triangle.BC);
+            Edges.Add(triangle.AC);
+        }
+
+        private void SetActivation()
+        {
+            BitArray array = new BitArray(4);
+            
+            array[3] = B.Activated;
+            array[2] = C.Activated;
+            array[1] = D.Activated;
+            array[0] = A.Activated;
+
+            activation = GetIntFromBitArray(array);
+        }
+
         private int GetIntFromBitArray(BitArray bitArray)
         {
-
             if (bitArray.Length > 32)
             {
                 throw new System.ArgumentException("Argument length shall be at most 32 bits.");
