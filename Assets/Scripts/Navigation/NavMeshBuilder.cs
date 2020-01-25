@@ -5,9 +5,6 @@ using UnityEngine;
 
 namespace Minima.Navigation
 {
-    /// <summary>
-    /// Use it to test how (O^n) algorithms makes your game suffer
-    /// </summary>
     public class NavMeshBuilder : NavMeshBuilderBase
     {
         #region Fields
@@ -20,6 +17,8 @@ namespace Minima.Navigation
         protected List<NavCell> navCells = new List<NavCell>();
         protected List<List<NavPoint>> pointLines = new List<List<NavPoint>>();
 
+        protected List<List<NavCell>> cellLines = new List<List<NavCell>>();
+
         #endregion
 
         #region Properties
@@ -27,11 +26,6 @@ namespace Minima.Navigation
         private float Step { get => 1f / density; }
 
         #endregion
-
-        void Start()
-        {
-            BuildNavMesh();
-        }
 
         protected virtual void Update()
         {
@@ -55,7 +49,7 @@ namespace Minima.Navigation
 
             GetAllObstacles();
             CreateGrid();
-            CreateSquares();
+            CreateCells();
 
             System.TimeSpan timeElapsed = System.DateTime.Now - startTime;
             Debug.Log("NavMesh building took " + timeElapsed);
@@ -80,15 +74,12 @@ namespace Minima.Navigation
             }
         }
 
-        /*
-         *  B C
-         *  A D
-         */
-
-        protected void CreateSquares()
+        protected void CreateCells()
         {
             for (int i = 0; i < pointLines.Count - 1; i++)
             {
+                var line = new List<NavCell>();
+
                 for (int j = 0; j < pointLines[i].Count - 1; j++)
                 {
                     var a = pointLines[i][j];
@@ -102,7 +93,11 @@ namespace Minima.Navigation
                     {
                         edges = edges.Concat(cell.Edges).ToList();
                     }
+
+                    line.Add(cell);
                 }
+
+                cellLines.Add(line);
             }
         }
 

@@ -29,7 +29,6 @@ namespace Minima.Navigation
             BD,
         }
 
-
         #region Fields
 
         private NavPoint ab;
@@ -37,19 +36,25 @@ namespace Minima.Navigation
         private NavPoint cd;
         private NavPoint ad;
 
+        private List<NavPoint> points = new List<NavPoint>();
+
         #endregion
 
         #region Properties
 
         // Clockwise from left bottom
+
+        // B C
+        // A D
+
         public NavPoint A { get; set; }
         public NavPoint B { get; set; }
         public NavPoint C { get; set; }
         public NavPoint D { get; set; }
 
         public List<NavTriangle> Triangles { get; private set; } = new List<NavTriangle>();
-
         public List<NavEdge> Edges { get; private set; } = new List<NavEdge>();
+        public List<NavPoint> Points { get => points; }
 
         int activation = 0;
 
@@ -67,9 +72,13 @@ namespace Minima.Navigation
             cd = new NavPoint(Vector2.Lerp(C.Position, D.Position, 0.5f));
             ad = new NavPoint(Vector2.Lerp(A.Position, D.Position, 0.5f));
 
+            AddPointsUniq(A, B, C, D);
+
             SetActivation();
             Triangulate();
         }
+
+        #region Triangulation
 
         private void Triangulate()
         {
@@ -154,19 +163,6 @@ namespace Minima.Navigation
                     }
             }
 
-        }
-
-        private NavEdge CreateEdge(NavPoint a, NavPoint b)
-        {
-            return new NavEdge(a, b);
-        }
-
-        private void TriangulateFull()
-        {
-            var middle = CreateEdge(B, D);
-
-            CreateTriangle(middle, A);
-            CreateTriangle(middle, C);
         }
 
         private void TriangulateCorner(Corner corner)
@@ -305,9 +301,6 @@ namespace Minima.Navigation
 
         }
 
-        // B C
-        // A D
-
         private void TriangulateMiddle(MiddleType middleType)
         {
             switch (middleType)
@@ -365,15 +358,28 @@ namespace Minima.Navigation
             }
         }
 
+        private void TriangulateFull()
+        {
+            var middle = CreateEdge(B, D);
+
+            CreateTriangle(middle, A);
+            CreateTriangle(middle, C);
+        }
+
+        #endregion
+
+        private NavEdge CreateEdge(NavPoint a, NavPoint b)
+        {
+            return new NavEdge(a, b);
+        }
+
         private void CreateTriangle(NavEdge edge, NavPoint point)
         {
             var triangle = new NavTriangle(edge, point);
             Triangles.Add(triangle);
 
-            AddEdgeUniq(edge);
-
-            Edges.Add(triangle.BC);
-            Edges.Add(triangle.AC);
+            AddEdgesUniq(edge, triangle.BC, triangle.AC);
+            AddPointsUniq(triangle.A, triangle.B, triangle.C);
         }
 
         private void CreateTriangle(NavEdge ab, NavEdge bc, NavEdge ac)
@@ -381,16 +387,29 @@ namespace Minima.Navigation
             var triangle = new NavTriangle(ab, bc, ac);
             Triangles.Add(triangle);
 
-            AddEdgeUniq(ab);
-            AddEdgeUniq(bc);
-            AddEdgeUniq(ac);
+            AddEdgesUniq(ab, bc, ac);
+            AddPointsUniq(triangle.A, triangle.B, triangle.C);
         }
 
-        private void AddEdgeUniq(NavEdge edge)
+        private void AddEdgesUniq(params NavEdge[] edges)
         {
-            if (!Edges.Contains(edge))
+            foreach (var edge in edges)
             {
-                Edges.Add(edge);
+                if (!Edges.Contains(edge))
+                {
+                    Edges.Add(edge);
+                }
+            }
+        }
+
+        private void AddPointsUniq(params NavPoint[] points)
+        {
+            foreach (var point in points)
+            {
+                if (!points.Contains(point))
+                {
+                    this.points.Add(point);
+                }
             }
         }
 

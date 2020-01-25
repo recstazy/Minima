@@ -49,5 +49,19 @@ namespace Minima.Navigation
                 return new NavPoint();
             }
         }
+
+        public void AddConnected(NavTriangle triangle)
+        {
+            if (!ConnectedTriangles.Contains(triangle))
+            {
+                ConnectedTriangles.Add(triangle);
+            }
+        }
+
+        public NavTriangle GetAnotherTriangle(NavTriangle triangle)
+        {
+            var other = ConnectedTriangles.Find(t => t != triangle);
+            return other;
+        }
     }
 }

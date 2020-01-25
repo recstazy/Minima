@@ -41,6 +41,8 @@ namespace Minima.Navigation
             AB = new NavEdge(a, b);
             BC = new NavEdge(b, c);
             AC = new NavEdge(a, c);
+
+            AddSelfToConnected();
         }
 
         public NavTriangle(NavEdge ab, NavEdge bc, NavEdge ac)
@@ -52,6 +54,8 @@ namespace Minima.Navigation
             A = AB.Start;
             B = BC.Start;
             C = AC.End;
+
+            AddSelfToConnected();
         }
 
         public NavTriangle(NavEdge edge, NavPoint point)
@@ -63,21 +67,26 @@ namespace Minima.Navigation
             AB = edge;
             BC = new NavEdge(B, C);
             AC = new NavEdge(A, C);
+
+            AddSelfToConnected();
         }
 
         private List<NavTriangle> GetConnected()
         {
             List<NavTriangle> connected = new List<NavTriangle>();
-
-            connected = connected.Concat(AB.ConnectedTriangles).ToList();
-            connected = connected.Concat(BC.ConnectedTriangles).ToList();
-            connected = connected.Concat(AC.ConnectedTriangles).ToList();
-
             var thisTriangle = this;
 
-            connected.RemoveAll(t => t == thisTriangle);
-
+            connected.Add(AB.GetAnotherTriangle(thisTriangle));
+            connected.Add(BC.GetAnotherTriangle(thisTriangle));
+            connected.Add(AC.GetAnotherTriangle(thisTriangle));
             return connected;
+        }
+
+        private void AddSelfToConnected()
+        {
+            AB.AddConnected(this);
+            BC.AddConnected(this);
+            AC.AddConnected(this);
         }
 
         #region Operators
