@@ -43,6 +43,17 @@ namespace Minima.Navigation
             AC = new NavEdge(a, c);
         }
 
+        public NavTriangle(NavEdge ab, NavEdge bc, NavEdge ac)
+        {
+            AB = ab;
+            BC = bc;
+            AC = ac;
+
+            A = AB.Start;
+            B = BC.Start;
+            C = AC.End;
+        }
+
         public NavTriangle(NavEdge edge, NavPoint point)
         {
             A = edge.Start;

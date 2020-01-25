@@ -30,7 +30,7 @@ namespace Minima.Navigation
 
         void Start()
         {
-            //BuildNavMesh();
+            BuildNavMesh();
         }
 
         protected virtual void Update()
@@ -81,8 +81,8 @@ namespace Minima.Navigation
         }
 
         /*
-         *  A B
-         *  C D
+         *  B C
+         *  A D
          */
 
         protected void CreateSquares()
