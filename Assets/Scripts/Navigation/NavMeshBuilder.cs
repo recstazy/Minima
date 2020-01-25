@@ -10,14 +10,15 @@ namespace Minima.Navigation
         #region Fields
 
         [SerializeField]
-        [Range(1, 10)]
-        private int density = 1;
+        [Range(0.1f, 10f)]
+        private float density = 1f;
 
         protected List<NavTriangle> triangles = new List<NavTriangle>();
         protected List<NavCell> navCells = new List<NavCell>();
         protected List<List<NavPoint>> pointLines = new List<List<NavPoint>>();
 
         protected List<List<NavCell>> cellLines = new List<List<NavCell>>();
+        protected Transform thisTransform;
 
         #endregion
 
@@ -26,6 +27,11 @@ namespace Minima.Navigation
         private float Step { get => 1f / density; }
 
         #endregion
+
+        private void Awake()
+        {
+            thisTransform = transform;
+        }
 
         protected virtual void Update()
         {
@@ -59,6 +65,7 @@ namespace Minima.Navigation
         {
             float boundX = buildArea.bounds.extents.x;
             float boundY = buildArea.bounds.extents.y;
+            var origin = thisTransform.position.ToVector2();
 
             for (float x = -boundX; x <= boundX; x += Step)
             {
@@ -66,7 +73,7 @@ namespace Minima.Navigation
 
                 for (float y = -boundY; y <= boundY; y += Step)
                 {
-                    var point = CreatePoint(new Vector2(x, y));
+                    var point = CreatePoint(origin + new Vector2(x, y));
                     line.Add(point);
                 }
 
@@ -92,6 +99,11 @@ namespace Minima.Navigation
                     if (cell.Edges.Count > 0)
                     {
                         edges = edges.Concat(cell.Edges).ToList();
+                    }
+
+                    foreach(var p in cell.Points)
+                    {
+                        points.AddUniq(p);
                     }
 
                     line.Add(cell);

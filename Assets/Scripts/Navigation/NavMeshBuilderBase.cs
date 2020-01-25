@@ -41,24 +41,7 @@ namespace Minima.Navigation
             point.Activated = CheckPointActivation(point);
             points.Add(point);
 
-            // --- just for debug
-            var pointGO = Instantiate(pointPrefab, point.Position, Quaternion.identity, this.transform);
-
-            Color color;
-
-            if (point.Activated)
-            {
-                color = Color.white;
-            }
-            else
-            {
-                color = Color.black;
-            }
-
-            var sprite = pointGO.GetComponent<SpriteRenderer>();
-            point.Sprite = sprite;
-            point.Sprite.color = color;
-            // ---
+            //InstantiatePoint(point);
 
             return point;
         }
@@ -148,6 +131,26 @@ namespace Minima.Navigation
             }
 
             return true;
+        }
+
+        protected void InstantiatePoint(NavPoint point)
+        {
+            var pointGO = Instantiate(pointPrefab, point.Position, Quaternion.identity, this.transform);
+
+            Color color;
+
+            if (point.Activated)
+            {
+                color = Color.white;
+            }
+            else
+            {
+                color = Color.black;
+            }
+
+            var sprite = pointGO.GetComponent<SpriteRenderer>();
+            point.Sprite = sprite;
+            point.Sprite.color = color;
         }
     }
 }

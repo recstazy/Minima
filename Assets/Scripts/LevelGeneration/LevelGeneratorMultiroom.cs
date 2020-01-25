@@ -36,7 +36,6 @@ namespace Minima.LevelGeneration
             GenerateRooms();
             SnapRooms();
             GenerateSpawn();
-
         }
 
         /// <summary>

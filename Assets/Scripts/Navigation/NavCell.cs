@@ -395,10 +395,7 @@ namespace Minima.Navigation
         {
             foreach (var edge in edges)
             {
-                if (!Edges.Contains(edge))
-                {
-                    Edges.Add(edge);
-                }
+                Edges.AddUniq(edge);
             }
         }
 
@@ -406,10 +403,7 @@ namespace Minima.Navigation
         {
             foreach (var point in points)
             {
-                if (!points.Contains(point))
-                {
-                    this.points.Add(point);
-                }
+                this.points.AddUniq(point);
             }
         }
 

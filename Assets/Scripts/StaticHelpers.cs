@@ -166,6 +166,14 @@ public static class StaticHelpers
         return new Vector3(vector.x, vector.y, 0f);
     }
 
+    public static void AddUniq<T>(this List<T> list, T item)
+    {
+        if (!list.Contains(item))
+        {
+            list.Add(item);
+        }
+    }
+
     private static System.Random random = new System.Random();
     /// <summary>
     /// Copiet this from StackOverflow
