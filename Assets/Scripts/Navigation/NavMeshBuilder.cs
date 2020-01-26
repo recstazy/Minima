@@ -13,11 +13,19 @@ namespace Minima.Navigation
         [Range(0.1f, 10f)]
         private float density = 1f;
 
-        protected List<NavTriangle> triangles = new List<NavTriangle>();
-        protected List<NavCell> navCells = new List<NavCell>();
-        protected List<List<NavPoint>> pointLines = new List<List<NavPoint>>();
+        [SerializeField]
+        private bool showPoints = false;
 
+        [SerializeField]
+        private bool autoActivate = false;
+
+        protected List<NavTriangle> triangles = new List<NavTriangle>();
+        protected List<List<NavPoint>> pointLines = new List<List<NavPoint>>();
         protected List<List<NavCell>> cellLines = new List<List<NavCell>>();
+
+        protected List<float> xAxes = new List<float>();
+        protected List<float> yAxes = new List<float>();
+
         protected Transform thisTransform;
 
         #endregion
@@ -31,6 +39,14 @@ namespace Minima.Navigation
         private void Awake()
         {
             thisTransform = transform;
+        }
+
+        private void Start()
+        {
+            if (autoActivate)
+            {
+                BuildDelayed();
+            }
         }
 
         protected virtual void Update()
@@ -51,29 +67,39 @@ namespace Minima.Navigation
 
         public override void BuildNavMesh()
         {
-            System.DateTime startTime = System.DateTime.Now;
-
             GetAllObstacles();
+            InitializeGridAxes();
             CreateGrid();
             CreateCells();
+        }
 
-            System.TimeSpan timeElapsed = System.DateTime.Now - startTime;
-            Debug.Log("NavMesh building took " + timeElapsed);
+        protected virtual void InitializeGridAxes()
+        {
+            float boundX = buildArea.bounds.extents.x;
+            float boundY = buildArea.bounds.extents.y;
+
+            for (float x = -boundX; x <= boundX; x += Step)
+            {
+                xAxes.Add(x);
+            }
+
+            for (float y = -boundY; y <= boundY; y += Step)
+            {
+                yAxes.Add(y);
+            }
         }
 
         protected void CreateGrid()
         {
-            float boundX = buildArea.bounds.extents.x;
-            float boundY = buildArea.bounds.extents.y;
             var origin = thisTransform.position.ToVector2();
 
-            for (float x = -boundX; x <= boundX; x += Step)
+            foreach (var x in xAxes)
             {
                 var line = new List<NavPoint>();
 
-                for (float y = -boundY; y <= boundY; y += Step)
+                foreach (var y in yAxes)
                 {
-                    var point = CreatePoint(origin + new Vector2(x, y));
+                    var point = CreatePoint(origin + new Vector2(x, y), showPoints);
                     line.Add(point);
                 }
 
@@ -116,7 +142,6 @@ namespace Minima.Navigation
         protected NavCell CreateCell(NavPoint a, NavPoint b, NavPoint c, NavPoint d)
         {
             var cell = new NavCell(a, b, c, d);
-            navCells.Add(cell);
             return cell;
         }
 

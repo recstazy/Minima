@@ -5106,7 +5106,7 @@ MonoBehaviour:
   roomGeneratorPrefab: {fileID: 7963234438967846403, guid: f5ddb31deef6b4b4cb2dc79f2184f722,
     type: 3}
   roomRawOffset: 30
-  roomsCount: 10
+  roomsCount: 3
   generatorExitsPerRoom: 2
   randomizeExitsCount: 0
 --- !u!4 &1400033323

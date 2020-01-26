@@ -35,7 +35,8 @@ namespace Minima.LevelGeneration
             CreateGenerators(InstantiateGenerator(Vector2.zero));
             GenerateRooms();
             SnapRooms();
-            GenerateSpawn();
+            GenerateNavigation();
+            ExecuteNextFrame(() => GenerateSpawn());
         }
 
         /// <summary>
@@ -128,8 +129,27 @@ namespace Minima.LevelGeneration
         {
             foreach (var g in roomGenerators)
             {
-                g.OnPostSnap();
+                g.GenerateSpawn();
             }
+        }
+
+        private void GenerateNavigation()
+        {
+            System.DateTime startTime = System.DateTime.Now;
+            
+            foreach (var g in roomGenerators)
+            {
+                g.GenerateNavigation();
+            }
+
+            System.TimeSpan timeElapsed = System.DateTime.Now - startTime;
+            Debug.Log("NavMesh building took " + timeElapsed);
+        }
+
+        private IEnumerator ExecuteNextFrame(System.Action method)
+        {
+            yield return new WaitForEndOfFrame();
+            method();
         }
     }
 }

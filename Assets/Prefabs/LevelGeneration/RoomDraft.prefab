@@ -211,7 +211,7 @@ MonoBehaviour:
   exits: {fileID: 2763896842970934329}
   wallsGenerator: {fileID: 7459346419100925081}
   spawnGenerator: {fileID: 5335019796253877920}
-  navMeshBuilder: {fileID: 6314672213021783511}
+  navMeshBuilder: {fileID: 5775685205484608602}
 --- !u!1 &2763896842970934331
 GameObject:
   m_ObjectHideFlags: 0
@@ -1228,16 +1228,16 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 3646231508971161677}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6314672213021783511 stripped
+--- !u!114 &5775685205484608602 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7293646490493353370, guid: 14ed2550755cc9845bb9b6e29f7c6201,
+  m_CorrespondingSourceObject: {fileID: 7114947623705089047, guid: 14ed2550755cc9845bb9b6e29f7c6201,
     type: 3}
   m_PrefabInstance: {fileID: 3646231508971161677}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a18d8b5b4ba59674a8dd7756a84350a4, type: 3}
+  m_Script: {fileID: 11500000, guid: 5245fc00088a72b409c0024216c28965, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &6821068173006726571

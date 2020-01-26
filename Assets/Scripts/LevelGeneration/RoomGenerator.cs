@@ -52,10 +52,14 @@ namespace Minima.LevelGeneration
             RoomDraft.HideExits();
         }
 
-        public void OnPostSnap()
+        public void GenerateSpawn()
         {
             RoomDraft.SpawnGenerator.GeneratePoints();
-            RoomDraft.NavMeshBuilder.BuildDelayed();
+        }
+
+        public void GenerateNavigation()
+        {
+            RoomDraft.NavMeshBuilder.BuildNavMesh();
         }
 
         public void SetExitsCount(int count)

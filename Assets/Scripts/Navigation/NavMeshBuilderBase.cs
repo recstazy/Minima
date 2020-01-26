@@ -18,9 +18,6 @@ namespace Minima.Navigation
         [SerializeField]
         protected bool showDebug = false;
 
-        [SerializeField]
-        protected float boundOffset = 0.15f;
-
         protected List<NavPoint> points = new List<NavPoint>();
         protected List<NavEdge> edges = new List<NavEdge>();
         protected List<Collider2D> obstacles = new List<Collider2D>();
@@ -35,13 +32,16 @@ namespace Minima.Navigation
         {
         }
 
-        protected NavPoint CreatePoint(Vector2 position)
+        protected NavPoint CreatePoint(Vector2 position, bool instantiatePoint = false)
         {
             var point = new NavPoint(position);
             point.Activated = CheckPointActivation(point);
             points.Add(point);
 
-            //InstantiatePoint(point);
+            if (instantiatePoint)
+            {
+                InstantiatePoint(point);
+            }
 
             return point;
         }

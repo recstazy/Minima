@@ -66,7 +66,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7293646490493353371}
-  - component: {fileID: 7293646490493353370}
+  - component: {fileID: 7114947623705089047}
   m_Layer: 0
   m_Name: NavBuilder
   m_TagString: Untagged
@@ -89,7 +89,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7293646490493353370
+--- !u!114 &7114947623705089047
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -98,7 +98,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7293646490493353372}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a18d8b5b4ba59674a8dd7756a84350a4, type: 3}
+  m_Script: {fileID: 11500000, guid: 5245fc00088a72b409c0024216c28965, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   pointPrefab: {fileID: 7789849713511794811, guid: a766735b34a14a2479a86e63e2f873e5,
@@ -107,3 +107,8 @@ MonoBehaviour:
   showDebug: 1
   boundOffset: 0.15
   density: 1
+  showPoints: 1
+  autoActivate: 0
+  pointsPerObject: 2
+  boundCoefficient: 0.9
+  collapsePointsTreshhold: 0.1
