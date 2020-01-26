@@ -89,7 +89,8 @@ namespace Minima.Navigation
                 if (next - current <= collapsePointsTreshhold)
                 {
                     listCopy[i] = (current + next) / 2;
-                    listCopy.Remove(next);
+                    listCopy.RemoveAt(i + 1);
+                    i--;
                 }
             }
 
