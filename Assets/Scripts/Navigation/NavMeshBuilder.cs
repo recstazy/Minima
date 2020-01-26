@@ -19,8 +19,6 @@ namespace Minima.Navigation
         [SerializeField]
         private bool autoActivate = false;
 
-        protected List<NavTriangle> triangles = new List<NavTriangle>();
-        protected List<List<NavPoint>> pointLines = new List<List<NavPoint>>();
         protected List<List<NavCell>> cellLines = new List<List<NavCell>>();
 
         protected List<float> xAxes = new List<float>();

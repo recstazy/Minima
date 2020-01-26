@@ -22,6 +22,10 @@ namespace Minima.Navigation
         protected List<NavEdge> edges = new List<NavEdge>();
         protected List<Collider2D> obstacles = new List<Collider2D>();
 
+        protected List<NavTriangle> triangles = new List<NavTriangle>();
+        protected List<List<NavPoint>> pointLines = new List<List<NavPoint>>();
+        
+
         #endregion
 
         #region Properties
@@ -30,6 +34,20 @@ namespace Minima.Navigation
 
         public virtual void BuildNavMesh()
         {
+        }
+
+        public bool IsPointInBounds(Vector2 point)
+        {
+            return buildArea.OverlapPoint(point);
+        }
+
+        public NavTriangle GetContainingTriangle(Vector2 point)
+        {
+            var trianglesList = triangles.ToList();
+            var comparer = new TriangleDistanceComparer(point);
+            trianglesList.Sort(comparer);
+
+            return trianglesList[0];
         }
 
         protected NavPoint CreatePoint(Vector2 position, bool instantiatePoint = false)

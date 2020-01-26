@@ -71,6 +71,14 @@ namespace Minima.Navigation
             AddSelfToConnected();
         }
 
+        public NavTriangle GetClosestConnection(Vector2 origin, params NavTriangle[] except)
+        {
+            var comparer = new TriangleDistanceComparer(origin);
+            var connected = Connected.Except(except).ToList();
+            connected.Sort(comparer);
+            return connected[0];
+        }
+
         private List<NavTriangle> GetConnected()
         {
             List<NavTriangle> connected = new List<NavTriangle>();
