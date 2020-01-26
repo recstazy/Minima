@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
@@ -74,7 +75,7 @@ namespace Minima.LevelGeneration
             {
                 if (randomizeExitsCount)
                 {
-                    g.SetExitsCount(Random.Range(1, 4));
+                    g.SetExitsCount(UnityEngine.Random.Range(1, 4));
                 }
 
                 g.GenerateRoom();
@@ -135,23 +136,23 @@ namespace Minima.LevelGeneration
 
         private void GenerateNavigation()
         {
-            System.DateTime startTime = System.DateTime.Now;
+            DateTime startTime = DateTime.Now;
             
             foreach (var g in roomGenerators)
             {
                 g.GenerateNavigation();
             }
 
-            System.TimeSpan timeElapsed = System.DateTime.Now - startTime;
+            TimeSpan timeElapsed = DateTime.Now - startTime;
             Debug.Log("NavMesh building took " + timeElapsed);
         }
 
-        private void ExecuteNextFrame(System.Action method)
+        protected void ExecuteNextFrame(Action method)
         {
             StartCoroutine(WaitNextFrameAndExecute(method));
         }
 
-        private IEnumerator WaitNextFrameAndExecute(System.Action method)
+        private IEnumerator WaitNextFrameAndExecute(Action method)
         {
             yield return new WaitForEndOfFrame();
             method?.Invoke();

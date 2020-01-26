@@ -65,48 +65,7 @@ namespace Minima.Navigation
             return edge;
         }
 
-        protected List<NavPoint> GetClosestPoints(NavPoint origin, int count, params NavPoint[] except)
-        {
-            return GetClosestPoints(points, origin, count, except);
-        }
-
-        protected List<NavPoint> GetClosestPoints(List<NavPoint> sourcePoints, NavPoint origin, int count, params NavPoint[] except)
-        {
-            var distanceComparer = new NavPointDistanceComparer(origin);
-            var pointsTemp = sourcePoints.ToList();
-
-            pointsTemp.Remove(origin);
-            pointsTemp = pointsTemp.Except(except).ToList();
-            pointsTemp.Sort(distanceComparer);
-
-            var toRemove = new List<NavPoint>();
-
-            foreach (var p in pointsTemp)
-            {
-                if (!StaticHelpers.CheckVisibility(origin.Position, p.Position))
-                {
-                    toRemove.Add(p);
-                }
-            }
-
-            pointsTemp = pointsTemp.Except(toRemove).ToList();
-            var closest = pointsTemp.Take(count).ToList();
-
-            return closest;
-        }
-
-        protected NavPoint GetClosestPoint(NavEdge edge)
-        {
-            var closest = GetClosestPoints(edge.Start, 3, edge.End);
-
-            var comparer = new EdgeDistanceComparer(edge);
-
-            closest.Sort(comparer);
-
-            return closest[0];
-        }
-
-        protected void GetAllObstacles()
+        protected virtual void GetAllObstacles()
         {
             if (obstacles.Count() == 0)
             {
