@@ -35,7 +35,7 @@ namespace Minima.Navigation
 
             foreach (var o in obstacles)
             {
-                var position = o.transform.position;
+                var position = o.transform.localPosition;
                 var extents = o.bounds.extents * boundCoefficient;
 
                 if (extents.x > extents.y)
