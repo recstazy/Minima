@@ -105,10 +105,9 @@ MonoBehaviour:
     type: 3}
   buildArea: {fileID: 7293646489621766662}
   showDebug: 1
-  boundOffset: 0.15
   density: 1
   showPoints: 1
   autoActivate: 0
   pointsPerObject: 2
   boundCoefficient: 0.9
-  collapsePointsTreshhold: 0.1
+  collapsePointsTreshhold: 0.4

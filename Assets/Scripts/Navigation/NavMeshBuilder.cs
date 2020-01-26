@@ -11,7 +11,7 @@ namespace Minima.Navigation
 
         [SerializeField]
         [Range(0.1f, 10f)]
-        private float density = 1f;
+        protected float density = 1f;
 
         [SerializeField]
         private bool showPoints = false;
