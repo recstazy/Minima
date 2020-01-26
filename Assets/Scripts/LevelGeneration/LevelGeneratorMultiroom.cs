@@ -22,6 +22,9 @@ namespace Minima.LevelGeneration
         [SerializeField]
         private bool randomizeExitsCount = false;
 
+        [SerializeField]
+        private Navigation.NavBuildManager navBuildManager;
+
         private List<RoomGenerator> roomGenerators = new List<RoomGenerator>();
         private List<ExitCorner> roomsExits = new List<ExitCorner>();
 
@@ -36,8 +39,8 @@ namespace Minima.LevelGeneration
             CreateGenerators(InstantiateGenerator(Vector2.zero));
             GenerateRooms();
             SnapRooms();
+            BuildNavigation();
             GenerateSpawn();
-            ExecuteNextFrame(() => GenerateNavigation());
         }
 
         /// <summary>
@@ -134,28 +137,14 @@ namespace Minima.LevelGeneration
             }
         }
 
-        private void GenerateNavigation()
+        private void BuildNavigation()
         {
-            DateTime startTime = DateTime.Now;
-            
             foreach (var g in roomGenerators)
             {
-                g.GenerateNavigation();
+                navBuildManager.AddBuilder(g.RoomDraft.NavMeshBuilder);
             }
 
-            TimeSpan timeElapsed = DateTime.Now - startTime;
-            Debug.Log("NavMesh building took " + timeElapsed);
-        }
-
-        protected void ExecuteNextFrame(Action method)
-        {
-            StartCoroutine(WaitNextFrameAndExecute(method));
-        }
-
-        private IEnumerator WaitNextFrameAndExecute(Action method)
-        {
-            yield return new WaitForEndOfFrame();
-            method?.Invoke();
+            navBuildManager.BuildNavigation();
         }
     }
 }
