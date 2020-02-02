@@ -1,31 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 public static class ListExtentions
 {
-    public static T LastItem<T>(this IList<T> list)
+    public static T[] ConcatOne<T>(this T[] array, T item)
     {
-        if (list.Count > 0)
-        {
-            return list[list.Count - 1];
-        }
-        else
-        {
-            return default;
-        }
-    }
-
-    public static T FirstItem<T>(this IList<T> list)
-    {
-        if (list.Count > 0)
-        {
-            return list[0];
-        }
-        else
-        {
-            return default;
-        }
+        return array.Concat(new T[] { item }).ToArray();
     }
 
     public static void AddUniq<T>(this List<T> list, T item)

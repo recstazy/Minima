@@ -49,6 +49,7 @@ namespace Minima.Navigation
         public NavPoint B { get; set; }
         public NavPoint C { get; set; }
         public NavPoint D { get; set; }
+        public Vector2 Center { get; set; }
 
         public NavEdge AB { get; private set; }
         public NavEdge BC { get; private set; }
@@ -75,6 +76,7 @@ namespace Minima.Navigation
             BC = new NavEdge();
             CD = new NavEdge();
             AD = new NavEdge();
+            Center = A.Position + (C.Position - A.Position) / 2;
 
             ab = new NavPoint(Vector2.Lerp(A.Position, B.Position, 0.5f));
             bc = new NavPoint(Vector2.Lerp(B.Position, C.Position, 0.5f));
@@ -94,27 +96,9 @@ namespace Minima.Navigation
             Triangulate();
         }
 
-        public void MergeEdges(NavCell left, NavCell bottom)
+        public NavTriangle GetNearestTriangle(Vector2 point)
         {
-            if (AB.IsValid && left.CD.IsValid)
-            {
-                var thisCell = this;
-                var thisTriangle = Triangles.Find(t => t.Edges.Contains(thisCell.AB));
-                var leftTriangle = left.Triangles.Find(t => t.Edges.Contains(left.CD));
-
-                leftTriangle.BC.ConnectedTriangles.Add(thisTriangle);
-                thisTriangle.AC = leftTriangle.BC;
-            }
-
-            if (AD.IsValid && bottom.BC.IsValid)
-            {
-                var thisCell = this;
-                var thisTriangle = Triangles.Find(t => t.Edges.Contains(thisCell.AD));
-                var bottomTriangle = bottom.Triangles.Find(t => t.Edges.Contains(bottom.BC));
-
-                bottomTriangle.AC.ConnectedTriangles.Add(thisTriangle);
-                thisTriangle.BC = bottomTriangle.AC;
-            }
+            return StaticHelpers.GetNearestTriangle(point, Triangles);
         }
 
         #region Triangulation
@@ -401,13 +385,8 @@ namespace Minima.Navigation
         {
             var middle = CreateEdge(B, D);
 
-            var left = CreateTriangle(middle, A);
-            var right = CreateTriangle(middle, C);
-
-            AB = left.AC;
-            AD = left.BC;
-            BC = right.AC;
-            CD = right.BC;
+            CreateTriangle(middle, A);
+            CreateTriangle(middle, C);
         }
 
         #endregion
@@ -417,15 +396,13 @@ namespace Minima.Navigation
             return new NavEdge(a, b);
         }
 
-        private NavTriangle CreateTriangle(NavEdge edge, NavPoint point)
+        private void CreateTriangle(NavEdge edge, NavPoint point)
         {
             var triangle = new NavTriangle(edge, point);
             Triangles.Add(triangle);
 
             AddEdgesUniq(edge, triangle.BC, triangle.AC);
             AddPointsUniq(triangle.A, triangle.B, triangle.C);
-
-            return triangle;
         }
 
         private void CreateTriangle(NavEdge ab, NavEdge bc, NavEdge ac)
@@ -465,11 +442,12 @@ namespace Minima.Navigation
             Activation = GetIntFromBitArray(array);
         }
 
+        // From StackOverflow
         private int GetIntFromBitArray(BitArray bitArray)
         {
             if (bitArray.Length > 32)
             {
-                throw new System.ArgumentException("Argument length shall be at most 32 bits.");
+                throw new System.ArgumentException("Argument length should be at most 32 bits.");
             }
 
             int[] array = new int[1];

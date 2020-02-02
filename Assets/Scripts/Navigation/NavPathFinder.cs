@@ -64,7 +64,7 @@ namespace Minima.Navigation
             AddNextPoints(ref path, nextPoint, target);
         }
 
-        private NavMeshBuilderBase FindBuilder(Vector2 point)
+        private NavMeshBuilder FindBuilder(Vector2 point)
         {
             foreach (var b in buildManager.Builders)
             {

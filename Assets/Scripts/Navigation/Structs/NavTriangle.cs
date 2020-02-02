@@ -85,7 +85,7 @@ namespace Minima.Navigation
             var vertices = new List<NavPoint> { A, B, C };
             var comparer = new NavPointDistanceComparer(origin);
             vertices.Sort(comparer);
-            return vertices.FirstItem();
+            return vertices.FirstOrDefault();
         }
 
         private List<NavTriangle> GetConnected()

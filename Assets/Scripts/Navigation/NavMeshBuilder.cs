@@ -17,6 +17,7 @@ namespace Minima.Navigation
         private bool autoActivate = false;
 
         protected List<List<NavCell>> cellLines = new List<List<NavCell>>();
+        protected NavCell[] cells = new NavCell[0];
 
         protected List<float> xAxes = new List<float>();
         protected List<float> yAxes = new List<float>();
@@ -69,6 +70,13 @@ namespace Minima.Navigation
             CreateCells();
         }
 
+        public NavTriangle GetNearestTriangle(Vector2 point)
+        {
+            var cell = GetNearestCell(point);
+            return cell.GetNearestTriangle(point);
+        }
+
+
         protected virtual void InitializeGridAxes()
         {
             float boundX = buildArea.bounds.extents.x;
@@ -105,13 +113,9 @@ namespace Minima.Navigation
 
         protected void CreateCells()
         {
-            int cellX = -1;
-            int cellY = -1;
-
             for (int i = 0; i < pointLines.Count - 1; i++)
             {
                 var line = new List<NavCell>();
-                cellX = -1;
 
                 for (int j = 0; j < pointLines[i].Count - 1; j++)
                 {
@@ -122,41 +126,11 @@ namespace Minima.Navigation
 
                     var cell = CreateCell(a, b, c, d);
 
-                    if (cell.Edges.Count > 0)
-                    {
-                        edges = edges.Concat(cell.Edges).ToList();
-                    }
-
-                    if (cell.Triangles.Count > 0)
-                    {
-                        triangles = triangles.Concat(cell.Triangles).ToList();
-                    }
-
-                    foreach(var p in cell.Points)
-                    {
-                        points.AddUniq(p);
-                    }
-
-                    NavCell leftCell = new NavCell();
-                    NavCell bottomCell = new NavCell();
-
-                    if (cellX > 1 && cellY >= 0)
-                    {
-                        leftCell = cellLines[cellY][cellX - 1];
-                    }
-
-                    if (cellX >= 1 && cellY > 0)
-                    {
-                        bottomCell = cellLines[cellY - 1][cellX];
-                    }
-
+                    cells = cells.ConcatOne(cell);
                     line.Add(cell);
-                    cell.MergeEdges(leftCell, bottomCell);
-                    cellX++;
                 }
 
                 cellLines.Add(line);
-                cellY++;
             }
         }
 
@@ -168,10 +142,21 @@ namespace Minima.Navigation
 
         protected void DrawEdges()
         {
-            foreach (var e in edges)
+            foreach (var c in cells)
             {
-                Debug.DrawLine(e.Start.Position, e.End.Position, Color.red);
+                foreach (var e in c.Edges)
+                {
+                    Debug.DrawLine(e.Start.Position, e.End.Position, Color.red);
+                }
             }
+        }
+
+        private NavCell GetNearestCell(Vector2 point)
+        {
+            var cells = this.cells.ToArray();
+            var comparer = new CellDistanceComparer(point);
+            System.Array.Sort(cells, comparer);
+            return cells.FirstOrDefault();
         }
 
         private IEnumerator DelayedBuild()

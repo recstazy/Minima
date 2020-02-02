@@ -49,7 +49,7 @@ namespace Minima.Navigation
             var connected = ConnectedPoints.Except(except).ToArray();
             var comparer = new NavPointDistanceComparer(target);
             System.Array.Sort(connected, comparer);
-            return connected.FirstItem();
+            return connected.FirstOrDefault();
         }
 
         #region Operators

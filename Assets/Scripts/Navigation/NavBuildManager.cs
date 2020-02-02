@@ -19,7 +19,7 @@ namespace Minima.Navigation
 
         #region Properties
 
-        public List<NavMeshBuilderBase> Builders { get; private set; } = new List<NavMeshBuilderBase>();
+        public List<NavMeshBuilder> Builders { get; private set; } = new List<NavMeshBuilder>();
 
         #endregion
 
@@ -28,7 +28,7 @@ namespace Minima.Navigation
             ExecuteNextFrame(() => BuildImmediatley());
         }
 
-        public void AddBuilder(NavMeshBuilderBase builder)
+        public void AddBuilder(NavMeshBuilder builder)
         {
             Builders.Add(builder);
             builder.ShowPoints = showPoints;

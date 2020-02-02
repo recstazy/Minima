@@ -21,11 +21,7 @@ namespace Minima.Navigation
         [SerializeField]
         private bool showPoints = false;
 
-        protected List<NavPoint> points = new List<NavPoint>();
-        protected List<NavEdge> edges = new List<NavEdge>();
         protected List<Collider2D> obstacles = new List<Collider2D>();
-
-        protected List<NavTriangle> triangles = new List<NavTriangle>();
         protected List<List<NavPoint>> pointLines = new List<List<NavPoint>>();
 
         #endregion
@@ -46,16 +42,10 @@ namespace Minima.Navigation
             return buildArea.OverlapPoint(point);
         }
 
-        public NavTriangle GetNearestTriangle(Vector2 point)
-        {
-            return StaticHelpers.GetNearestTriangle(point, triangles);
-        }
-
         protected NavPoint CreatePoint(Vector2 position)
         {
             var point = new NavPoint(position);
             point.Activated = CheckPointActivation(point);
-            points.Add(point);
 
             if (ShowPoints)
             {
@@ -63,25 +53,6 @@ namespace Minima.Navigation
             }
 
             return point;
-        }
-
-        protected NavEdge CreateEdge(NavPoint a, NavPoint b, out bool success)
-        {
-            var edge = CreateEdge(a, b);
-            success = edge.IsValid;
-
-            return edge;
-        }
-
-        protected NavEdge CreateEdge(NavPoint a, NavPoint b)
-        {
-            var edge = new NavEdge(a, b);
-
-            edges.Add(edge);
-            a.ConnectedEdges.Add(edge);
-            b.ConnectedEdges.Add(edge);
-
-            return edge;
         }
 
         protected virtual void GetAllObstacles()
