@@ -21,34 +21,10 @@ namespace Minima.Navigation
         public NavPoint B { get; }
         public NavPoint C { get; }
 
-        public List<NavEdge> Edges
-        {
-            get
-            {
-                return new List<NavEdge> { AB, BC, AC };
-            }
-        }
-
-        public List<NavTriangle> Connected { get => GetConnected(); }
         public bool IsValid { get; private set; }
         public Vector2 Center { get; private set; }
         
         #endregion
-
-        public NavTriangle(NavPoint a, NavPoint b, NavPoint c)
-        {
-            A = a;
-            B = b;
-            C = c;
-
-            AB = new NavEdge(a, b);
-            BC = new NavEdge(b, c);
-            AC = new NavEdge(a, c);
-
-            Center = StaticHelpers.GetTriangleCenter(A.Position, B.Position, C.Position);
-            IsValid = true;
-            AddSelfToConnected();
-        }
 
         public NavTriangle(NavEdge ab, NavEdge bc, NavEdge ac)
         {
@@ -62,7 +38,6 @@ namespace Minima.Navigation
 
             Center = StaticHelpers.GetTriangleCenter(A.Position, B.Position, C.Position);
             IsValid = true;
-            AddSelfToConnected();
         }
 
         public NavTriangle(NavEdge edge, NavPoint point)
@@ -77,7 +52,6 @@ namespace Minima.Navigation
 
             Center = StaticHelpers.GetTriangleCenter(A.Position, B.Position, C.Position);
             IsValid = true;
-            AddSelfToConnected();
         }
 
         public NavPoint ClosestVertex(Vector2 origin)
@@ -86,31 +60,6 @@ namespace Minima.Navigation
             var comparer = new NavPointDistanceComparer(origin);
             vertices.Sort(comparer);
             return vertices.FirstOrDefault();
-        }
-
-        private List<NavTriangle> GetConnected()
-        {
-            List<NavTriangle> connected = new List<NavTriangle>();
-
-            AddConnectedToList(AB, connected);
-            AddConnectedToList(BC, connected);
-            AddConnectedToList(AC, connected);
-            return connected;
-        }
-
-        private void AddSelfToConnected()
-        {
-            AB.AddConnected(this);
-            BC.AddConnected(this);
-            AC.AddConnected(this);
-        }
-
-        private void AddConnectedToList(NavEdge edge, List<NavTriangle> list)
-        {
-            if (edge.IsValid)
-            {
-                list.Add(edge.GetAnotherTriangle(this));
-            }
         }
 
         #region Operators

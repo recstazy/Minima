@@ -1155,6 +1155,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: NavBuilder
       objectReference: {fileID: 0}
+    - target: {fileID: 7114947623705089047, guid: 14ed2550755cc9845bb9b6e29f7c6201,
+        type: 3}
+      propertyPath: pointsPerObject
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7114947623705089047, guid: 14ed2550755cc9845bb9b6e29f7c6201,
+        type: 3}
+      propertyPath: collapsePointsTreshhold
+      value: 0.6
+      objectReference: {fileID: 0}
     - target: {fileID: 7293646490493353371, guid: 14ed2550755cc9845bb9b6e29f7c6201,
         type: 3}
       propertyPath: m_LocalPosition.x

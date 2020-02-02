@@ -9,16 +9,17 @@ namespace Minima.Navigation
     {
         #region Properties
 
-        public List<NavPoint> NavPoints { get; set; }
-        public List<Vector2> Points { get; set; }
+        public NavPoint[] NavPoints { get; set; }
+        public Vector2[] Points { get; set; }
         public bool IsValid { get; private set; }
+        public int Length { get => Points.Length; }
 
         #endregion
 
         public NavPath(params NavPoint[] points)
         {
-            NavPoints = new List<NavPoint>();
-            Points = new List<Vector2>();
+            NavPoints = new NavPoint[0];
+            Points = new Vector2[0];
             IsValid = true;
 
             foreach (var t in points)
@@ -29,8 +30,8 @@ namespace Minima.Navigation
 
         public NavPath(params Vector2[] points)
         {
-            NavPoints = new List<NavPoint>();
-            Points = new List<Vector2>();
+            NavPoints = new NavPoint[0];
+            Points = new Vector2[0];
             IsValid = true;
 
             foreach (var t in points)
@@ -41,14 +42,14 @@ namespace Minima.Navigation
 
         public void Add(NavPoint point)
         {
-            NavPoints.Add(point);
-            Points.Add(point.Position);
+            NavPoints = NavPoints.ConcatOne(point);
+            Points = Points.ConcatOne(point.Position);
         }
 
         public void Add(Vector2 point)
         {
-            NavPoints.Add(new NavPoint(point));
-            Points.Add(point);
+            NavPoints = NavPoints.ConcatOne(new NavPoint(point));
+            Points = Points.ConcatOne(point);
         }
     }
 }

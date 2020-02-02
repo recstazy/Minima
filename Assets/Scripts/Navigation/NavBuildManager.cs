@@ -45,7 +45,13 @@ namespace Minima.Navigation
             }
 
             TimeSpan timeElapsed = DateTime.Now - startTime;
-            Debug.Log("NavMesh building took " + timeElapsed);
+
+            int pointsCount = 0;
+            foreach (var b in Builders)
+            {
+                pointsCount += b.PointsCount;
+            }
+            Debug.Log("NavMesh building took " + timeElapsed + "NavPoints count = " + pointsCount);
         }
 
         protected void ExecuteNextFrame(Action method)

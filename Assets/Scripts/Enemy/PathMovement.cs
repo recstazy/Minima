@@ -60,7 +60,7 @@ public class PathMovement : TargetMovement
     {
         int index = 0;
 
-        while (index != path.NavPoints.Count)
+        while (index != path.NavPoints.Length)
         {
             currentTargetPoint = path.Points[index];
 

@@ -7,7 +7,37 @@ public static class ListExtentions
 {
     public static T[] ConcatOne<T>(this T[] array, T item)
     {
-        return array.Concat(new T[] { item }).ToArray();
+        Array.Resize(ref array, array.Length + 1);
+        array[array.Length - 1] = item;
+        return array;
+    }
+
+    public static T[] RemoveAt<T>(this T[] array, int index)
+    {
+        if (index >= array.Length)
+        {
+            return array;
+        }
+
+        var copy = array.ToList();
+        copy.RemoveAt(index);
+        return copy.ToArray();
+    }
+
+    public static T[] AddUniq<T>(this T[] array, T item)
+    {
+        if (!array.Contains(item))
+        {
+            return array.ConcatOne(item);
+        }
+
+        return array;
+    }
+
+    public static T[] ConcatUniq<T>(this T[] array, T[] items)
+    {
+        var toConcat = items.Except(array);
+        return array.Concat(toConcat).ToArray();
     }
 
     public static void AddUniq<T>(this List<T> list, T item)

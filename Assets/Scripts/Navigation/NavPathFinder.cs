@@ -42,7 +42,7 @@ namespace Minima.Navigation
 
         private void AddNextPoints(ref NavPath path, NavPoint point, NavPoint target)
         {
-            if (path.NavPoints.Count > 100)
+            if (path.Length > 100)
             {
                 Debug.Log("Path length > 100");
                 return;

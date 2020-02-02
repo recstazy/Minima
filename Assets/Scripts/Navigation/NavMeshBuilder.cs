@@ -29,7 +29,21 @@ namespace Minima.Navigation
         #region Properties
 
         private float Step { get => 1f / density; }
-        
+
+        public int PointsCount
+        {
+            get
+            {
+                int count = 0;
+                foreach (var c in cells)
+                {
+                    count += c.Points.Length;
+                }
+
+                return count;
+            }
+        }
+
 
         #endregion
 
@@ -99,25 +113,25 @@ namespace Minima.Navigation
 
             foreach (var x in xAxes)
             {
-                var line = new List<NavPoint>();
+                var line = new NavPoint[0];
 
                 foreach (var y in yAxes)
                 {
                     var point = CreatePoint(origin + new Vector2(x, y));
-                    line.Add(point);
+                    line = line.ConcatOne(point);
                 }
 
-                pointLines.Add(line);
+                pointLines = pointLines.ConcatOne(line);
             }
         }
 
         protected void CreateCells()
         {
-            for (int i = 0; i < pointLines.Count - 1; i++)
+            for (int i = 0; i < pointLines.Length - 1; i++)
             {
                 var line = new List<NavCell>();
 
-                for (int j = 0; j < pointLines[i].Count - 1; j++)
+                for (int j = 0; j < pointLines[i].Length - 1; j++)
                 {
                     var a = pointLines[i][j];
                     var b = pointLines[i][j + 1];

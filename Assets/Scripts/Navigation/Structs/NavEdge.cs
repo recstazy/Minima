@@ -6,17 +6,10 @@ namespace Minima.Navigation
 {
     public struct NavEdge
     {
-        #region Fields
-
-        #endregion
-
         #region Properties
 
         public NavPoint Start { get; set; }
         public NavPoint End { get; set; }
-
-        public List<NavTriangle> ConnectedTriangles { get; set; }
-
         public bool IsValid { get; set; }
 
         #endregion
@@ -25,7 +18,6 @@ namespace Minima.Navigation
         {
             Start = start;
             End = end;
-            ConnectedTriangles = new List<NavTriangle>();
             IsValid = true;
         }
 
@@ -48,20 +40,6 @@ namespace Minima.Navigation
             {
                 return new NavPoint();
             }
-        }
-
-        public void AddConnected(NavTriangle triangle)
-        {
-            if (!ConnectedTriangles.Contains(triangle))
-            {
-                ConnectedTriangles.Add(triangle);
-            }
-        }
-
-        public NavTriangle GetAnotherTriangle(NavTriangle triangle)
-        {
-            var other = ConnectedTriangles.Find(t => t != triangle);
-            return other;
         }
     }
 }

@@ -49,7 +49,7 @@ namespace Minima.Navigation
         {
             if (showDebug && path.IsValid)
             {
-                for (int i = 0; i < path.NavPoints.Count - 1; i++)
+                for (int i = 0; i < path.Length - 1; i++)
                 {
                     Debug.DrawLine(path.Points[i], path.Points[i + 1], Color.green, Time.deltaTime);
                 }

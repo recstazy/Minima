@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Minima.Navigation
@@ -56,9 +55,9 @@ namespace Minima.Navigation
         public NavEdge CD { get; private set; }
         public NavEdge AD { get; private set; }
 
-        public List<NavTriangle> Triangles { get; private set; } 
-        public List<NavEdge> Edges { get; private set; }
-        public List<NavPoint> Points { get; private set; }
+        public NavTriangle[] Triangles { get; private set; } 
+        public NavEdge[] Edges { get; private set; }
+        public NavPoint[] Points { get; private set; }
         public bool IsValid { get; private set; }
 
         public int Activation { get; private set; }
@@ -86,9 +85,9 @@ namespace Minima.Navigation
             Activation = 0;
             IsValid = true;
 
-            Points = new List<NavPoint>();
-            Edges = new List<NavEdge>();
-            Triangles = new List<NavTriangle>();
+            Points = new NavPoint[0];
+            Edges = new NavEdge[0];
+            Triangles = new NavTriangle[0];
 
             AddPointsUniq(A, B, C, D);
 
@@ -399,7 +398,7 @@ namespace Minima.Navigation
         private void CreateTriangle(NavEdge edge, NavPoint point)
         {
             var triangle = new NavTriangle(edge, point);
-            Triangles.Add(triangle);
+            Triangles = Triangles.ConcatOne(triangle);
 
             AddEdgesUniq(edge, triangle.BC, triangle.AC);
             AddPointsUniq(triangle.A, triangle.B, triangle.C);
@@ -408,7 +407,7 @@ namespace Minima.Navigation
         private void CreateTriangle(NavEdge ab, NavEdge bc, NavEdge ac)
         {
             var triangle = new NavTriangle(ab, bc, ac);
-            Triangles.Add(triangle);
+            Triangles = Triangles.ConcatOne(triangle);
 
             AddEdgesUniq(ab, bc, ac);
             AddPointsUniq(triangle.A, triangle.B, triangle.C);
@@ -418,7 +417,7 @@ namespace Minima.Navigation
         {
             foreach (var edge in edges)
             {
-                Edges.AddUniq(edge);
+                Edges = Edges.AddUniq(edge);
             }
         }
 
@@ -426,7 +425,7 @@ namespace Minima.Navigation
         {
             foreach (var point in points)
             {
-                Points.AddUniq(point);
+                Points = Points.AddUniq(point);
             }
         }
 

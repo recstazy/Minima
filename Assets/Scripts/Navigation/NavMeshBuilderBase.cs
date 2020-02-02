@@ -22,7 +22,7 @@ namespace Minima.Navigation
         private bool showPoints = false;
 
         protected List<Collider2D> obstacles = new List<Collider2D>();
-        protected List<List<NavPoint>> pointLines = new List<List<NavPoint>>();
+        protected NavPoint[][] pointLines = new NavPoint[0][];
 
         #endregion
 
