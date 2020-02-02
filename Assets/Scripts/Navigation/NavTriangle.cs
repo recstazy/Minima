@@ -8,13 +8,14 @@ namespace Minima.Navigation
     public struct NavTriangle
     {
         #region Fields
+
         #endregion
 
         #region Properties
 
-        public NavEdge AB { get; private set; }
-        public NavEdge BC { get; private set; }
-        public NavEdge AC { get; private set; }
+        public NavEdge AB { get; set; }
+        public NavEdge BC { get; set; }
+        public NavEdge AC { get; set; }
 
         public NavPoint A { get; }
         public NavPoint B { get; }
@@ -29,6 +30,8 @@ namespace Minima.Navigation
         }
 
         public List<NavTriangle> Connected { get => GetConnected(); }
+        public bool IsValid { get; private set; }
+        public Vector2 Center { get; private set; }
         
         #endregion
 
@@ -42,6 +45,8 @@ namespace Minima.Navigation
             BC = new NavEdge(b, c);
             AC = new NavEdge(a, c);
 
+            Center = StaticHelpers.GetTriangleCenter(A.Position, B.Position, C.Position);
+            IsValid = true;
             AddSelfToConnected();
         }
 
@@ -55,6 +60,8 @@ namespace Minima.Navigation
             B = BC.Start;
             C = AC.End;
 
+            Center = StaticHelpers.GetTriangleCenter(A.Position, B.Position, C.Position);
+            IsValid = true;
             AddSelfToConnected();
         }
 
@@ -68,25 +75,26 @@ namespace Minima.Navigation
             BC = new NavEdge(B, C);
             AC = new NavEdge(A, C);
 
+            Center = StaticHelpers.GetTriangleCenter(A.Position, B.Position, C.Position);
+            IsValid = true;
             AddSelfToConnected();
         }
 
-        public NavTriangle GetClosestConnection(Vector2 origin, params NavTriangle[] except)
+        public NavPoint ClosestVertex(Vector2 origin)
         {
-            var comparer = new TriangleDistanceComparer(origin);
-            var connected = Connected.Except(except).ToList();
-            connected.Sort(comparer);
-            return connected[0];
+            var vertices = new List<NavPoint> { A, B, C };
+            var comparer = new NavPointDistanceComparer(origin);
+            vertices.Sort(comparer);
+            return vertices.FirstItem();
         }
 
         private List<NavTriangle> GetConnected()
         {
             List<NavTriangle> connected = new List<NavTriangle>();
-            var thisTriangle = this;
 
-            connected.Add(AB.GetAnotherTriangle(thisTriangle));
-            connected.Add(BC.GetAnotherTriangle(thisTriangle));
-            connected.Add(AC.GetAnotherTriangle(thisTriangle));
+            AddConnectedToList(AB, connected);
+            AddConnectedToList(BC, connected);
+            AddConnectedToList(AC, connected);
             return connected;
         }
 
@@ -95,6 +103,14 @@ namespace Minima.Navigation
             AB.AddConnected(this);
             BC.AddConnected(this);
             AC.AddConnected(this);
+        }
+
+        private void AddConnectedToList(NavEdge edge, List<NavTriangle> list)
+        {
+            if (edge.IsValid)
+            {
+                list.Add(edge.GetAnotherTriangle(this));
+            }
         }
 
         #region Operators
@@ -109,14 +125,15 @@ namespace Minima.Navigation
             return !IsEqual(a, b);
         }
 
+        /// <summary>
+        /// Two triangles can't intersect, so for equality it's enough to their centers be equal
+        /// </summary>
         private static bool IsEqual(NavTriangle a, NavTriangle b)
         {
-            if (a.A == b.A && a.B == b.B && a.C == b.C)
-            {
-                return true;
-            }
+            bool xEqual = a.Center.x.Equal(b.Center.x);
+            bool yEqual = a.Center.y.Equal(b.Center.y);
 
-            return false;
+            return xEqual && yEqual;
         }
 
         #endregion

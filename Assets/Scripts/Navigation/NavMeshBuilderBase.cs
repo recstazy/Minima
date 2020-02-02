@@ -16,7 +16,10 @@ namespace Minima.Navigation
         protected Collider2D buildArea;
 
         [SerializeField]
-        protected bool showDebug = false;
+        private bool showDebug = false;
+
+        [SerializeField]
+        private bool showPoints = false;
 
         protected List<NavPoint> points = new List<NavPoint>();
         protected List<NavEdge> edges = new List<NavEdge>();
@@ -24,11 +27,13 @@ namespace Minima.Navigation
 
         protected List<NavTriangle> triangles = new List<NavTriangle>();
         protected List<List<NavPoint>> pointLines = new List<List<NavPoint>>();
-        
 
         #endregion
 
         #region Properties
+
+        public bool ShowPoints { get => showPoints; set => showPoints = value; }
+        public bool ShowDebug { get => showDebug; set => showDebug = value; }
 
         #endregion
 
@@ -41,22 +46,18 @@ namespace Minima.Navigation
             return buildArea.OverlapPoint(point);
         }
 
-        public NavTriangle GetContainingTriangle(Vector2 point)
+        public NavTriangle GetNearestTriangle(Vector2 point)
         {
-            var trianglesList = triangles.ToList();
-            var comparer = new TriangleDistanceComparer(point);
-            trianglesList.Sort(comparer);
-
-            return trianglesList[0];
+            return StaticHelpers.GetNearestTriangle(point, triangles);
         }
 
-        protected NavPoint CreatePoint(Vector2 position, bool instantiatePoint = false)
+        protected NavPoint CreatePoint(Vector2 position)
         {
             var point = new NavPoint(position);
             point.Activated = CheckPointActivation(point);
             points.Add(point);
 
-            if (instantiatePoint)
+            if (ShowPoints)
             {
                 InstantiatePoint(point);
             }

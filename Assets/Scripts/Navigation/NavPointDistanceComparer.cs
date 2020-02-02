@@ -14,6 +14,11 @@ namespace Minima.Navigation
             Origin = origin;
         }
 
+        public NavPointDistanceComparer(Vector2 origin)
+        {
+            Origin = new NavPoint(origin);
+        }
+
         public int Compare(NavPoint x, NavPoint y)
         {
             var xDistance = Vector2.Distance(Origin.Position, x.Position);

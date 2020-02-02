@@ -9,6 +9,12 @@ namespace Minima.Navigation
     {
         #region Fields
 
+        [SerializeField]
+        private bool showPoints = false;
+
+        [SerializeField]
+        private bool showDebugMesh = false;
+
         #endregion
 
         #region Properties
@@ -25,6 +31,8 @@ namespace Minima.Navigation
         public void AddBuilder(NavMeshBuilderBase builder)
         {
             Builders.Add(builder);
+            builder.ShowPoints = showPoints;
+            builder.ShowDebug = showDebugMesh;
         }
 
         protected void BuildImmediatley()

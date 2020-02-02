@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace Minima.Navigation
 {
@@ -17,25 +18,50 @@ namespace Minima.Navigation
 
         #endregion
 
+        // Trying to implement A*
         public NavPath FindPath(Vector2 origin, Vector2 target)
         {
-            var path = new NavPath();
-            var builder = FindBuilder(origin);
+            var path = new NavPath(origin);
+            var originBuilder = FindBuilder(origin);
+            var targetBuilder = FindBuilder(target);
 
-            var lastTriangle = builder.GetContainingTriangle(origin);
-            var triangle = lastTriangle.GetClosestConnection(origin);
-            bool isVisible = false;
-
-            do
+            if (originBuilder == null)
             {
-                triangle = triangle.GetClosestConnection(origin, lastTriangle);
-                var center = StaticHelpers.GetTriangleCenter(triangle.A.Position, triangle.B.Position, triangle.C.Position);
-                isVisible = StaticHelpers.CheckVisibility(center, origin);
-                path.Points.Add(center);
+                return path;
             }
-            while (!isVisible);
+
+            var startPoint = originBuilder.GetNearestTriangle(origin).ClosestVertex(target);
+            var endPoint = targetBuilder.GetNearestTriangle(target).ClosestVertex(origin);
+
+            path.Add(startPoint);
+            AddNextPoints(ref path, startPoint, endPoint);
+            path.Add(target);
 
             return path;
+        }
+
+        private void AddNextPoints(ref NavPath path, NavPoint point, NavPoint target)
+        {
+            if (path.NavPoints.Count > 100)
+            {
+                Debug.Log("Path length > 100");
+                return;
+            }
+
+            if (point == target)
+            {
+                return;
+            }
+
+            var nextPoint = point.ClosestVertex(target.Position, path.NavPoints.ToArray());
+
+            if (!nextPoint.IsValid)
+            {
+                return;
+            }
+
+            path.Add(nextPoint);
+            AddNextPoints(ref path, nextPoint, target);
         }
 
         private NavMeshBuilderBase FindBuilder(Vector2 point)

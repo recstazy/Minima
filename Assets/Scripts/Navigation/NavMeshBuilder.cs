@@ -14,9 +14,6 @@ namespace Minima.Navigation
         protected float density = 1f;
 
         [SerializeField]
-        private bool showPoints = false;
-
-        [SerializeField]
         private bool autoActivate = false;
 
         protected List<List<NavCell>> cellLines = new List<List<NavCell>>();
@@ -31,6 +28,7 @@ namespace Minima.Navigation
         #region Properties
 
         private float Step { get => 1f / density; }
+        
 
         #endregion
 
@@ -49,7 +47,7 @@ namespace Minima.Navigation
 
         protected virtual void Update()
         {
-            if (showDebug)
+            if (ShowDebug)
             {
                 DrawEdges();
             }
@@ -97,7 +95,7 @@ namespace Minima.Navigation
 
                 foreach (var y in yAxes)
                 {
-                    var point = CreatePoint(origin + new Vector2(x, y), showPoints);
+                    var point = CreatePoint(origin + new Vector2(x, y));
                     line.Add(point);
                 }
 
@@ -107,9 +105,13 @@ namespace Minima.Navigation
 
         protected void CreateCells()
         {
+            int cellX = -1;
+            int cellY = -1;
+
             for (int i = 0; i < pointLines.Count - 1; i++)
             {
                 var line = new List<NavCell>();
+                cellX = -1;
 
                 for (int j = 0; j < pointLines[i].Count - 1; j++)
                 {
@@ -125,15 +127,36 @@ namespace Minima.Navigation
                         edges = edges.Concat(cell.Edges).ToList();
                     }
 
+                    if (cell.Triangles.Count > 0)
+                    {
+                        triangles = triangles.Concat(cell.Triangles).ToList();
+                    }
+
                     foreach(var p in cell.Points)
                     {
                         points.AddUniq(p);
                     }
 
+                    NavCell leftCell = new NavCell();
+                    NavCell bottomCell = new NavCell();
+
+                    if (cellX > 1 && cellY >= 0)
+                    {
+                        leftCell = cellLines[cellY][cellX - 1];
+                    }
+
+                    if (cellX >= 1 && cellY > 0)
+                    {
+                        bottomCell = cellLines[cellY - 1][cellX];
+                    }
+
                     line.Add(cell);
+                    cell.MergeEdges(leftCell, bottomCell);
+                    cellX++;
                 }
 
                 cellLines.Add(line);
+                cellY++;
             }
         }
 

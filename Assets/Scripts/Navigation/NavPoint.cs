@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace Minima.Navigation
 {
@@ -9,10 +10,9 @@ namespace Minima.Navigation
         #region Properties
 
         public SpriteRenderer Sprite { get; set; }
-
         public Vector2 Position { get; set; }
-
         public List<NavEdge> ConnectedEdges { get; set; }
+        public bool IsValid { get; set; }
 
         public List<NavPoint> ConnectedPoints
         {
@@ -41,6 +41,15 @@ namespace Minima.Navigation
             ConnectedEdges = new List<NavEdge>();
             Activated = false;
             Sprite = null;
+            IsValid = true;
+        }
+
+        public NavPoint ClosestVertex(Vector2 target, params NavPoint[] except)
+        {
+            var connected = ConnectedPoints.Except(except).ToArray();
+            var comparer = new NavPointDistanceComparer(target);
+            System.Array.Sort(connected, comparer);
+            return connected.FirstItem();
         }
 
         #region Operators
@@ -57,7 +66,9 @@ namespace Minima.Navigation
 
         private static bool IsEqual(NavPoint a, NavPoint b)
         {
-            return a.Position == b.Position;
+            bool xEqual = a.Position.x.Equal(b.Position.x);
+            bool yEqual = a.Position.y.Equal(b.Position.y);
+            return xEqual && yEqual;
         }
 
         #endregion

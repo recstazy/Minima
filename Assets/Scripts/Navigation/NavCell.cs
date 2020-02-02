@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Minima.Navigation
 {
-    public class NavCell
+    public struct NavCell
     {
         private enum Half
         {
@@ -36,8 +36,6 @@ namespace Minima.Navigation
         private NavPoint cd;
         private NavPoint ad;
 
-        private List<NavPoint> points = new List<NavPoint>();
-
         #endregion
 
         #region Properties
@@ -52,11 +50,17 @@ namespace Minima.Navigation
         public NavPoint C { get; set; }
         public NavPoint D { get; set; }
 
-        public List<NavTriangle> Triangles { get; private set; } = new List<NavTriangle>();
-        public List<NavEdge> Edges { get; private set; } = new List<NavEdge>();
-        public List<NavPoint> Points { get => points; }
+        public NavEdge AB { get; private set; }
+        public NavEdge BC { get; private set; }
+        public NavEdge CD { get; private set; }
+        public NavEdge AD { get; private set; }
 
-        int activation = 0;
+        public List<NavTriangle> Triangles { get; private set; } 
+        public List<NavEdge> Edges { get; private set; }
+        public List<NavPoint> Points { get; private set; }
+        public bool IsValid { get; private set; }
+
+        public int Activation { get; private set; }
 
         #endregion
 
@@ -67,10 +71,22 @@ namespace Minima.Navigation
             C = c;
             D = d;
 
+            AB = new NavEdge();
+            BC = new NavEdge();
+            CD = new NavEdge();
+            AD = new NavEdge();
+
             ab = new NavPoint(Vector2.Lerp(A.Position, B.Position, 0.5f));
             bc = new NavPoint(Vector2.Lerp(B.Position, C.Position, 0.5f));
             cd = new NavPoint(Vector2.Lerp(C.Position, D.Position, 0.5f));
             ad = new NavPoint(Vector2.Lerp(A.Position, D.Position, 0.5f));
+
+            Activation = 0;
+            IsValid = true;
+
+            Points = new List<NavPoint>();
+            Edges = new List<NavEdge>();
+            Triangles = new List<NavTriangle>();
 
             AddPointsUniq(A, B, C, D);
 
@@ -78,11 +94,34 @@ namespace Minima.Navigation
             Triangulate();
         }
 
+        public void MergeEdges(NavCell left, NavCell bottom)
+        {
+            if (AB.IsValid && left.CD.IsValid)
+            {
+                var thisCell = this;
+                var thisTriangle = Triangles.Find(t => t.Edges.Contains(thisCell.AB));
+                var leftTriangle = left.Triangles.Find(t => t.Edges.Contains(left.CD));
+
+                leftTriangle.BC.ConnectedTriangles.Add(thisTriangle);
+                thisTriangle.AC = leftTriangle.BC;
+            }
+
+            if (AD.IsValid && bottom.BC.IsValid)
+            {
+                var thisCell = this;
+                var thisTriangle = Triangles.Find(t => t.Edges.Contains(thisCell.AD));
+                var bottomTriangle = bottom.Triangles.Find(t => t.Edges.Contains(bottom.BC));
+
+                bottomTriangle.AC.ConnectedTriangles.Add(thisTriangle);
+                thisTriangle.BC = bottomTriangle.AC;
+            }
+        }
+
         #region Triangulation
 
         private void Triangulate()
         {
-            switch (activation)
+            switch (Activation)
             {
                 case 0:
                     return;
@@ -362,8 +401,13 @@ namespace Minima.Navigation
         {
             var middle = CreateEdge(B, D);
 
-            CreateTriangle(middle, A);
-            CreateTriangle(middle, C);
+            var left = CreateTriangle(middle, A);
+            var right = CreateTriangle(middle, C);
+
+            AB = left.AC;
+            AD = left.BC;
+            BC = right.AC;
+            CD = right.BC;
         }
 
         #endregion
@@ -373,13 +417,15 @@ namespace Minima.Navigation
             return new NavEdge(a, b);
         }
 
-        private void CreateTriangle(NavEdge edge, NavPoint point)
+        private NavTriangle CreateTriangle(NavEdge edge, NavPoint point)
         {
             var triangle = new NavTriangle(edge, point);
             Triangles.Add(triangle);
 
             AddEdgesUniq(edge, triangle.BC, triangle.AC);
             AddPointsUniq(triangle.A, triangle.B, triangle.C);
+
+            return triangle;
         }
 
         private void CreateTriangle(NavEdge ab, NavEdge bc, NavEdge ac)
@@ -403,7 +449,7 @@ namespace Minima.Navigation
         {
             foreach (var point in points)
             {
-                this.points.AddUniq(point);
+                Points.AddUniq(point);
             }
         }
 
@@ -416,7 +462,7 @@ namespace Minima.Navigation
             array[1] = D.Activated;
             array[0] = A.Activated;
 
-            activation = GetIntFromBitArray(array);
+            Activation = GetIntFromBitArray(array);
         }
 
         private int GetIntFromBitArray(BitArray bitArray)

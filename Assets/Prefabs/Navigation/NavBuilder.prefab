@@ -110,4 +110,4 @@ MonoBehaviour:
   autoActivate: 0
   pointsPerObject: 2
   boundCoefficient: 0.9
-  collapsePointsTreshhold: 1
+  collapsePointsTreshhold: 0.6

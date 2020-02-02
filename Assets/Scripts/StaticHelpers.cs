@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using Minima.Navigation;
 
 public static class StaticHelpers
 {
@@ -106,6 +107,34 @@ public static class StaticHelpers
 
     }
 
+    public static NavTriangle GetNearestTriangle(Vector2 point, IEnumerable<NavTriangle> triangles)
+    {
+        if (triangles.Count() < 2 && triangles.Count() > 0)
+        {
+            return triangles.ToArray()[0];
+        }
+        else if (triangles.Count() == 0)
+        {
+            return new NavTriangle();
+        }
+
+        var trianglesArray = triangles.ToArray();
+        var comparer = new TriangleDistanceComparer(point);
+        System.Array.Sort(trianglesArray, comparer);
+
+        return trianglesArray[0];
+    }
+
+    public static bool IsPointInRadius(Vector2 point, Vector2 origin, float radius)
+    {
+        if (Vector2.Distance(point, origin) < radius)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     /// <summary>
     /// Returnes true if ab intersects with cd
     /// </summary>
@@ -132,6 +161,11 @@ public static class StaticHelpers
         }
 
         return false;
+    }
+
+    public static bool Equal(this float a, float b, float precision = 0.001f)
+    {
+        return Mathf.Abs(b - a) <= precision;
     }
 
     private static List<RaycastHit2D> RaycastVisibility(Vector2 from, Vector2 to)
@@ -166,28 +200,5 @@ public static class StaticHelpers
         return new Vector3(vector.x, vector.y, 0f);
     }
 
-    public static void AddUniq<T>(this List<T> list, T item)
-    {
-        if (!list.Contains(item))
-        {
-            list.Add(item);
-        }
-    }
-
-    private static System.Random random = new System.Random();
-    /// <summary>
-    /// Copiet this from StackOverflow
-    /// </summary>
-    public static void Shuffle<T>(this IList<T> list)
-    {
-        int n = list.Count;
-        while (n > 1)
-        {
-            n--;
-            int k = random.Next(n + 1);
-            T value = list[k];
-            list[k] = list[n];
-            list[n] = value;
-        }
-    }
+    
 }
