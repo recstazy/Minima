@@ -51,7 +51,7 @@ namespace Minima.Navigation
             {
                 pointsCount += b.PointsCount;
             }
-            Debug.Log("NavMesh building took " + timeElapsed + "NavPoints count = " + pointsCount);
+            Debug.Log("NavMesh building took " + timeElapsed + ", NavPoints count = " + pointsCount);
         }
 
         protected void ExecuteNextFrame(Action method)

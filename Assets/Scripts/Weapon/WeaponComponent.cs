@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum DamageTarget
+public enum TargetType
 {
     Player = 8,
     Enemy = 9,

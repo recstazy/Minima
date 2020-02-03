@@ -7,7 +7,7 @@ public class AreaWeapon : CoolingWeapon
     #region Fields
 
     [SerializeField]
-    private DamageTarget damageTarget;
+    private TargetType damageTarget;
 
     [SerializeField]
     private ParticleSystem AreaParticles;
@@ -24,7 +24,7 @@ public class AreaWeapon : CoolingWeapon
 
     #endregion
 
-    public void SetTarget(DamageTarget target)
+    public void SetTarget(TargetType target)
     {
         damageTarget = target;
     }

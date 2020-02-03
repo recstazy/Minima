@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TargetMovement : MovementComponent
 {
+    public event System.Action OnTargetReached;
+
     #region Fields
 
     [SerializeField]

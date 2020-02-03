@@ -11,7 +11,7 @@ public class PainArea : MonoBehaviour
     private float dmgPerSecond;
 
     [SerializeField]
-    private List<DamageTarget> targets = new List<DamageTarget>();
+    private List<TargetType> targets = new List<TargetType>();
 
     private List<Character> damageTargets = new List<Character>();
 
@@ -56,7 +56,7 @@ public class PainArea : MonoBehaviour
 
     private Character GetCharacter(Collision2D collision)
     {
-        var damageTarget = (DamageTarget)collision.gameObject.layer;
+        var damageTarget = (TargetType)collision.gameObject.layer;
 
         if (targets.Contains(damageTarget))
         {
