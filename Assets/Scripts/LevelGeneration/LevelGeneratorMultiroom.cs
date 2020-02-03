@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,6 +22,9 @@ namespace Minima.LevelGeneration
         [SerializeField]
         private bool randomizeExitsCount = false;
 
+        [SerializeField]
+        private Navigation.NavBuildManager navBuildManager;
+
         private List<RoomGenerator> roomGenerators = new List<RoomGenerator>();
         private List<ExitCorner> roomsExits = new List<ExitCorner>();
 
@@ -35,6 +39,7 @@ namespace Minima.LevelGeneration
             CreateGenerators(InstantiateGenerator(Vector2.zero));
             GenerateRooms();
             SnapRooms();
+            BuildNavigation();
             GenerateSpawn();
         }
 
@@ -73,7 +78,7 @@ namespace Minima.LevelGeneration
             {
                 if (randomizeExitsCount)
                 {
-                    g.SetExitsCount(Random.Range(1, 4));
+                    g.SetExitsCount(UnityEngine.Random.Range(1, 4));
                 }
 
                 g.GenerateRoom();
@@ -130,6 +135,16 @@ namespace Minima.LevelGeneration
             {
                 g.GenerateSpawn();
             }
+        }
+
+        private void BuildNavigation()
+        {
+            foreach (var g in roomGenerators)
+            {
+                navBuildManager.AddBuilder(g.RoomDraft.NavMeshBuilder);
+            }
+
+            navBuildManager.BuildNavigation();
         }
     }
 }

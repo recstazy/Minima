@@ -23,7 +23,7 @@ public class TargetMovement : MovementComponent
         base.Update();
     }
 
-    public void MoveToTarget(Transform target)
+    public virtual void MoveToTarget(Transform target)
     {
         currentTarget = target;
         MoveToTarget();

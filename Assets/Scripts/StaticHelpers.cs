@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using Minima.Navigation;
 
 public static class StaticHelpers
 {
@@ -86,27 +87,107 @@ public static class StaticHelpers
         return origin + offset;
     }
 
-    public static bool CheckVisibility(Vector2 from, Vector2 to, bool showDebug = false)
+    public static float GetTriangleSurface(Vector2 a, Vector2 b, Vector2 c, bool showDebug = false)
     {
-        Vector2 distanceVector = (to - from);
-        Ray ray = new Ray(from, distanceVector.normalized);
+        var ab = Vector2.Distance(a, b);
+        float angle = Vector2.Angle(b - a, c - a);
 
-        List<RaycastHit2D> hits = new List<RaycastHit2D>();
-
-        var hitsCount = Physics2D.Raycast(from, distanceVector.normalized, new ContactFilter2D(), hits, distanceVector.magnitude);
+        var hVector = (c - a) * Mathf.Sin(angle);
+        float h = hVector.magnitude;
 
         if (showDebug)
         {
-            Debug.DrawLine(ray.origin, ray.direction * distanceVector.magnitude  + ray.origin, Color.green, 30f);
-            Debug.Log("CheckVisibility: count = " + hitsCount);
-
-            foreach (var h in hits)
-            {
-                Debug.Log(h.collider.name);
-            }
+            Debug.DrawLine(a, b, Color.yellow, 15f);
+            Debug.DrawLine(a, c, Color.yellow, 15f);
+            Debug.DrawLine(b, c, Color.yellow, 15f);
+            Debug.DrawLine(c, c - hVector, Color.red, 15f);
         }
 
-        return hitsCount <= 0;
+        return (ab * h) / 2;
+
+    }
+
+    public static NavTriangle GetNearestTriangle(Vector2 point, IEnumerable<NavTriangle> triangles)
+    {
+        if (triangles.Count() < 2 && triangles.Count() > 0)
+        {
+            return triangles.ToArray()[0];
+        }
+        else if (triangles.Count() == 0)
+        {
+            return new NavTriangle();
+        }
+
+        var trianglesArray = triangles.ToArray();
+        var comparer = new TriangleDistanceComparer(point);
+        System.Array.Sort(trianglesArray, comparer);
+
+        return trianglesArray[0];
+    }
+
+    public static bool IsPointInRadius(Vector2 point, Vector2 origin, float radius)
+    {
+        if (Vector2.Distance(point, origin) < radius)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Returnes true if ab intersects with cd
+    /// </summary>
+    public static bool EdgesIntersect(Vector2 a, Vector2 b, Vector2 c, Vector2 d)
+    {
+        float denominator = (d.y - c.y) * (b.x - a.x) - (d.x - c.x) * (b.y - a.y);
+
+        float u = ((d.x - c.x) * (a.y - c.y) - (d.y - c.y) * (a.x - c.x)) / denominator;
+        float v = ((b.x - a.x) * (a.y - c.y) - (b.y - a.y) * (a.x - c.x)) / denominator;
+
+        if (u.InBounds(0f, 1f) && v.InBounds(0f, 1f))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static bool InBounds(this float value, float left, float right)
+    {
+        if (value >= left && value <= right)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static bool Equal(this float a, float b, float precision = 0.001f)
+    {
+        return Mathf.Abs(b - a) <= precision;
+    }
+
+    private static List<RaycastHit2D> RaycastVisibility(Vector2 from, Vector2 to)
+    {
+        Vector2 distanceVector = (to - from);
+        List<RaycastHit2D> hits = new List<RaycastHit2D>();
+        var hitsCount = Physics2D.Raycast(from, distanceVector.normalized, new ContactFilter2D(), hits, distanceVector.magnitude);
+
+        return hits;
+    }
+
+    public static bool CheckVisibility(Vector2 from, Vector2 to)
+    {
+        var hits = RaycastVisibility(from, to);
+        return hits.Count <= 0;
+    }
+
+    public static bool CheckVisibility(Vector2 from, Vector2 to, out List<RaycastHit2D> outHits)
+    {
+        var hits = RaycastVisibility(from, to);
+        outHits = hits;
+        return hits.Count <= 0;
     }
 
     public static Vector2 ToVector2(this Vector3 vector)
@@ -119,20 +200,5 @@ public static class StaticHelpers
         return new Vector3(vector.x, vector.y, 0f);
     }
 
-    private static System.Random random = new System.Random();
-    /// <summary>
-    /// Copiet this from StackOverflow
-    /// </summary>
-    public static void Shuffle<T>(this IList<T> list)
-    {
-        int n = list.Count;
-        while (n > 1)
-        {
-            n--;
-            int k = random.Next(n + 1);
-            T value = list[k];
-            list[k] = list[n];
-            list[n] = value;
-        }
-    }
+    
 }

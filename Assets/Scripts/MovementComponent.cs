@@ -88,7 +88,6 @@ public class MovementComponent : MonoBehaviour
         if (rotateToDirection && direction != Vector2.zero)
         {
             thisTransform.right = direction.normalized;
-            Debug.Log(direction);
         }
     }
 }
