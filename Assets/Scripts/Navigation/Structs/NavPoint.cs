@@ -18,15 +18,20 @@ namespace Minima.Navigation
         {
             get
             {
-                var connected = new List<NavPoint>();
-
-                foreach (var e in ConnectedEdges)
+                if (IsValid)
                 {
-                    var p = e.GetAnotherEnd(this);
-                    connected.Add(p);
+                    var connected = new List<NavPoint>();
+
+                    foreach (var e in ConnectedEdges)
+                    {
+                        var p = e.GetAnotherEnd(this);
+                        connected.Add(p);
+                    }
+
+                    return connected;
                 }
 
-                return connected;
+                return null;
             }
         }
 
@@ -46,10 +51,15 @@ namespace Minima.Navigation
 
         public NavPoint ClosestVertex(Vector2 target, params NavPoint[] except)
         {
-            var connected = ConnectedPoints.Except(except).ToArray();
-            var comparer = new NavPointDistanceComparer(target);
-            System.Array.Sort(connected, comparer);
-            return connected.FirstOrDefault();
+            if (IsValid)
+            {
+                var connected = ConnectedPoints.Except(except).ToArray();
+                var comparer = new NavPointDistanceComparer(target);
+                System.Array.Sort(connected, comparer);
+                return connected.FirstOrDefault();
+            }
+
+            return new NavPoint();
         }
 
         #region Operators
