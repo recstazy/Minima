@@ -20,6 +20,10 @@ namespace Minima.LevelGeneration
         private int generatorExitsPerRoom = 2;
 
         [SerializeField]
+        [Range(0, 100)]
+        private int lineGeneratingChance = 50;
+
+        [SerializeField]
         private bool randomizeExitsCount = false;
 
         [SerializeField]
@@ -56,7 +60,17 @@ namespace Minima.LevelGeneration
                 return false;
             }
 
-            var exits = GetRandomExits(generatorExitsPerRoom);
+            List<ExitCorner> exits;
+            var random = Helpers.FakeRandomBool(100 - lineGeneratingChance);
+
+            if (random)
+            {
+                exits = GetRandomExits(generatorExitsPerRoom);
+            }
+            else
+            {
+                exits = GetFarestExits(generatorExitsPerRoom);
+            }
 
             foreach (var e in exits)
             {
@@ -119,6 +133,15 @@ namespace Minima.LevelGeneration
             }
 
             return result;
+        }
+
+        private List<ExitCorner> GetFarestExits(int count)
+        {
+            var exits = roomsExits.ToArray();
+            Array.Sort(exits, new CornerDistanceComparer(transform.position));
+            exits = exits.Where(e => e.NextRoom == null).ToArray();
+
+            return exits.Take(count).ToList();
         }
 
         private Vector2 GetPositionForNextRoom(ExitCorner exit)

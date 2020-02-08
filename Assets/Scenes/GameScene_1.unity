@@ -5167,6 +5167,7 @@ MonoBehaviour:
   roomRawOffset: 30
   roomsCount: 25
   generatorExitsPerRoom: 2
+  lineGeneratingChance: 20
   randomizeExitsCount: 0
   navBuildManager: {fileID: 476582116}
 --- !u!4 &1400033323

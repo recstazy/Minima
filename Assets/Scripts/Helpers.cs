@@ -8,9 +8,14 @@ public static class Helpers
 {
     public static bool RandomBool()
     {
+        return FakeRandomBool(50);
+    }
+
+    public static bool FakeRandomBool(int trueChance)
+    {
         int randomInt = Random.Range(0, 100);
 
-        if (randomInt >= 50)
+        if (randomInt >= 100 - Mathf.Clamp(trueChance, 0, 100))
         {
             return true;
         }
