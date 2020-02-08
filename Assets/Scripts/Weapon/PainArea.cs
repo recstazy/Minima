@@ -11,7 +11,7 @@ public class PainArea : MonoBehaviour
     private float dmgPerSecond;
 
     [SerializeField]
-    private List<DamageTarget> targets = new List<DamageTarget>();
+    private List<TargetType> targets = new List<TargetType>();
 
     private List<Character> damageTargets = new List<Character>();
 
@@ -28,7 +28,7 @@ public class PainArea : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        var character = GetCharacter(collision);
+        var character = GetCharacter(collision.collider);
 
         if (character != null)
         {
@@ -37,6 +37,26 @@ public class PainArea : MonoBehaviour
     }
 
     private void OnCollisionExit2D(Collision2D collision)
+    {
+        var character = GetCharacter(collision.collider);
+
+        if (character != null)
+        {
+            damageTargets.Remove(character);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        var character = GetCharacter(collision);
+
+        if (character != null)
+        {
+            damageTargets.Add(character);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
     {
         var character = GetCharacter(collision);
 
@@ -54,13 +74,13 @@ public class PainArea : MonoBehaviour
         }
     }
 
-    private Character GetCharacter(Collision2D collision)
+    private Character GetCharacter(Collider2D collider)
     {
-        var damageTarget = (DamageTarget)collision.gameObject.layer;
+        var damageTarget = (TargetType)collider.gameObject.layer;
 
         if (targets.Contains(damageTarget))
         {
-            var character = collision.gameObject.GetComponent<Character>();
+            var character = collider.gameObject.GetComponent<Character>();
             return character;
         }
 

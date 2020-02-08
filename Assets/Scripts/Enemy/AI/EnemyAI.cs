@@ -2,66 +2,69 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAI : AIBase
+namespace Minima.AI
 {
-    #region Fields
-
-    [SerializeField]
-    private TriggerDelegate agressionTrigger;
-
-    [SerializeField]
-    private TriggerDelegate shootTrigger;
-
-    #endregion
-
-    #region Properties
-
-    #endregion
-
-    protected virtual void Awake()
+    public class EnemyAI : AIBase
     {
-        BindTriggers(true);
-    }
+        #region Fields
 
-    private void OnDestroy()
-    {
-        BindTriggers(false);
-    }
+        [SerializeField]
+        private TriggerDelegate agressionTrigger;
 
-    protected virtual void ShootTriggerCallback(GameObject target)
-    {
-        AIControlled.Shoot(target.GetCharacter());
-    }
+        [SerializeField]
+        private TriggerDelegate shootTrigger;
 
-    protected virtual void AgressionTriggerCallback(GameObject target)
-    {
-        AIControlled.MoveTo(target.transform);
-    }
+        #endregion
 
-    protected virtual void BindTriggers(bool newBinded)
-    {
-        if (newBinded)
+        #region Properties
+
+        #endregion
+
+        protected virtual void Awake()
         {
-            if (agressionTrigger != null)
-            {
-                agressionTrigger.OnTargetTriggered += AgressionTriggerCallback;
-            }
-
-            if (shootTrigger != null)
-            {
-                shootTrigger.OnTargetTriggered += ShootTriggerCallback;
-            }
+            BindTriggers(true);
         }
-        else
-        {
-            if (agressionTrigger != null)
-            {
-                agressionTrigger.OnTargetTriggered -= AgressionTriggerCallback;
-            }
 
-            if (shootTrigger != null)
+        private void OnDestroy()
+        {
+            BindTriggers(false);
+        }
+
+        protected virtual void ShootTriggerCallback(GameObject target)
+        {
+            AIControlled.Blackboard.TargetCharacter = target.GetCharacter();
+        }
+
+        protected virtual void AgressionTriggerCallback(GameObject target)
+        {
+            AIControlled.MoveTo(target.transform, MovementType.Direct);
+        }
+
+        protected virtual void BindTriggers(bool newBinded)
+        {
+            if (newBinded)
             {
-                shootTrigger.OnTargetTriggered -= ShootTriggerCallback;
+                if (agressionTrigger != null)
+                {
+                    agressionTrigger.OnTargetTriggered += AgressionTriggerCallback;
+                }
+
+                if (shootTrigger != null)
+                {
+                    shootTrigger.OnTargetTriggered += ShootTriggerCallback;
+                }
+            }
+            else
+            {
+                if (agressionTrigger != null)
+                {
+                    agressionTrigger.OnTargetTriggered -= AgressionTriggerCallback;
+                }
+
+                if (shootTrigger != null)
+                {
+                    shootTrigger.OnTargetTriggered -= ShootTriggerCallback;
+                }
             }
         }
     }

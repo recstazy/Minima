@@ -2,48 +2,71 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AIControlled : MonoBehaviour
+namespace Minima.AI
 {
-    #region Fields
-
-    [SerializeField]
-    private WeaponComponent weapon;
-
-    [SerializeField]
-    private TargetMovement movementComp;
-
-    #endregion
-
-    #region Fields
-
-    public WeaponComponent Weapon { get => weapon; }
-    public MovementComponent MovementComp { get => movementComp; }
-
-    #endregion
-
-    public virtual void MoveTo(Transform target)
+    public class AIControlled : MonoBehaviour
     {
-        if (movementComp != null)
+        #region Fields
+
+        [SerializeField]
+        private WeaponComponent weapon;
+
+        [SerializeField]
+        private PathMovement movementComp;
+
+        [SerializeField]
+        private Animator stateMachine;
+
+        #endregion
+
+        #region Properties
+
+        public WeaponComponent Weapon { get => weapon; }
+        public MovementComponent MovementComp { get => movementComp; }
+        public AIBlackboard Blackboard { get; private set; } = new AIBlackboard();
+
+        #endregion
+
+        public void SetBlackboardValue(string name, bool value)
         {
-            movementComp.MoveToTarget(target);
+            stateMachine.SetBool(name, value);
         }
-    }
 
-    public void StopMovement()
-    {
-        movementComp.StopMoving();
-    }
-
-    public void ContinueMovement()
-    {
-        movementComp.SetCanMove(true);
-    }
-
-    public virtual void Shoot(Character target = null)
-    {
-        if (Weapon != null)
+        public void SetBlackboardTrigger(string name)
         {
-            Weapon.UseWeapon();
+            stateMachine.SetTrigger(name);
+        }
+
+        public virtual void MoveTo(Transform target, MovementType movementType, System.Action reachedCallback = null)
+        {
+            if (movementComp != null)
+            {
+                movementComp.MoveToTarget(target, movementType, reachedCallback);
+            }
+        }
+
+        public void StopMovement()
+        {
+            if (movementComp != null)
+            {
+                movementComp.StopMoving();
+            }
+        }
+
+        public void ContinueMovement()
+        {
+            if (movementComp != null)
+            {
+                movementComp.SetCanMove(true);
+            }
+        }
+
+        public virtual void Attack(Character target = null)
+        {
+            if (Weapon != null)
+            {
+                Weapon.UseWeapon();
+            }
         }
     }
 }

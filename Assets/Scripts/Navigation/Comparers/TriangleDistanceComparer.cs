@@ -9,8 +9,8 @@ public class TriangleDistanceComparer : IComparer<NavTriangle>
 
     public int Compare(NavTriangle x, NavTriangle y)
     {
-        Vector2 xCenter = StaticHelpers.GetTriangleCenter(x.A.Position, x.B.Position, x.C.Position);
-        Vector2 yCenter = StaticHelpers.GetTriangleCenter(y.A.Position, y.B.Position, y.C.Position);
+        Vector2 xCenter = Helpers.GetTriangleCenter(x.A.Position, x.B.Position, x.C.Position);
+        Vector2 yCenter = Helpers.GetTriangleCenter(y.A.Position, y.B.Position, y.C.Position);
 
         float xMagnitude = Vector2.SqrMagnitude(xCenter - Origin);
         float yMagnitude = Vector2.SqrMagnitude(yCenter - Origin);

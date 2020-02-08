@@ -36,7 +36,7 @@ namespace Minima.Navigation
             B = BC.Start;
             C = AC.End;
 
-            Center = StaticHelpers.GetTriangleCenter(A.Position, B.Position, C.Position);
+            Center = Helpers.GetTriangleCenter(A.Position, B.Position, C.Position);
             IsValid = true;
         }
 
@@ -50,7 +50,7 @@ namespace Minima.Navigation
             BC = new NavEdge(B, C);
             AC = new NavEdge(A, C);
 
-            Center = StaticHelpers.GetTriangleCenter(A.Position, B.Position, C.Position);
+            Center = Helpers.GetTriangleCenter(A.Position, B.Position, C.Position);
             IsValid = true;
         }
 

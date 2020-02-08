@@ -7,7 +7,7 @@ public class EnemyBase : Character
     #region Fields
 
     [SerializeField]
-    private List<DamageTarget> targets = new List<DamageTarget>();
+    private List<TargetType> targets = new List<TargetType>();
 
     [SerializeField]
     private bool autoTargetPlayer = true;
@@ -32,7 +32,7 @@ public class EnemyBase : Character
         }
     }
 
-    public void AddTarget(DamageTarget target)
+    public void AddTarget(TargetType target)
     {
         targets.Add(target);
         UpdateTargets();
@@ -49,6 +49,6 @@ public class EnemyBase : Character
 
     private void SetPlayerAsTarget()
     {
-        AddTarget(DamageTarget.Player);
+        AddTarget(TargetType.Player);
     }
 }

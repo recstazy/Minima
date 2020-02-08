@@ -4,19 +4,20 @@ using UnityEngine;
 
 namespace Minima.AI
 {
-    public class AIBase : MonoBehaviour
+    public class AIAttack : AITask
     {
         #region Fields
-
-        [SerializeField]
-        private AIControlled aiControlled;
 
         #endregion
 
         #region Properties
 
-        public AIControlled AIControlled { get => aiControlled; }
-
         #endregion
+
+        public override void OnTaskEnter()
+        {
+            aiControlled.Attack();
+            EndTask(true);
+        }
     }
 }

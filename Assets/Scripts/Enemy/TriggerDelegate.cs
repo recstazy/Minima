@@ -10,7 +10,7 @@ public class TriggerDelegate : MonoBehaviour, IEnemyTargetable
 
     #region Fields
 
-    protected List<DamageTarget> targetTypes = new List<DamageTarget>();
+    protected List<TargetType> targetTypes = new List<TargetType>();
 
     #endregion
 
@@ -38,7 +38,7 @@ public class TriggerDelegate : MonoBehaviour, IEnemyTargetable
         OnTargetTriggered?.Invoke(target);
     }
 
-    public void UpdateTargets(List<DamageTarget> targets)
+    public void UpdateTargets(List<TargetType> targets)
     {
         targetTypes = targets;
     }

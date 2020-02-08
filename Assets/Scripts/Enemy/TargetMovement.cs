@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TargetMovement : MovementComponent
 {
+    public event System.Action OnTargetReached;
+
     #region Fields
 
     [SerializeField]
@@ -43,17 +45,23 @@ public class TargetMovement : MovementComponent
         if (collision.transform == currentTarget)
         {
             StopMoving();
+            CallTargetTeached();
         }
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    //private void OnCollisionExit2D(Collision2D collision)
+    //{
+    //    if (collision.transform == currentTarget)
+    //    {
+    //        if (canMove)
+    //        {
+    //            MoveToTarget();
+    //        }
+    //    }
+    //}
+
+    protected virtual void CallTargetTeached()
     {
-        if (collision.transform == currentTarget)
-        {
-            if (canMove)
-            {
-                MoveToTarget();
-            }
-        }
+        OnTargetReached?.Invoke();
     }
 }

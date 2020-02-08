@@ -2,38 +2,41 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class YellowEnemyAI : EnemyAI
+namespace Minima.AI
 {
-    #region Fields
-
-    [SerializeField]
-    private float stopMovementDelay = 1f;
-
-    private Coroutine stopCoroutine;
-
-    #endregion
-
-    #region Properties
-
-    #endregion
-
-    protected override void ShootTriggerCallback(GameObject target)
+    public class YellowEnemyAI : EnemyAI
     {
-        base.ShootTriggerCallback(target);
+        #region Fields
 
-        if (stopCoroutine == null)
+        [SerializeField]
+        private float stopMovementDelay = 1f;
+
+        private Coroutine stopCoroutine;
+
+        #endregion
+
+        #region Properties
+
+        #endregion
+
+        protected override void ShootTriggerCallback(GameObject target)
         {
-            stopCoroutine = StartCoroutine(StopWhenShooting());
+            base.ShootTriggerCallback(target);
+
+            if (stopCoroutine == null)
+            {
+                stopCoroutine = StartCoroutine(StopWhenShooting());
+            }
         }
-    }
 
-    private IEnumerator StopWhenShooting()
-    {
-        AIControlled.StopMovement();
+        private IEnumerator StopWhenShooting()
+        {
+            AIControlled.StopMovement();
 
-        yield return new WaitForSeconds(stopMovementDelay);
+            yield return new WaitForSeconds(stopMovementDelay);
 
-        AIControlled.ContinueMovement();
-        stopCoroutine = null;
+            AIControlled.ContinueMovement();
+            stopCoroutine = null;
+        }
     }
 }

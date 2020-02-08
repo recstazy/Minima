@@ -66,7 +66,7 @@ namespace Minima.LevelGeneration
                 direction = Vector2.right;
             }
 
-            bool isNegative = StaticHelpers.RandomBool();
+            bool isNegative = Helpers.RandomBool();
 
             if (isNegative)
             {

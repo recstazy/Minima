@@ -4954,6 +4954,7 @@ GameObject:
   - component: {fileID: 4601056732519910657}
   - component: {fileID: 4601056732519910656}
   - component: {fileID: 4687920976204578887}
+  - component: {fileID: 7377347807273714192}
   m_Layer: 0
   m_Name: AgressionTrigger
   m_TagString: Untagged
@@ -5003,6 +5004,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8be440232e4090408309be2719c9cc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7377347807273714192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4601056732519910658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 692cbc6acc375d444b25b0ea8c950ff1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aIControlled: {fileID: 7807344850437560428}
+  trigger: {fileID: 4687920976204578887}
 --- !u!1 &4601056733867002483
 GameObject:
   m_ObjectHideFlags: 0
@@ -5155,7 +5170,6 @@ MonoBehaviour:
   navAgent: {fileID: 6652528254622937497}
   acceptableRadius: 0.5
   updateTime: 0.1
-  updateTargetTime: 1
 --- !u!50 &4601056734282181984
 Rigidbody2D:
   serializedVersion: 4
@@ -5202,8 +5216,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6677299998527448422}
+  - component: {fileID: 3090169717292032175}
   - component: {fileID: 7807344850437560428}
-  - component: {fileID: 2218167977509992041}
   - component: {fileID: 6652528254622937497}
   m_Layer: 9
   m_Name: AI
@@ -5227,6 +5241,25 @@ Transform:
   m_Father: {fileID: 4601056734282181985}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &3090169717292032175
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8519357912053526299}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 78b3a3909d14bf94b88d18a773734140, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &7807344850437560428
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5241,21 +5274,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weapon: {fileID: 0}
   movementComp: {fileID: 2496618225136795330}
---- !u!114 &2218167977509992041
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8519357912053526299}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e856431507867d4da293dd99f63f2ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  aiControlled: {fileID: 7807344850437560428}
-  agressionTrigger: {fileID: 4687920976204578887}
-  shootTrigger: {fileID: 0}
+  stateMachine: {fileID: 3090169717292032175}
 --- !u!114 &6652528254622937497
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5325,7 +5344,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -5410,6 +5429,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cd6a55fb3a114d4fb9dbcb16e64473a, type: 3}
+--- !u!4 &4353215553513432555 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3842439115060717990, guid: 2cd6a55fb3a114d4fb9dbcb16e64473a,
+    type: 3}
+  m_PrefabInstance: {fileID: 665033556814007373}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &994036669487968467 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 356113582072003742, guid: 2cd6a55fb3a114d4fb9dbcb16e64473a,
@@ -5431,12 +5456,6 @@ GameObject:
 --- !u!4 &7422736168408488272 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7942229097595507997, guid: 2cd6a55fb3a114d4fb9dbcb16e64473a,
-    type: 3}
-  m_PrefabInstance: {fileID: 665033556814007373}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &4353215553513432555 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3842439115060717990, guid: 2cd6a55fb3a114d4fb9dbcb16e64473a,
     type: 3}
   m_PrefabInstance: {fileID: 665033556814007373}
   m_PrefabAsset: {fileID: 0}
