@@ -34,11 +34,21 @@ namespace Minima.LevelGeneration
 
         private Vector2 GetOrthoPosition(WallCorner cornerA, WallCorner cornerB)
         {
-            float orthoX = cornerA.GetWallEndPoint(cornerB).position.x;
-            float orthoY = cornerB.GetWallEndPoint(cornerA).position.y;
+            Vector2 center = transform.position;
 
-            Vector2 orthoCornerPosition = new Vector2(orthoX, orthoY);
-            return orthoCornerPosition;
+            var endA = cornerA.GetWallEndPoint(cornerB);
+            var endB = cornerB.GetWallEndPoint(cornerA);
+
+            Vector2 positionVariantA = new Vector2(endA.position.x, endB.position.y);
+            Vector2 positionVariantB = new Vector2(endB.position.x, endA.position.y);
+            Vector2 result = positionVariantA;
+
+            if ((positionVariantA - center).sqrMagnitude < (positionVariantB - center).sqrMagnitude)
+            {
+                result = positionVariantB;
+            }
+
+            return result;
         }
     }
 }
