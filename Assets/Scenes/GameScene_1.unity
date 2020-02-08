@@ -4947,7 +4947,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   showPoints: 0
-  showDebugMesh: 0
+  showDebugMesh: 1
+  pointsPerObject: 2
+  collapsePointsTreshold: 0.5
 --- !u!114 &476582117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5166,7 +5168,7 @@ MonoBehaviour:
     type: 3}
   roomRawOffset: 30
   roomsCount: 25
-  generatorExitsPerRoom: 2
+  generatorExitsPerRoom: 3
   lineGeneratingChance: 20
   randomizeExitsCount: 0
   navBuildManager: {fileID: 476582116}

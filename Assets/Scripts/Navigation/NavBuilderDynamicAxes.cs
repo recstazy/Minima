@@ -10,17 +10,14 @@ namespace Minima.Navigation
         #region Fields
 
         [SerializeField]
-        private int pointsPerObject = 2;
-
-        [SerializeField]
         private float boundCoefficient = 1f;
-
-        [SerializeField]
-        private float collapsePointsTreshhold = 0.3f;
 
         #endregion
 
         #region Properties
+
+        public float CollapsePointsTreshhold { get; set; } = 0.3f;
+        public int PointsPerObject { get; set; } = 2;
 
         #endregion
 
@@ -42,7 +39,7 @@ namespace Minima.Navigation
                 {
                     iterationAxes = extents.x;
                     staticAxes = position.y;
-                    step = extents.x * 2 / pointsPerObject;
+                    step = extents.x * 2 / PointsPerObject;
                     dynamicList = xAxes;
                     staticList = yAxes;
                     posOffset = position.x;
@@ -51,7 +48,7 @@ namespace Minima.Navigation
                 {
                     iterationAxes = extents.y;
                     staticAxes = position.x;
-                    step = extents.y * 2 / pointsPerObject;
+                    step = extents.y * 2 / PointsPerObject;
                     dynamicList = yAxes;
                     staticList = xAxes;
                     posOffset = position.y;
@@ -86,7 +83,7 @@ namespace Minima.Navigation
                 var current = listCopy[i];
                 var next = listCopy[i + 1];
 
-                if (next - current <= collapsePointsTreshhold)
+                if (next - current <= CollapsePointsTreshhold)
                 {
                     listCopy[i] = (current + next) / 2;
                     listCopy.RemoveAt(i + 1);

@@ -15,6 +15,12 @@ namespace Minima.Navigation
         [SerializeField]
         private bool showDebugMesh = false;
 
+        [SerializeField]
+        private int pointsPerObject = 2;
+
+        [SerializeField]
+        private float collapsePointsTreshold = 0.3f;
+
         #endregion
 
         #region Properties
@@ -33,6 +39,13 @@ namespace Minima.Navigation
             Builders.Add(builder);
             builder.ShowPoints = showPoints;
             builder.ShowDebug = showDebugMesh;
+            
+            if (builder is NavBuilderDynamicAxes)
+            {
+                var b = builder as NavBuilderDynamicAxes;
+                b.CollapsePointsTreshhold = collapsePointsTreshold;
+                b.PointsPerObject = pointsPerObject;
+            }
         }
 
         protected void BuildImmediatley()

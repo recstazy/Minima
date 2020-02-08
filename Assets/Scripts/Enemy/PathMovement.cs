@@ -58,6 +58,18 @@ public class PathMovement : TargetMovement
         }
     }
 
+    public override void StopMoving()
+    {
+        base.StopMoving();
+        currentTargetPoint = Vector2.zero;
+
+        if (movingCoroutine != null)
+        {
+            StopCoroutine(movingCoroutine);
+            movingCoroutine = null;
+        }
+    }
+
     private void MoveOnPath(NavPath path)
     {
         movingCoroutine = StartCoroutine(MoveOnPathCycle(path));
@@ -80,19 +92,24 @@ public class PathMovement : TargetMovement
         }
 
         StopMoving();
-        CallTargetTeached();
+
+        if (index == path.NavPoints.Length)
+        {
+            CallTargetTeached();
+        }
+        
         movingCoroutine = null;
     }
 
-    public override void StopMoving()
+    protected override void ReachedObstacle()
     {
-        base.StopMoving();
-        currentTargetPoint = Vector2.zero;
+        FindNewPath();
+    }
 
-        if (movingCoroutine != null)
-        {
-            StopCoroutine(movingCoroutine);
-            movingCoroutine = null;
-        }
+    private void FindNewPath()
+    {
+        Debug.Log("FindNewPath");
+        StopMoving();
+        MoveToTarget(currentTarget);
     }
 }
