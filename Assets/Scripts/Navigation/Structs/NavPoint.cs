@@ -37,7 +37,6 @@ namespace Minima.Navigation
 
         public bool Activated { get; set; }
 
-
         #endregion
 
         public NavPoint(Vector2 position)

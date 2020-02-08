@@ -23,6 +23,7 @@ namespace Minima.Navigation
 
         public bool IsValid { get; private set; }
         public Vector2 Center { get; private set; }
+        public int Activation { get; private set; }
         
         #endregion
 
@@ -35,9 +36,12 @@ namespace Minima.Navigation
             A = AB.Start;
             B = BC.Start;
             C = AC.End;
+            Activation = 0;
 
             Center = Helpers.GetTriangleCenter(A.Position, B.Position, C.Position);
             IsValid = true;
+
+            SetActivation();
         }
 
         public NavTriangle(NavEdge edge, NavPoint point)
@@ -49,17 +53,34 @@ namespace Minima.Navigation
             AB = edge;
             BC = new NavEdge(B, C);
             AC = new NavEdge(A, C);
+            Activation = 0;
 
             Center = Helpers.GetTriangleCenter(A.Position, B.Position, C.Position);
             IsValid = true;
+
+            SetActivation();
         }
 
         public NavPoint ClosestVertex(Vector2 origin)
         {
             var vertices = new List<NavPoint> { A, B, C };
+            vertices.RemoveAll(v => !v.Activated);
             var comparer = new NavPointDistanceComparer(origin);
             vertices.Sort(comparer);
             return vertices.FirstOrDefault();
+        }
+
+        void SetActivation()
+        {
+            var vertices = new NavPoint[] { A, B, C };
+
+            foreach (var v in vertices)
+            {
+                if (v.Activated)
+                {
+                    Activation++;
+                }
+            }
         }
 
         #region Operators

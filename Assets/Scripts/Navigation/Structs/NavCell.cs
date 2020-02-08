@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace Minima.Navigation
 {
@@ -61,6 +62,7 @@ namespace Minima.Navigation
         public bool IsValid { get; private set; }
 
         public int Activation { get; private set; }
+        public float ActivationAvg { get; private set; }
 
         #endregion
 
@@ -83,6 +85,7 @@ namespace Minima.Navigation
             ad = new NavPoint(Vector2.Lerp(A.Position, D.Position, 0.5f));
 
             Activation = 0;
+            ActivationAvg = 0f;
             IsValid = true;
 
             Points = new NavPoint[0];
@@ -93,11 +96,13 @@ namespace Minima.Navigation
 
             SetActivation();
             Triangulate();
+            SetAvgActivation();
         }
 
         public NavTriangle GetNearestTriangle(Vector2 point)
         {
-            return Helpers.GetNearestTriangle(point, Triangles);
+            var triangles = Triangles.Where(t => t.Activation >= 3);
+            return Helpers.GetNearestTriangle(point, triangles);
         }
 
         #region Triangulation
@@ -427,6 +432,21 @@ namespace Minima.Navigation
             {
                 Points = Points.AddUniq(point);
             }
+        }
+
+        private void SetAvgActivation()
+        {
+            int activated = 0;
+
+            foreach (var p in Points)
+            {
+                if (p.Activated)
+                {
+                    activated++;
+                }
+            }
+
+            ActivationAvg = (float)activated / Points.Count();
         }
 
         private void SetActivation()

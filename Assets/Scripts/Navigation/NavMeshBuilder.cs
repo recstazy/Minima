@@ -167,7 +167,7 @@ namespace Minima.Navigation
 
         private NavCell GetNearestCell(Vector2 point)
         {
-            var cells = this.cells.ToArray();
+            var cells = this.cells.Where(c => c.ActivationAvg >= 0.9f).ToArray();
             var comparer = new CellDistanceComparer(point);
             System.Array.Sort(cells, comparer);
             return cells.FirstOrDefault();
