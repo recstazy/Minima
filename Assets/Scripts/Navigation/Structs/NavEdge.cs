@@ -23,7 +23,7 @@ namespace Minima.Navigation
 
         public bool Intersects(NavEdge otherEdge)
         {
-            return StaticHelpers.EdgesIntersect(Start.Position, End.Position, otherEdge.Start.Position, otherEdge.End.Position);
+            return Helpers.EdgesIntersect(Start.Position, End.Position, otherEdge.Start.Position, otherEdge.End.Position);
         }
 
         public NavPoint GetAnotherEnd(NavPoint start)

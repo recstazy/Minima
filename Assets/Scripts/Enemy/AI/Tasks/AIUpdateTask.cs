@@ -20,6 +20,12 @@ namespace Minima.AI
 
         #endregion
 
+        public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+            shouldUpdate = true;
+            base.OnStateEnter(animator, stateInfo, layerIndex);
+        }
+
         public override void TaskUpdate()
         {
             if (canUpdate)

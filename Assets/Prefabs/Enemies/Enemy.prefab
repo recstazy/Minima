@@ -5170,7 +5170,6 @@ MonoBehaviour:
   navAgent: {fileID: 6652528254622937497}
   acceptableRadius: 0.5
   updateTime: 0.1
-  updateTargetTime: 1
 --- !u!50 &4601056734282181984
 Rigidbody2D:
   serializedVersion: 4
@@ -5345,7 +5344,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -5358,6 +5357,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4601056734282181985}
     m_Modifications:
+    - target: {fileID: 755006211118822104, guid: 2cd6a55fb3a114d4fb9dbcb16e64473a,
+        type: 3}
+      propertyPath: m_Name
+      value: HealthSystem
+      objectReference: {fileID: 0}
     - target: {fileID: 356113582072003742, guid: 2cd6a55fb3a114d4fb9dbcb16e64473a,
         type: 3}
       propertyPath: owner
@@ -5417,11 +5421,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 755006211118822104, guid: 2cd6a55fb3a114d4fb9dbcb16e64473a,
-        type: 3}
-      propertyPath: m_Name
-      value: HealthSystem
       objectReference: {fileID: 0}
     - target: {fileID: 161423937917799598, guid: 2cd6a55fb3a114d4fb9dbcb16e64473a,
         type: 3}

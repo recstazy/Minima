@@ -12,7 +12,7 @@ namespace Minima.AI
         private WeaponComponent weapon;
 
         [SerializeField]
-        private TargetMovement movementComp;
+        private PathMovement movementComp;
 
         [SerializeField]
         private Animator stateMachine;
@@ -37,22 +37,28 @@ namespace Minima.AI
             stateMachine.SetTrigger(name);
         }
 
-        public virtual void MoveTo(Transform target)
+        public virtual void MoveTo(Transform target, MovementType movementType, System.Action reachedCallback = null)
         {
             if (movementComp != null)
             {
-                movementComp.MoveToTarget(target);
+                movementComp.MoveToTarget(target, movementType, reachedCallback);
             }
         }
 
         public void StopMovement()
         {
-            movementComp.StopMoving();
+            if (movementComp != null)
+            {
+                movementComp.StopMoving();
+            }
         }
 
         public void ContinueMovement()
         {
-            movementComp.SetCanMove(true);
+            if (movementComp != null)
+            {
+                movementComp.SetCanMove(true);
+            }
         }
 
         public virtual void Attack(Character target = null)

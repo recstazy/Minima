@@ -8,15 +8,18 @@ namespace Minima.AI
     {
         public override void OnTaskEnter()
         {
+            CheckTarget();
             canUpdate = true;
         }
 
         public override void OnTaskTimedUpdate()
         {
-            if (BlackBoard.TargetCharacter != null)
-            {
-                EndTask(true);
-            }
+            CheckTarget();
+        }
+
+        private void CheckTarget()
+        {
+            EndTask(BlackBoard.TargetCharacter != null);
         }
     }
 }

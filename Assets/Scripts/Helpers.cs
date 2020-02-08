@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Minima.Navigation;
 
-public static class StaticHelpers
+public static class Helpers
 {
     public static bool RandomBool()
     {
@@ -177,10 +177,16 @@ public static class StaticHelpers
         return hits;
     }
 
-    public static bool CheckVisibility(Vector2 from, Vector2 to)
+    public static bool CheckVisibility(Vector2 from, Vector2 to, params TargetType[] ignoreTypes)
     {
         var hits = RaycastVisibility(from, to);
-        return hits.Count <= 0;
+
+        foreach (var t in ignoreTypes)
+        {
+            hits.RemoveAll(h => h.collider.gameObject.layer == (int)t);
+        }
+
+        return hits.Count == 0;
     }
 
     public static bool CheckVisibility(Vector2 from, Vector2 to, out List<RaycastHit2D> outHits)
@@ -200,5 +206,5 @@ public static class StaticHelpers
         return new Vector3(vector.x, vector.y, 0f);
     }
 
-    
+
 }

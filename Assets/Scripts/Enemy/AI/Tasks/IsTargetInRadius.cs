@@ -9,14 +9,12 @@ namespace Minima.AI
         [SerializeField]
         private float radius = 2f;
 
-        private Transform thisTransform;
         private Transform targetTransform;
         
         public override void OnTaskEnter()
         {
             if (BlackBoard.TargetCharacter != null)
             {
-                thisTransform = aiControlled.transform;
                 targetTransform = BlackBoard.TargetCharacter.transform;
                 canUpdate = true;
             }

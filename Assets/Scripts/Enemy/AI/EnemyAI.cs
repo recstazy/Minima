@@ -37,7 +37,7 @@ namespace Minima.AI
 
         protected virtual void AgressionTriggerCallback(GameObject target)
         {
-            AIControlled.MoveTo(target.transform);
+            AIControlled.MoveTo(target.transform, MovementType.Direct);
         }
 
         protected virtual void BindTriggers(bool newBinded)

@@ -17,14 +17,31 @@ namespace Minima.AI
         [SerializeField]
         protected ValueType valueType = ValueType.Bool;
 
+        [SerializeField]
+        protected bool shouldUpdate = false;
+
         protected Animator animator;
         protected AIControlled aiControlled;
+        protected Transform thisTransform;
+
+        protected bool canCallUpdate = false;
 
         #endregion
 
         #region Properties
 
-        protected AIBlackboard BlackBoard { get => aiControlled.Blackboard; }
+        protected AIBlackboard BlackBoard 
+        { 
+            get
+            {
+                if (aiControlled != null)
+                {
+                    return aiControlled.Blackboard;
+                }
+
+                return null;
+            }
+        }
 
         #endregion
 
@@ -33,20 +50,26 @@ namespace Minima.AI
             if (aiControlled == null)
             {
                 this.animator = animator;
+                thisTransform = animator.transform;
                 aiControlled = animator.GetComponent<AIControlled>();
             }
 
+            canCallUpdate = true;
             OnTaskEnter();
         }
 
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            canCallUpdate = false;
             OnTaskExit();
         }
 
         public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            TaskUpdate();
+            if (shouldUpdate && canCallUpdate)
+            {
+                TaskUpdate();
+            }
         }
 
         public virtual void OnTaskEnter()
@@ -76,6 +99,11 @@ namespace Minima.AI
                         break;
                     }
             }
+        }
+
+        public virtual void EndTask()
+        {
+            animator.SetTrigger(animatorValueName);
         }
     }
 }

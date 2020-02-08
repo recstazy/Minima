@@ -84,12 +84,12 @@ namespace Minima.LevelGeneration
                 float radius = 0f;
                 if (IsTriangleSpawnable(c, out radius))
                 {
-                    var newPoint = StaticHelpers
+                    var newPoint = Helpers
                         .GetTriangleCenter(c.position, c.PreviousCorner.position, c.NextCorner.position);
 
                     if (IsPointInRoom(newPoint))
                     {
-                        point = StaticHelpers.RandomPointInRadius(newPoint, radius);
+                        point = Helpers.RandomPointInRadius(newPoint, radius);
                         break;
                     }
                 }
@@ -100,7 +100,7 @@ namespace Minima.LevelGeneration
 
         private bool IsTriangleSpawnable(WallCorner corner, out float innerRadius)
         {
-            innerRadius = StaticHelpers.GetInnerTriangleRadius(
+            innerRadius = Helpers.GetInnerTriangleRadius(
                 corner.position, corner.NextCorner.position, corner.PreviousCorner.position);
 
             if (innerRadius > spawnableRadius)
@@ -115,7 +115,7 @@ namespace Minima.LevelGeneration
 
         private bool IsPointInRoom(Vector2 point)
         {
-            return StaticHelpers.CheckVisibility(point.ToVector3(), ThisRoom.transform.position);
+            return Helpers.CheckVisibility(point.ToVector3(), ThisRoom.transform.position);
         }
     }
 }

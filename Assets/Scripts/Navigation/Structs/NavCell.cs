@@ -97,7 +97,7 @@ namespace Minima.Navigation
 
         public NavTriangle GetNearestTriangle(Vector2 point)
         {
-            return StaticHelpers.GetNearestTriangle(point, Triangles);
+            return Helpers.GetNearestTriangle(point, Triangles);
         }
 
         #region Triangulation
@@ -329,7 +329,7 @@ namespace Minima.Navigation
             {
                 case MiddleType.AC:
                     {
-                        bool includeMiddle = StaticHelpers.CheckVisibility(A.Position, C.Position);
+                        bool includeMiddle = Helpers.CheckVisibility(A.Position, C.Position);
 
                         if (includeMiddle)
                         {
@@ -354,7 +354,7 @@ namespace Minima.Navigation
                     }
                 case MiddleType.BD:
                     {
-                        bool includeMiddle = StaticHelpers.CheckVisibility(B.Position, D.Position);
+                        bool includeMiddle = Helpers.CheckVisibility(B.Position, D.Position);
 
                         if (includeMiddle)
                         {

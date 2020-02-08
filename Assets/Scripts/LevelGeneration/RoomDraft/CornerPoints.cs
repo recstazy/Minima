@@ -72,7 +72,7 @@ namespace Minima.LevelGeneration
 
         public Vector2 GetAvailableOffsetDirection(Vector2 centerDirection)
         {
-            bool useX = StaticHelpers.RandomBool();
+            bool useX = Helpers.RandomBool();
             Vector2 result;
 
             if (useX)

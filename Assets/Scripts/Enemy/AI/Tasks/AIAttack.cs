@@ -17,6 +17,7 @@ namespace Minima.AI
         public override void OnTaskEnter()
         {
             aiControlled.Attack();
+            EndTask(true);
         }
     }
 }
