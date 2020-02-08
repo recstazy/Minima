@@ -18,7 +18,6 @@ namespace Minima.Navigation
 
         #endregion
 
-        // Trying to implement A*
         public NavPath FindPath(Vector2 origin, Vector2 target)
         {
             var path = new NavPath(origin);
