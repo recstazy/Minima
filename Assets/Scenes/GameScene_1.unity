@@ -4949,7 +4949,7 @@ MonoBehaviour:
   showPoints: 0
   showDebugMesh: 1
   pointsPerObject: 2
-  collapsePointsTreshold: 0.3
+  collapsePointsTreshold: 0.5
 --- !u!114 &476582117
 MonoBehaviour:
   m_ObjectHideFlags: 0

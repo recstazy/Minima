@@ -210,6 +210,4 @@ public static class Helpers
     {
         return new Vector3(vector.x, vector.y, 0f);
     }
-
-
 }

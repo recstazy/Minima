@@ -42,23 +42,24 @@ public class TargetMovement : MovementComponent
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.transform == currentTarget)
+        if (currentTarget != null)
         {
-            StopMoving();
-            CallTargetTeached();
+            if (collision.transform == currentTarget)
+            {
+                StopMoving();
+                CallTargetTeached();
+            }
+
+            if (collision.gameObject.tag == "Obstacle")
+            {
+                ReachedObstacle();
+            }
         }
     }
 
-    //private void OnCollisionExit2D(Collision2D collision)
-    //{
-    //    if (collision.transform == currentTarget)
-    //    {
-    //        if (canMove)
-    //        {
-    //            MoveToTarget();
-    //        }
-    //    }
-    //}
+    protected virtual void ReachedObstacle()
+    {
+    }
 
     protected virtual void CallTargetTeached()
     {
