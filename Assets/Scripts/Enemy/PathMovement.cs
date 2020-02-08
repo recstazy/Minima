@@ -19,7 +19,6 @@ public class PathMovement : TargetMovement
     private float updateTime = 0.2f;
 
     private NavPath path;
-    private Vector2 currentTargetPoint;
     private Coroutine movingCoroutine;
     protected MovementType movementType = MovementType.Path;
 
@@ -44,17 +43,17 @@ public class PathMovement : TargetMovement
 
     public override void MoveToTarget(Transform target)
     {
-        currentTarget = target;
-        path = navAgent.GetPath(target.position);
-        MoveOnPath(path);
-    }
-
-    public override void MoveToTarget()
-    {
-        if (currentTarget != null && currentTargetPoint != Vector2.zero)
+        if (movementType == MovementType.Path)
         {
-            var direction = currentTargetPoint - thisTransform.position.ToVector2();
-            MoveOnDirection(direction);
+            updateEveryFrame = false;
+            currentTarget = target;
+            path = navAgent.GetPath(target.position);
+            MoveOnPath(path);
+        }
+        else
+        {
+            updateEveryFrame = true;
+            base.MoveToTarget(target);
         }
     }
 

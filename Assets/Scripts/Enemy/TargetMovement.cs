@@ -10,6 +10,11 @@ public class TargetMovement : MovementComponent
 
     [SerializeField]
     protected Transform currentTarget;
+
+    [SerializeField]
+    protected bool updateEveryFrame = true;
+
+    protected Vector2 currentTargetPoint;
     
     #endregion
 
@@ -21,6 +26,11 @@ public class TargetMovement : MovementComponent
 
     override protected void Update()
     {
+        if (updateEveryFrame && currentTarget != null)
+        {
+            currentTargetPoint = currentTarget.position;
+        }
+        
         MoveToTarget();
         base.Update();
     }
@@ -33,9 +43,9 @@ public class TargetMovement : MovementComponent
 
     public virtual void MoveToTarget()
     {
-        if (currentTarget != null)
+        if (currentTarget != null && currentTargetPoint != Vector2.zero)
         {
-            var direction = currentTarget.position - thisTransform.position;
+            var direction = currentTargetPoint - thisTransform.position.ToVector2();
             MoveOnDirection(direction);
         }
     }
