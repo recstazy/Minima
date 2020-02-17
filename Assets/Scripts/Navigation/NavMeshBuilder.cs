@@ -24,11 +24,16 @@ namespace Minima.Navigation
 
         protected Transform thisTransform;
 
+        private ChunkConnection leftConnection = new ChunkConnection(Vector2.left);
+        private ChunkConnection rightConnection = new ChunkConnection(Vector2.right);
+        private ChunkConnection topConnection = new ChunkConnection(Vector2.up);
+        private ChunkConnection bottomConnection = new ChunkConnection(Vector2.down);
+
+        private List<List<NavCell>> chunkConnections = new List<List<NavCell>>();
+
         #endregion
 
         #region Properties
-
-        private float Step { get => 1f / density; }
 
         public int PointsCount
         {
@@ -44,6 +49,12 @@ namespace Minima.Navigation
             }
         }
 
+        private float Step { get => 1f / density; }
+
+        protected ChunkConnection LeftConnection { get => leftConnection; set => leftConnection = value; }
+        protected ChunkConnection RightConnection { get => rightConnection; set => rightConnection = value; }
+        protected ChunkConnection TopConnection { get => topConnection; set => topConnection = value; }
+        protected ChunkConnection BottomConnection { get => bottomConnection; set => bottomConnection = value; }
 
         #endregion
 
@@ -84,12 +95,31 @@ namespace Minima.Navigation
             CreateCells();
         }
 
+        public void CreateChunkConnections()
+        {
+            SetConnections();
+
+            var connections = new ChunkConnection[] { RightConnection, LeftConnection, TopConnection, BottomConnection };
+
+            foreach (var c in connections)
+            {
+                if (c.IsValid && !c.IsConnected)
+                {
+                    ConnectChunks(c);
+                }
+            }
+        }
+
         public NavTriangle GetNearestTriangle(Vector2 point)
         {
             var cell = GetNearestCell(point);
             return cell.GetNearestTriangle(point);
         }
 
+        public void AddCells(params NavCell[] cells)
+        {
+            this.cells = this.cells.Concat(cells).ToArray();
+        }
 
         protected virtual void InitializeGridAxes()
         {
@@ -148,6 +178,57 @@ namespace Minima.Navigation
             }
         }
 
+        protected void ConnectChunks(ChunkConnection connection)
+        {
+            if (connection.Direction == Vector2.right)
+            {
+                ConnectChunksHorisontal(connection.Builder, this);
+                connection.Builder.BottomConnection.SetConnected(true);
+            }
+            else if (connection.Direction == Vector2.left)
+            {
+                ConnectChunksHorisontal(this, connection.Builder);
+                connection.Builder.TopConnection.SetConnected(true);
+            }
+
+            connection.IsConnected = true;
+        }
+
+        private void ConnectChunksHorisontal(NavMeshBuilder right, NavMeshBuilder left)
+        {
+            var rightCells = right.cellLines.First().ToArray();
+            var leftCells = left.cellLines.Last().ToArray();
+
+            var minIndex = Mathf.Min(rightCells.Length, leftCells.Length);
+            float middle = minIndex / 2f;
+            int centerIndex = Mathf.FloorToInt(middle);
+
+            var line = new NavCell[0];
+
+            for (int i = centerIndex; i >= 0; i--)
+            {
+                var rightCell = rightCells[i];
+                var leftCell = leftCells[i];
+
+                var cell = CreateCell(leftCell.D, leftCell.C, rightCell.A, rightCell.B);
+                line = line.ConcatOne(cell);
+            }
+
+            for (int i = centerIndex; i < minIndex; i++)
+            {
+                var rightCell = rightCells[i];
+                var leftCell = leftCells[i];
+
+                var cell = CreateCell(leftCell.D, leftCell.C, rightCell.A, rightCell.B);
+                line = line.ConcatOne(cell);
+            }
+
+            right.cellLines.Insert(0, line.ToList());
+            left.cellLines.Add(line.ToList());
+            right.AddCells(line);
+            left.AddCells(line);
+        }
+
         protected NavCell CreateCell(NavPoint a, NavPoint b, NavPoint c, NavPoint d)
         {
             var cell = new NavCell(a, b, c, d);
@@ -163,6 +244,17 @@ namespace Minima.Navigation
                     Debug.DrawLine(e.Start.Position, e.End.Position, Color.red);
                 }
             }
+
+            foreach (var line in chunkConnections)
+            {
+                foreach (var c in line)
+                {
+                    foreach (var e in c.Edges)
+                    {
+                        Debug.DrawLine(e.Start.Position, e.End.Position, Color.blue);
+                    }
+                }
+            }
         }
 
         private NavCell GetNearestCell(Vector2 point)
@@ -170,6 +262,7 @@ namespace Minima.Navigation
             var cells = this.cells.Where(c => c.ActivationAvg >= 0.9f).ToArray();
             var comparer = new CellDistanceComparer(point);
             System.Array.Sort(cells, comparer);
+            
             return cells.FirstOrDefault();
         }
 
@@ -178,6 +271,72 @@ namespace Minima.Navigation
             yield return new WaitForEndOfFrame();
 
             BuildNavMesh();
+        }
+
+        private void SetConnections()
+        {
+            if (!RightConnection.TriedConnect)
+            {
+                if (RaycastBuilder(ref rightConnection))
+                {
+                    RightConnection.Builder.LeftConnection.SetBuilder(this);
+                    RightConnection.Builder.LeftConnection.SetTried(true);
+                }
+
+                RightConnection.SetTried(true);
+            }
+
+            if (!LeftConnection.TriedConnect)
+            {
+                if (RaycastBuilder(ref leftConnection))
+                {
+                    LeftConnection.Builder.RightConnection.SetBuilder(this);
+                    LeftConnection.Builder.RightConnection.SetTried(true);
+                }
+
+                LeftConnection.SetTried(true);
+            }
+
+            if (!TopConnection.TriedConnect)
+            {
+                if (RaycastBuilder(ref topConnection))
+                {
+                    TopConnection.Builder.BottomConnection.SetBuilder(this);
+                    TopConnection.Builder.BottomConnection.SetTried(true);
+                }
+
+                TopConnection.SetTried(true);
+            }
+
+            if (!BottomConnection.TriedConnect)
+            {
+                if(RaycastBuilder(ref bottomConnection))
+                {
+                    BottomConnection.Builder.TopConnection.SetBuilder(this);
+                    BottomConnection.Builder.TopConnection.SetTried(true);
+                }
+
+                BottomConnection.SetTried(true);
+            }
+        }
+
+        private bool RaycastBuilder(ref ChunkConnection connection)
+        {
+            var filter = new ContactFilter2D();
+            filter.useTriggers = true;
+            filter.SetLayerMask(LayerMask.GetMask("Navigation"));
+            var result = new List<RaycastHit2D>();
+            Physics2D.Raycast(thisTransform.position, connection.Direction, filter, result, buildArea.bounds.size.x);
+
+            result.RemoveAll(r => r.collider == buildArea);
+
+            if (result.Count > 0)
+            {
+                connection.Builder = result.First().collider.GetComponentInParent<NavMeshBuilder>();
+                return true;
+            }
+
+            return false;
         }
     }
 }

@@ -4,21 +4,26 @@ using UnityEngine;
 
 namespace Minima.Navigation
 {
-    public class CostComparer : IComparer<NavPoint>
+    public class NavBuilderCostComparer : IComparer<NavMeshBuilder>
     {
         public Vector2 Origin { get; set; }
         public Vector2 Target { get; set; }
 
-        public CostComparer(Vector2 origin, Vector2 target)
+        public NavBuilderCostComparer(Vector2 origin, Vector2 target)
         {
             Target = target;
             Origin = origin;
         }
 
-        public int Compare(NavPoint x, NavPoint y)
+        public int Compare(NavMeshBuilder x, NavMeshBuilder y)
         {
-            float costX = (Target - x.Position).sqrMagnitude * (Origin - x.Position).sqrMagnitude;
-            float costY = (Target - y.Position).sqrMagnitude * (Origin - y.Position).sqrMagnitude;
+            float costX = 
+                (Target - x.transform.position.ToVector2()).sqrMagnitude * 
+                (Origin - x.transform.position.ToVector2()).sqrMagnitude;
+
+            float costY = 
+                (Target - y.transform.position.ToVector2()).sqrMagnitude * 
+                (Origin - y.transform.position.ToVector2()).sqrMagnitude;
 
             if (costY > costX)
             {

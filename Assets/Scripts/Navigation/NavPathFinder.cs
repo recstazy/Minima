@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 namespace Minima.Navigation
 {
@@ -29,8 +30,22 @@ namespace Minima.Navigation
                 return path;
             }
 
-            var startPoint = originBuilder.GetNearestTriangle(origin).ClosestVertex(target);
-            var endPoint = targetBuilder.GetNearestTriangle(target).ClosestVertex(origin);
+            path = FindPathInRoom(originBuilder, origin, target);
+
+            if (originBuilder != targetBuilder)
+            {
+                path.Add(target);
+            }
+            
+            return path;
+        }
+
+        private NavPath FindPathInRoom(NavMeshBuilder builder, Vector2 origin, Vector2 target)
+        {
+            var path = new NavPath(origin);
+
+            var startPoint = builder.GetNearestTriangle(origin).ClosestVertex(target);
+            var endPoint = builder.GetNearestTriangle(target).ClosestVertex(origin);
 
             path.Add(startPoint);
             AddNextPoints(ref path, startPoint, endPoint);
@@ -41,9 +56,9 @@ namespace Minima.Navigation
 
         private void AddNextPoints(ref NavPath path, NavPoint point, NavPoint target)
         {
-            if (path.Length > 100)
+            if (path.Length > 25)
             {
-                Debug.Log("Path length > 100");
+                Debug.Log("Path length > 25");
                 return;
             }
 
@@ -52,10 +67,29 @@ namespace Minima.Navigation
                 return;
             }
 
-            var nextPoint = point.ClosestVertex(target.Position, path.NavPoints.ToArray());
+            var nextPoint = point.ClosestVertex(target.Position, path.NavPoints.Concat(path.Except).ToArray());
 
             if (!nextPoint.IsValid)
             {
+                path.Exclude(point);
+
+                if (path.Length != 0)
+                {
+                    AddNextPoints(ref path, path.NavPoints.LastOrDefault(), target);
+                }
+                
+                return;
+            }
+
+            if (!Helpers.CheckVisibility(point.Position, nextPoint.Position))
+            {
+                path.Exclude(nextPoint);
+
+                if (path.Length != 0)
+                {
+                    AddNextPoints(ref path, path.NavPoints.LastOrDefault(), target);
+                }
+
                 return;
             }
 
@@ -74,6 +108,30 @@ namespace Minima.Navigation
             }
 
             return null;
+        }
+
+        private void FindBuilderPath(ref NavPath path, NavMeshBuilder startBuilder, NavMeshBuilder targetBuilder)
+        {
+            var builders = buildManager.Builders.Except(path.Builders).ToArray();
+            var comparer = new NavBuilderCostComparer(startBuilder.transform.position, targetBuilder.transform.position);
+            Array.Sort(builders, comparer);
+
+            var nextBuilder = builders.LastOrDefault();
+
+            if (nextBuilder == null)
+            {
+                Debug.LogError("First builder in path find is null");
+                return;
+            }
+
+            path.AddBuilder(nextBuilder);
+
+            if (nextBuilder == targetBuilder)
+            {
+                return;
+            }
+
+            FindBuilderPath(ref path, nextBuilder, targetBuilder);
         }
     }
 }

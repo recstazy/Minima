@@ -53,7 +53,7 @@ namespace Minima.Navigation
             if (IsValid)
             {
                 var connected = ConnectedPoints.Except(except).ToArray();
-                var comparer = new CostComparer(Position, target);
+                var comparer = new NavPointDistanceComparer(target);
                 System.Array.Sort(connected, comparer);
                 return connected.FirstOrDefault();
             }

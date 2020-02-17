@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7293646489621766663}
   - component: {fileID: 7293646489621766662}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: BuildArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108,6 +108,4 @@ MonoBehaviour:
   showPoints: 1
   density: 1
   autoActivate: 0
-  pointsPerObject: 2
   boundCoefficient: 0.9
-  collapsePointsTreshhold: 0.3

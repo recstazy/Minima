@@ -11,6 +11,8 @@ namespace Minima.Navigation
 
         public NavPoint[] NavPoints { get; set; }
         public Vector2[] Points { get; set; }
+        public NavPoint[] Except { get; set; }
+        public NavMeshBuilder[] Builders { get; set; }
         public bool IsValid { get; private set; }
         public int Length { get => Points.Length; }
 
@@ -20,6 +22,8 @@ namespace Minima.Navigation
         {
             NavPoints = new NavPoint[0];
             Points = new Vector2[0];
+            Except = new NavPoint[0];
+            Builders = new NavMeshBuilder[0];
             IsValid = true;
 
             foreach (var t in points)
@@ -32,12 +36,21 @@ namespace Minima.Navigation
         {
             NavPoints = new NavPoint[0];
             Points = new Vector2[0];
+            Except = new NavPoint[0];
+            Builders = new NavMeshBuilder[0];
             IsValid = true;
 
             foreach (var t in points)
             {
                 Add(t);
             }
+        }
+
+        public void Exclude(params NavPoint[] points)
+        {
+            Except = Except.ConcatUniq(points);
+            NavPoints = NavPoints.Except(Except).ToArray();
+            Points = Points.Except(Except.Select(p => p.Position)).ToArray();
         }
 
         public void Add(NavPoint point)
@@ -50,6 +63,24 @@ namespace Minima.Navigation
         {
             NavPoints = NavPoints.ConcatOne(new NavPoint(point));
             Points = Points.ConcatOne(point);
+        }
+
+        public void AddBuilder(NavMeshBuilder builder)
+        {
+            Builders = Builders.ConcatOne(builder);
+        }
+
+        public static NavPath operator+(NavPath a, NavPath b)
+        {
+            var result = new NavPath();
+
+            result.Points = a.Points.Concat(b.Points).ToArray();
+            result.NavPoints = a.NavPoints.Concat(b.NavPoints).ToArray();
+            result.Except = a.Except.Concat(b.Except).ToArray();
+            result.Builders = a.Builders.ConcatUniq(b.Builders).ToArray();
+            result.IsValid = true;
+
+            return result;
         }
     }
 }

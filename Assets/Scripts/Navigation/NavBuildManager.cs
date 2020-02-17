@@ -48,6 +48,14 @@ namespace Minima.Navigation
             }
         }
 
+        public void CreateChunkConnections()
+        {
+            foreach (var b in Builders)
+            {
+                b.CreateChunkConnections();
+            }
+        }
+
         protected void BuildImmediatley()
         {
             DateTime startTime = DateTime.Now;
@@ -56,6 +64,8 @@ namespace Minima.Navigation
             {
                 b.BuildNavMesh();
             }
+
+            CreateChunkConnections();
 
             TimeSpan timeElapsed = DateTime.Now - startTime;
 

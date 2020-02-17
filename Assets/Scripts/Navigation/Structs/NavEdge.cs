@@ -19,6 +19,9 @@ namespace Minima.Navigation
             Start = start;
             End = end;
             IsValid = true;
+
+            AddSelfToConnected(Start);
+            AddSelfToConnected(End);
         }
 
         public bool Intersects(NavEdge otherEdge)
@@ -40,6 +43,11 @@ namespace Minima.Navigation
             {
                 return new NavPoint();
             }
+        }
+
+        private void AddSelfToConnected(NavPoint point)
+        {
+            point.ConnectedEdges.Add(this);
         }
     }
 }

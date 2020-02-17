@@ -409,6 +409,11 @@ PrefabInstance:
       propertyPath: owner
       value: 
       objectReference: {fileID: 6844262298024995350}
+    - target: {fileID: 356113582072003742, guid: 2cd6a55fb3a114d4fb9dbcb16e64473a,
+        type: 3}
+      propertyPath: canBeDamaged
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3842439115060717990, guid: 2cd6a55fb3a114d4fb9dbcb16e64473a,
         type: 3}
       propertyPath: m_LocalPosition.x

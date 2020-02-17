@@ -107,7 +107,6 @@ public class PathMovement : TargetMovement
 
     private void FindNewPath()
     {
-        Debug.Log("FindNewPath");
         StopMoving();
         MoveToTarget(currentTarget);
     }

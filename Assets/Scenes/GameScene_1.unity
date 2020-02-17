@@ -4948,8 +4948,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showPoints: 0
   showDebugMesh: 1
-  pointsPerObject: 2
-  collapsePointsTreshold: 0.5
+  pointsPerObject: 1
+  collapsePointsTreshold: 0.3
 --- !u!114 &476582117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5167,7 +5167,7 @@ MonoBehaviour:
   roomGeneratorPrefab: {fileID: 7963234438967846403, guid: f5ddb31deef6b4b4cb2dc79f2184f722,
     type: 3}
   roomRawOffset: 30
-  roomsCount: 25
+  roomsCount: 10
   generatorExitsPerRoom: 3
   lineGeneratingChance: 20
   randomizeExitsCount: 0

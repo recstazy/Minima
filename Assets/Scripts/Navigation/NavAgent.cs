@@ -53,6 +53,11 @@ namespace Minima.Navigation
                 {
                     Debug.DrawLine(path.Points[i], path.Points[i + 1], Color.green, Time.deltaTime);
                 }
+
+                for (int i = 0; i < path.Except.Length - 1; i++)
+                {
+                    Debug.DrawLine(path.Except[i].Position, path.Except[i + 1].Position, Color.white, Time.deltaTime);
+                }
             }
         }
     }
