@@ -97,9 +97,9 @@ namespace Minima.Navigation
                 color = Color.black;
             }
 
-            var sprite = pointGO.GetComponent<SpriteRenderer>();
-            point.Sprite = sprite;
-            point.Sprite.color = color;
+            var view = pointGO.GetComponent<NavPointView>();
+            point.View = view;
+            point.View.SetColor(color);
         }
     }
 }

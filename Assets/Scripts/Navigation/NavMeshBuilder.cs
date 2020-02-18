@@ -30,6 +30,7 @@ namespace Minima.Navigation
         private ChunkConnection bottomConnection = new ChunkConnection(Vector2.down);
 
         private List<List<NavCell>> chunkConnections = new List<List<NavCell>>();
+        private NavPoint[] points;
 
         #endregion
 
@@ -46,6 +47,24 @@ namespace Minima.Navigation
                 }
 
                 return count;
+            }
+        }
+
+        public NavPoint[] Points
+        {
+            get
+            {
+                if (points == null)
+                {
+                    points = new NavPoint[0];
+
+                    foreach (var c in cells)
+                    {
+                        points = points.ConcatUniq(c.Points);
+                    }
+                }
+
+                return points;
             }
         }
 
@@ -262,7 +281,7 @@ namespace Minima.Navigation
             var cells = this.cells.Where(c => c.ActivationAvg >= 0.9f).ToArray();
             var comparer = new CellDistanceComparer(point);
             System.Array.Sort(cells, comparer);
-            
+
             return cells.FirstOrDefault();
         }
 
@@ -310,7 +329,7 @@ namespace Minima.Navigation
 
             if (!BottomConnection.TriedConnect)
             {
-                if(RaycastBuilder(ref bottomConnection))
+                if (RaycastBuilder(ref bottomConnection))
                 {
                     BottomConnection.Builder.TopConnection.SetBuilder(this);
                     BottomConnection.Builder.TopConnection.SetTried(true);

@@ -80,6 +80,12 @@ public class PathMovement : TargetMovement
 
         while (index != path.NavPoints.Length)
         {
+            if (index < 0 || index >= path.Length)
+            {
+                Debug.LogError("PathMovement: Index out of path range");
+                break;
+            }
+
             currentTargetPoint = path.Points[index];
 
             while (!Helpers.IsPointInRadius(thisTransform.position, currentTargetPoint, acceptableRadius))

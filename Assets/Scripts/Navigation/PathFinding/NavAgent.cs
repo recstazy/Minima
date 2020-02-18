@@ -51,7 +51,8 @@ namespace Minima.Navigation
             {
                 for (int i = 0; i < path.Length - 1; i++)
                 {
-                    Debug.DrawLine(path.Points[i], path.Points[i + 1], Color.green, Time.deltaTime);
+                    var color = Color.Lerp(Color.green, Color.red, i / (float)10f);
+                    Debug.DrawLine(path.Points[i], path.Points[i + 1], color, Time.deltaTime);
                 }
 
                 for (int i = 0; i < path.Except.Length - 1; i++)

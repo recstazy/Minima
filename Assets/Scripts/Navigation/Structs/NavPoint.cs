@@ -9,7 +9,7 @@ namespace Minima.Navigation
     {
         #region Properties
 
-        public SpriteRenderer Sprite { get; set; }
+        public NavPointView View { get; set; }
         public Vector2 Position { get; set; }
         public List<NavEdge> ConnectedEdges { get; set; }
         public bool IsValid { get; set; }
@@ -44,7 +44,7 @@ namespace Minima.Navigation
             Position = position;
             ConnectedEdges = new List<NavEdge>();
             Activated = false;
-            Sprite = null;
+            View = null;
             IsValid = true;
         }
 

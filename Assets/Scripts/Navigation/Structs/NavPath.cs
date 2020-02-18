@@ -46,6 +46,15 @@ namespace Minima.Navigation
             }
         }
 
+        public void InitializeEmpty()
+        {
+            NavPoints = new NavPoint[0];
+            Points = new Vector2[0];
+            Except = new NavPoint[0];
+            Builders = new NavMeshBuilder[0];
+            IsValid = true;
+        }
+
         public void Exclude(params NavPoint[] points)
         {
             Except = Except.ConcatUniq(points);
@@ -63,6 +72,12 @@ namespace Minima.Navigation
         {
             NavPoints = NavPoints.ConcatOne(new NavPoint(point));
             Points = Points.ConcatOne(point);
+        }
+
+        public void Add(NavPoint[] points)
+        {
+            NavPoints = NavPoints.Concat(points).ToArray();
+            Points = Points.Concat(points.Select(p => p.Position)).ToArray();
         }
 
         public void AddBuilder(NavMeshBuilder builder)
