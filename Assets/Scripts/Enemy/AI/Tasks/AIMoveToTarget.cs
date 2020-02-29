@@ -14,11 +14,12 @@ namespace Minima.AI
             if (BlackBoard.TargetTransform != null)
             {
                 aiControlled.StopMovement();
-                aiControlled.MoveTo(BlackBoard.TargetTransform.transform, movementType, TargetReached);
+                aiControlled.BindMovement(MovementStopped);
+                aiControlled.MoveTo(BlackBoard.TargetTransform.transform, movementType);
             }
         }
 
-        private void TargetReached()
+        private void MovementStopped(bool targetReached)
         {
             EndTask();
         }

@@ -15,7 +15,6 @@ namespace Minima.Navigation
         #region Fields
 
         private NavBuildManager buildManager;
-        private static Queue<Task> tasks = new Queue<Task>();
 
         #endregion
 
@@ -51,8 +50,8 @@ namespace Minima.Navigation
 
             if (containingChunk != null)
             {
-                var startPoint = containingChunk.GetNearestTriangle(origin).ClosestVertex(target);
-                var endPoint = containingChunk.GetNearestTriangle(target).ClosestVertex(origin);
+                var startPoint = containingChunk.NearestVisiblePoint(origin);
+                var endPoint = containingChunk.NearestVisiblePoint(target);
 
                 IPathFindAlgorithm dijkstra = new Dijkstra(containingChunk.Points);
                 path += dijkstra.FindPath(startPoint, endPoint);

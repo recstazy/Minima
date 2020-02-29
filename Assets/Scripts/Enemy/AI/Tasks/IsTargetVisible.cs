@@ -28,6 +28,9 @@ namespace Minima.AI
         {
             if (BlackBoard != null && BlackBoard.TargetTransform != null)
             {
+                ignoreTypes = ignoreTypes.AddUniq((TargetType)aiControlled.gameObject.layer);
+                ignoreTypes = ignoreTypes.AddUniq((TargetType)targetTransform.gameObject.layer);
+                
                 bool isVisible = Helpers.CheckVisibility(thisTransform.position, targetTransform.position, ignoreTypes);
                 EndTask(isVisible);
             }

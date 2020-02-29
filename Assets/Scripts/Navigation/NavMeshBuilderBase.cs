@@ -38,7 +38,7 @@ namespace Minima.Navigation
         {
         }
 
-        public bool IsPointInBounds(Vector2 point)
+        public virtual bool IsPointInBounds(Vector2 point)
         {
             return buildRect.Contains(point);
         }

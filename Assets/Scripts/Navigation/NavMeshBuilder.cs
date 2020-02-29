@@ -36,35 +36,22 @@ namespace Minima.Navigation
 
         #region Properties
 
-        public int PointsCount
+        public virtual int GetPointsCount()
         {
-            get
+            int count = 0;
+            foreach (var c in cells)
             {
-                int count = 0;
-                foreach (var c in cells)
-                {
-                    count += c.Points.Length;
-                }
-
-                return count;
+                count += c.Points.Length;
             }
+
+            return count;
         }
 
         public NavPoint[] Points
         {
             get
             {
-                if (points == null)
-                {
-                    points = new NavPoint[0];
-
-                    foreach (var c in cells)
-                    {
-                        points = points.ConcatUniq(c.Points);
-                    }
-                }
-
-                return points;
+                return GetPoints();
             }
         }
 
@@ -115,6 +102,21 @@ namespace Minima.Navigation
             CreateCells();
         }
 
+        protected virtual NavPoint[] GetPoints()
+        {
+            if (points == null)
+            {
+                points = new NavPoint[0];
+
+                foreach (var c in cells)
+                {
+                    points = points.ConcatUniq(c.Points);
+                }
+            }
+
+            return points;
+        }
+
         public void CreateChunkConnections()
         {
             SetConnections();
@@ -134,6 +136,11 @@ namespace Minima.Navigation
         {
             var cell = GetNearestCell(point);
             return cell.GetNearestTriangle(point);
+        }
+
+        public virtual NavPoint NearestVisiblePoint(Vector2 position)
+        {
+            return GetNearestTriangle(position).ClosestVertex(position);
         }
 
         public void AddCells(params NavCell[] cells)
@@ -255,7 +262,7 @@ namespace Minima.Navigation
             return cell;
         }
 
-        protected void DrawEdges()
+        protected virtual void DrawEdges()
         {
             foreach (var c in cells)
             {

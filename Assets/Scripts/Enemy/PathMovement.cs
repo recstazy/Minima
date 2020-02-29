@@ -29,17 +29,10 @@ public class PathMovement : TargetMovement
 
     #endregion
 
-    public void MoveToTarget(Transform target, MovementType movementType, System.Action reachedCallback = null)
+    public void MoveToTarget(Transform target, MovementType movementType)
     {
         this.movementType = movementType;
         StopMoving();
-
-        if (reachedCallback != null)
-        {
-            this.reachedCallback = reachedCallback;
-            OnTargetReached += this.reachedCallback;
-        }
-        
         MoveToTarget(target);
     }
 
@@ -105,8 +98,7 @@ public class PathMovement : TargetMovement
 
         if (!path.IsValid || index == path.NavPoints.Length)
         {
-            CallTargetTeached();
-            OnTargetReached -= reachedCallback;
+            CallTargetReached();
         }
         
         movingCoroutine = null;
@@ -114,7 +106,7 @@ public class PathMovement : TargetMovement
 
     protected override void ReachedObstacle()
     {
-        FindNewPath();
+        CallOnFail();
     }
 
     private void FindNewPath()

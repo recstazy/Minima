@@ -101,8 +101,13 @@ namespace Minima.Navigation
 
         public NavTriangle GetNearestTriangle(Vector2 point)
         {
-            var triangles = Triangles.Where(t => t.Activation >= 3);
-            return Helpers.GetNearestTriangle(point, triangles);
+            if (Triangles != null)
+            {
+                var triangles = Triangles.Where(t => t.Activation >= 3);
+                return Helpers.GetNearestTriangle(point, triangles);
+            }
+
+            return default;
         }
 
         #region Triangulation

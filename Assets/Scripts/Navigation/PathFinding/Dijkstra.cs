@@ -97,7 +97,6 @@ namespace Minima.Navigation
             }
 
             path = path.Reverse().ToArray();
-            Debug.Log("Path length = " + path.Length);
 
             return path;
         }

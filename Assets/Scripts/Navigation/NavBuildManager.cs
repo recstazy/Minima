@@ -21,6 +21,9 @@ namespace Minima.Navigation
         [SerializeField]
         private float collapsePointsTreshold = 0.3f;
 
+        [SerializeField]
+        private NavMeshBuilder builder;
+
         #endregion
 
         #region Properties
@@ -31,21 +34,22 @@ namespace Minima.Navigation
 
         public void BuildNavigation()
         {
+            Builders.Add(builder);
             ExecuteNextFrame(() => BuildImmediatley());
         }
 
         public void AddBuilder(NavMeshBuilder builder)
         {
-            Builders.Add(builder);
-            builder.ShowPoints = showPoints;
-            builder.ShowDebug = showDebugMesh;
+            //Builders.Add(builder);
+            //builder.ShowPoints = showPoints;
+            //builder.ShowDebug = showDebugMesh;
             
-            if (builder is NavBuilderDynamicAxes)
-            {
-                var b = builder as NavBuilderDynamicAxes;
-                b.CollapsePointsTreshhold = collapsePointsTreshold;
-                b.PointsPerObject = pointsPerObject;
-            }
+            //if (builder is NavBuilderDynamicAxes)
+            //{
+            //    var b = builder as NavBuilderDynamicAxes;
+            //    b.CollapsePointsTreshhold = collapsePointsTreshold;
+            //    b.PointsPerObject = pointsPerObject;
+            //}
         }
 
         public void CreateChunkConnections()
@@ -60,20 +64,25 @@ namespace Minima.Navigation
         {
             DateTime startTime = DateTime.Now;
 
-            foreach (var b in Builders)
-            {
-                b.BuildNavMesh();
-            }
+            //foreach (var b in Builders)
+            //{
+            //    b.BuildNavMesh();
+            //}
 
-            CreateChunkConnections();
+            //CreateChunkConnections();
+
+            builder.BuildNavMesh();
 
             TimeSpan timeElapsed = DateTime.Now - startTime;
 
-            int pointsCount = 0;
-            foreach (var b in Builders)
-            {
-                pointsCount += b.PointsCount;
-            }
+            //int pointsCount = 0;
+            //foreach (var b in Builders)
+            //{
+            //    pointsCount += b.PointsCount;
+            //}
+
+            int pointsCount = builder.GetPointsCount();
+
             Debug.Log("NavMesh building took " + timeElapsed + ", NavPoints count = " + pointsCount);
         }
 

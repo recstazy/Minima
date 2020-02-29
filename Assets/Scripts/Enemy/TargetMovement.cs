@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TargetMovement : MovementComponent
 {
-    public event System.Action OnTargetReached;
+    public System.Action<bool> OnMovementStopped;
 
     #region Fields
 
@@ -50,6 +50,16 @@ public class TargetMovement : MovementComponent
         }
     }
 
+    public void BindMovementStop(System.Action<bool> stopCallback)
+    {
+        OnMovementStopped = stopCallback;
+    }
+
+    public void DisposeCallbacks()
+    {
+        OnMovementStopped = null;
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (currentTarget != null)
@@ -57,7 +67,7 @@ public class TargetMovement : MovementComponent
             if (collision.transform == currentTarget)
             {
                 StopMoving();
-                CallTargetTeached();
+                CallTargetReached();
             }
 
             if (collision.gameObject.tag == "Obstacle")
@@ -69,10 +79,18 @@ public class TargetMovement : MovementComponent
 
     protected virtual void ReachedObstacle()
     {
+        CallOnFail();
     }
 
-    protected virtual void CallTargetTeached()
+    protected virtual void CallOnFail()
     {
-        OnTargetReached?.Invoke();
+        OnMovementStopped?.Invoke(false);
+        DisposeCallbacks();
+    }
+
+    protected virtual void CallTargetReached()
+    {
+        OnMovementStopped?.Invoke(true);
+        DisposeCallbacks();
     }
 }
