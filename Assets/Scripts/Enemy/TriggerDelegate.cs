@@ -1,6 +1,8 @@
 ﻿using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 [RequireComponent(typeof(Collider2D))]
 public class TriggerDelegate : MonoBehaviour, IEnemyTargetable
@@ -10,7 +12,8 @@ public class TriggerDelegate : MonoBehaviour, IEnemyTargetable
 
     #region Fields
 
-    protected List<TargetType> targetTypes = new List<TargetType>();
+    protected TargetType[] targetTypes;
+    protected int[] targetLayers = new int[0];
 
     #endregion
 
@@ -27,9 +30,12 @@ public class TriggerDelegate : MonoBehaviour, IEnemyTargetable
     {
         var layer = collision.gameObject.layer;
 
-        if (GetTargetLayers().Contains(layer))
+        if (layer > 0)
         {
-            CallTargetTriggered(collision.gameObject);
+            if (targetLayers.Contains(layer))
+            {
+                CallTargetTriggered(collision.gameObject);
+            }
         }
     }
 
@@ -40,18 +46,12 @@ public class TriggerDelegate : MonoBehaviour, IEnemyTargetable
 
     public void UpdateTargets(List<TargetType> targets)
     {
-        targetTypes = targets;
+        targetTypes = targets.ToArray();
+        SetTargetLayers();
     }
 
-    protected List<int> GetTargetLayers()
+    protected void SetTargetLayers()
     {
-        List<int> targetLayers = new List<int>();
-
-        foreach (var t in targetTypes)
-        {
-            targetLayers.Add((int)t);
-        }
-
-        return targetLayers;
+        targetLayers = targetTypes.Select(t => (int)t).ToArray();
     }
 }

@@ -4912,7 +4912,6 @@ GameObject:
   m_Component:
   - component: {fileID: 476582115}
   - component: {fileID: 476582116}
-  - component: {fileID: 476582117}
   m_Layer: 0
   m_Name: Navigation
   m_TagString: Untagged
@@ -4947,22 +4946,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   showPoints: 0
-  showDebugMesh: 1
+  showDebugMesh: 0
   pointsPerObject: 1
   collapsePointsTreshold: 0.3
---- !u!114 &476582117
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 476582114}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42ec7aa60233ec54eb7e55e1b8a15322, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  buildManager: {fileID: 476582116}
 --- !u!4 &479314442 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6844262298024995347, guid: 190e629a0f0172444bb0500229ce020a,

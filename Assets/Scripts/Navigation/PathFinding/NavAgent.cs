@@ -12,37 +12,40 @@ namespace Minima.Navigation
         private bool showDebug = false;
 
         private NavPathFinder finder;
+        private NavBuildManager buildManager;
         private Transform thisTransform;
         private NavPath path;
+        private PathFoundHandler ownerCallback;
 
         #endregion
 
         #region Properties
 
-        private NavPathFinder Finder
-        {
-            get
-            {
-                if (finder == null)
-                {
-                    finder = FindObjectOfType<NavPathFinder>();
-                }
-
-                return finder;
-            }
-        }
-
         #endregion
 
         private void Awake()
         {
+            buildManager = FindObjectOfType<NavBuildManager>();
+            finder = new NavPathFinder(buildManager);
             thisTransform = transform;
         }
 
         public NavPath GetPath(Vector2 target)
         {
-            path = Finder.FindPath(thisTransform.position, target);
+            path = finder.FindPath(thisTransform.position, target);
             return path;
+        }
+
+        public void GetPathAsync(Vector2 target, PathFoundHandler callback)
+        {
+            ownerCallback = callback;
+            finder.FindPathAsync(thisTransform.position, target, PathFoundCallBack);
+        }
+
+        private void PathFoundCallBack(NavPath path)
+        {
+            this.path = path;
+            ownerCallback?.Invoke(path);
         }
 
         private void Update()

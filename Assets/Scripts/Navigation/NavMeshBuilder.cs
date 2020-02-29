@@ -80,6 +80,7 @@ namespace Minima.Navigation
         private void Awake()
         {
             thisTransform = transform;
+            buildRect = new Rect(buildArea.bounds.center, buildArea.bounds.size);
         }
 
         private void Start()

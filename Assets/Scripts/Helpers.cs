@@ -158,6 +158,17 @@ public static class Helpers
         return false;
     }
 
+    /// <summary>
+    /// Is int value between left and right (including left, excluding right)
+    /// </summary>
+    public static bool InBounds(this int value, int left, int right)
+    {
+        return value >= left && value < right;
+    }
+
+    /// <summary>
+    /// Is float in bounds, including left and right values
+    /// </summary>
     public static bool InBounds(this float value, float left, float right)
     {
         if (value >= left && value <= right)

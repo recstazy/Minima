@@ -23,6 +23,7 @@ namespace Minima.Navigation
 
         protected List<Collider2D> obstacles = new List<Collider2D>();
         protected NavPoint[][] pointLines = new NavPoint[0][];
+        protected Rect buildRect;
 
         #endregion
 
@@ -39,7 +40,7 @@ namespace Minima.Navigation
 
         public bool IsPointInBounds(Vector2 point)
         {
-            return buildArea.OverlapPoint(point);
+            return buildRect.Contains(point);
         }
 
         protected NavPoint CreatePoint(Vector2 position)

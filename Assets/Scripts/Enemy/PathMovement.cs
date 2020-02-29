@@ -21,6 +21,7 @@ public class PathMovement : TargetMovement
     private NavPath path;
     private Coroutine movingCoroutine;
     protected MovementType movementType = MovementType.Path;
+    protected System.Action reachedCallback;
 
     #endregion
 
@@ -35,7 +36,8 @@ public class PathMovement : TargetMovement
 
         if (reachedCallback != null)
         {
-            OnTargetReached += reachedCallback;
+            this.reachedCallback = reachedCallback;
+            OnTargetReached += this.reachedCallback;
         }
         
         MoveToTarget(target);
@@ -47,8 +49,8 @@ public class PathMovement : TargetMovement
         {
             updateEveryFrame = false;
             currentTarget = target;
-            path = navAgent.GetPath(target.position);
-            MoveOnPath(path);
+            movingCoroutine = StartCoroutine(MoveOnPathCycle());
+            navAgent.GetPathAsync(target.position, SetPath);
         }
         else
         {
@@ -61,6 +63,7 @@ public class PathMovement : TargetMovement
     {
         base.StopMoving();
         currentTargetPoint = Vector2.zero;
+        path = default;
 
         if (movingCoroutine != null)
         {
@@ -69,14 +72,16 @@ public class PathMovement : TargetMovement
         }
     }
 
-    private void MoveOnPath(NavPath path)
+    private void SetPath(NavPath path)
     {
-        movingCoroutine = StartCoroutine(MoveOnPathCycle(path));
+        this.path = path;
     }
 
-    private IEnumerator MoveOnPathCycle(NavPath path)
+    private IEnumerator MoveOnPathCycle()
     {
         int index = 0;
+
+        yield return new WaitUntil(() => path.IsValid);
 
         while (index != path.NavPoints.Length)
         {
@@ -98,9 +103,10 @@ public class PathMovement : TargetMovement
 
         StopMoving();
 
-        if (index == path.NavPoints.Length)
+        if (!path.IsValid || index == path.NavPoints.Length)
         {
             CallTargetTeached();
+            OnTargetReached -= reachedCallback;
         }
         
         movingCoroutine = null;

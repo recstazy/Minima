@@ -32,7 +32,7 @@ namespace Minima.AI
 
         protected virtual void ShootTriggerCallback(GameObject target)
         {
-            AIControlled.Blackboard.TargetCharacter = target.GetCharacter();
+            AIControlled.Blackboard.TargetTransform = target.transform;
         }
 
         protected virtual void AgressionTriggerCallback(GameObject target)

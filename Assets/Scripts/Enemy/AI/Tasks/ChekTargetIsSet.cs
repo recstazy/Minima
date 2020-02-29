@@ -19,7 +19,7 @@ namespace Minima.AI
 
         private void CheckTarget()
         {
-            EndTask(BlackBoard.TargetCharacter != null);
+            EndTask(BlackBoard.TargetTransform != null);
         }
     }
 }

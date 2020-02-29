@@ -51,13 +51,13 @@ namespace Minima.Navigation
         private DijkstraNode[] GetPath(NavPoint target)
         {
             var exclusions = new DijkstraNode[0];
-            DijkstraNode current;
+            DijkstraNode current = new DijkstraNode();
 
-            while(true)
+            while (true)
             {
                 current = GetMinWeightNode(exclusions);
 
-                if (current.Point == target)
+                if (current.Point == target || !current.IsValid)
                 {
                     break;
                 }
@@ -97,24 +97,35 @@ namespace Minima.Navigation
             }
 
             path = path.Reverse().ToArray();
+            Debug.Log("Path length = " + path.Length);
 
             return path;
         }
 
         private DijkstraNode GetMinWeightNode(params DijkstraNode[] except)
         {
-            return nodes
-                .Except(except)
-                .Aggregate((node, next) => node.Weight < next.Weight ? node : next);
+            var nodesExcluded = nodes.ToArray();
+
+            if (except.Length > 0)
+            {
+                nodesExcluded = nodes.Except(except).ToArray();
+            }
+            
+            if (nodesExcluded.Length > 0)
+            {
+                return nodesExcluded.Aggregate((node, next) => node.Weight < next.Weight ? node : next);
+            }
+
+            return default;
         }
 
         private DijkstraNode[] CreateNodes(NavPoint[] points)
         {
-            DijkstraNode[] nodes = new DijkstraNode[0];
-            
-            foreach (var p in points)
+            DijkstraNode[] nodes = new DijkstraNode[points.Length];
+
+            for (int i = 0; i < points.Length; i++)
             {
-                nodes = nodes.ConcatOne(new DijkstraNode(p, Mathf.Infinity));
+                nodes[i] = new DijkstraNode(points[i], Mathf.Infinity);
             }
 
             return nodes;
@@ -135,7 +146,12 @@ namespace Minima.Navigation
 
         private void SetWeight(DijkstraNode node, float weight, NavPoint source)
         {
-            nodes[IndexOf(node)].SetWeightAndSource(weight, source);
+            int index = IndexOf(node);
+
+            if (index.InBounds(0, nodes.Length))
+            {
+                nodes[index].SetWeightAndSource(weight, source);
+            }
         }
 
         private int IndexOf(DijkstraNode node)
@@ -148,7 +164,12 @@ namespace Minima.Navigation
             if (!pointsIndexes.ContainsKey(point))
             {
                 var index = Array.IndexOf(points, point);
-                pointsIndexes.Add(point, index);
+
+                if (index >= 0)
+                {
+                    pointsIndexes.Add(point, index);
+                }
+
                 return index;
             }
             else

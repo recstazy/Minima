@@ -8,7 +8,7 @@ namespace Minima.AI
     {
         #region Properties
 
-        public Character TargetCharacter { get; set; }
+        public Transform TargetTransform { get; set; }
 
         #endregion
 
