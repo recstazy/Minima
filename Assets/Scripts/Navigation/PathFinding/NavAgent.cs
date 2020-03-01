@@ -11,7 +11,7 @@ namespace Minima.Navigation
         [SerializeField]
         private bool showDebug = false;
 
-        private NavPathFinder finder;
+        private PathFindManager finder;
         private NavMeshBuilderBase navMeshBuilder;
         private Transform thisTransform;
         private NavPath path;
@@ -26,20 +26,14 @@ namespace Minima.Navigation
         private void Awake()
         {
             navMeshBuilder = FindObjectOfType<NavMeshBuilderBase>();
-            finder = new NavPathFinder(navMeshBuilder);
+            finder = FindObjectOfType<PathFindManager>();
             thisTransform = transform;
-        }
-
-        public NavPath GetPath(Vector2 target)
-        {
-            path = finder.FindPath(thisTransform.position, target);
-            return path;
         }
 
         public void GetPathAsync(Vector2 target, PathFoundHandler callback)
         {
             ownerCallback = callback;
-            finder.FindPathAsync(thisTransform.position, target, PathFoundCallBack);
+            finder.FindPath(thisTransform.position, target, PathFoundCallBack);
         }
 
         private void PathFoundCallBack(NavPath path)

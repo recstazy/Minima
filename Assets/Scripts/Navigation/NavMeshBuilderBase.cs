@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace Minima.Navigation
 {
@@ -37,7 +38,11 @@ namespace Minima.Navigation
 
         public void BuildNavMesh()
         {
+            var startTime = DateTime.Now;
+
             ExecuteNextFrame(() => BuildNavMeshImmediately());
+
+            Debug.Log("MeshBuilding took " + (DateTime.Now - startTime));
         }
 
         public virtual void BuildNavMeshImmediately()

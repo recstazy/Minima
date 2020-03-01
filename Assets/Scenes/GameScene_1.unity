@@ -5097,6 +5097,7 @@ GameObject:
   m_Component:
   - component: {fileID: 476582115}
   - component: {fileID: 476582117}
+  - component: {fileID: 476582116}
   m_Layer: 0
   m_Name: Navigation
   m_TagString: Untagged
@@ -5118,6 +5119,20 @@ Transform:
   m_Father: {fileID: 1400033323}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &476582116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 476582114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8f3165395bc5a04e90767707998e346, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  navMeshBuilder: {fileID: 476582117}
+  maxParallel: 1
 --- !u!114 &476582117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5132,6 +5147,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showDebug: 1
   showPoints: 0
+  nearestPointsCount: 5
 --- !u!4 &479314442 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6844262298024995347, guid: 190e629a0f0172444bb0500229ce020a,

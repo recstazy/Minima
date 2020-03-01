@@ -1,10 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Jobs;
-using System.Linq;
-using System;
-using System.Threading.Tasks;
 
 namespace Minima.Navigation
 {
@@ -23,20 +19,11 @@ namespace Minima.Navigation
         #endregion
 
         /// <summary>
-        /// Provide the build manager to give finder navigation info
+        /// Provide builder to give finder navigation info
         /// </summary>
         public NavPathFinder(NavMeshBuilderBase navMeshBuider)
         {
             navBuilder = navMeshBuider;
-        }
-
-        public async void FindPathAsync(Vector2 origin, Vector2 target, PathFoundHandler callback)
-        {
-            await Task.Run(() =>
-            {
-                var path = FindPath(origin, target);
-                callback?.Invoke(path);
-            });
         }
 
         /// <summary>
