@@ -27,7 +27,7 @@ namespace Minima.LevelGeneration
         private bool randomizeExitsCount = false;
 
         [SerializeField]
-        private Navigation.NavBuildManager navBuildManager;
+        private Navigation.NavMeshBuilderBase navBuilder;
 
         private List<RoomGenerator> roomGenerators = new List<RoomGenerator>();
         private List<ExitCorner> roomsExits = new List<ExitCorner>();
@@ -162,12 +162,7 @@ namespace Minima.LevelGeneration
 
         private void BuildNavigation()
         {
-            foreach (var g in roomGenerators)
-            {
-                navBuildManager.AddBuilder(g.RoomDraft.NavMeshBuilder);
-            }
-
-            navBuildManager.BuildNavigation();
+            navBuilder.BuildNavMesh();
         }
     }
 }

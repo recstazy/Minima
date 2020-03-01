@@ -4955,7 +4955,7 @@ GameObject:
   - component: {fileID: 4601056732519910656}
   - component: {fileID: 4687920976204578887}
   - component: {fileID: 7377347807273714192}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: AgressionTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5167,6 +5167,7 @@ MonoBehaviour:
   inertia: 0.88
   rotateToDirection: 1
   currentTarget: {fileID: 0}
+  updateEveryFrame: 1
   navAgent: {fileID: 6652528254622937497}
   acceptableRadius: 0.5
   updateTime: 0.1

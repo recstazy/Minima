@@ -37,12 +37,17 @@ namespace Minima.AI
             stateMachine.SetTrigger(name);
         }
 
-        public virtual void MoveTo(Transform target, MovementType movementType, System.Action reachedCallback = null)
+        public virtual void MoveTo(Transform target, MovementType movementType)
         {
             if (movementComp != null)
             {
-                movementComp.MoveToTarget(target, movementType, reachedCallback);
+                movementComp.MoveToTarget(target, movementType);
             }
+        }
+
+        public virtual void BindMovement(System.Action<bool> movementStopCallback)
+        {
+            movementComp.BindMovementStop(movementStopCallback);
         }
 
         public void StopMovement()

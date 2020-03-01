@@ -16,7 +16,7 @@ namespace Minima.AI
 
         public override void OnTaskEnter()
         {
-            targetTransform = BlackBoard.TargetCharacter.transform;
+            targetTransform = BlackBoard.TargetTransform.transform;
 
             if (checkOnEnter)
             {
@@ -26,8 +26,11 @@ namespace Minima.AI
 
         private void CheckVisibility()
         {
-            if (BlackBoard != null && BlackBoard.TargetCharacter != null)
+            if (BlackBoard != null && BlackBoard.TargetTransform != null)
             {
+                ignoreTypes = ignoreTypes.AddUniq((TargetType)aiControlled.gameObject.layer);
+                ignoreTypes = ignoreTypes.AddUniq((TargetType)targetTransform.gameObject.layer);
+                
                 bool isVisible = Helpers.CheckVisibility(thisTransform.position, targetTransform.position, ignoreTypes);
                 EndTask(isVisible);
             }

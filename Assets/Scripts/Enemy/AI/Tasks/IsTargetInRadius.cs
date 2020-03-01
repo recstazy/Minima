@@ -13,9 +13,9 @@ namespace Minima.AI
         
         public override void OnTaskEnter()
         {
-            if (BlackBoard.TargetCharacter != null)
+            if (BlackBoard.TargetTransform != null)
             {
-                targetTransform = BlackBoard.TargetCharacter.transform;
+                targetTransform = BlackBoard.TargetTransform.transform;
                 canUpdate = true;
             }
         }

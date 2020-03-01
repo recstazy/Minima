@@ -4,12 +4,17 @@ using UnityEngine;
 
 public class TargetMovement : MovementComponent
 {
-    public event System.Action OnTargetReached;
+    public System.Action<bool> OnMovementStopped;
 
     #region Fields
 
     [SerializeField]
     protected Transform currentTarget;
+
+    [SerializeField]
+    protected bool updateEveryFrame = true;
+
+    protected Vector2 currentTargetPoint;
     
     #endregion
 
@@ -21,6 +26,11 @@ public class TargetMovement : MovementComponent
 
     override protected void Update()
     {
+        if (updateEveryFrame && currentTarget != null)
+        {
+            currentTargetPoint = currentTarget.position;
+        }
+        
         MoveToTarget();
         base.Update();
     }
@@ -33,11 +43,21 @@ public class TargetMovement : MovementComponent
 
     public virtual void MoveToTarget()
     {
-        if (currentTarget != null)
+        if (currentTarget != null && currentTargetPoint != Vector2.zero)
         {
-            var direction = currentTarget.position - thisTransform.position;
+            var direction = currentTargetPoint - thisTransform.position.ToVector2();
             MoveOnDirection(direction);
         }
+    }
+
+    public void BindMovementStop(System.Action<bool> stopCallback)
+    {
+        OnMovementStopped = stopCallback;
+    }
+
+    public void DisposeCallbacks()
+    {
+        OnMovementStopped = null;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -47,7 +67,7 @@ public class TargetMovement : MovementComponent
             if (collision.transform == currentTarget)
             {
                 StopMoving();
-                CallTargetTeached();
+                CallTargetReached();
             }
 
             if (collision.gameObject.tag == "Obstacle")
@@ -59,10 +79,18 @@ public class TargetMovement : MovementComponent
 
     protected virtual void ReachedObstacle()
     {
+        CallOnFail();
     }
 
-    protected virtual void CallTargetTeached()
+    protected virtual void CallOnFail()
     {
-        OnTargetReached?.Invoke();
+        OnMovementStopped?.Invoke(false);
+        DisposeCallbacks();
+    }
+
+    protected virtual void CallTargetReached()
+    {
+        OnMovementStopped?.Invoke(true);
+        DisposeCallbacks();
     }
 }

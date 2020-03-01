@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace Minima.AI
 {
@@ -28,7 +29,7 @@ namespace Minima.AI
 
         private void SetValue(GameObject target)
         {
-            aIControlled.Blackboard.TargetCharacter = target.GetCharacter();
+            aIControlled.Blackboard.TargetTransform = target.transform;
         }
     }
 }

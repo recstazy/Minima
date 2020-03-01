@@ -21,9 +21,6 @@ namespace Minima.LevelGeneration
         [SerializeField]
         private SpawnGenerator spawnGenerator;
 
-        [SerializeField]
-        private NavMeshBuilder navMeshBuilder;
-
         #endregion
 
         #region Properties
@@ -33,7 +30,6 @@ namespace Minima.LevelGeneration
         public List<ExitCorner> Exits { get => exits.Exits; }
         public WallsGenerator WallsGenerator { get => wallsGenerator; }
         public SpawnGenerator SpawnGenerator { get => spawnGenerator; }
-        public NavMeshBuilder NavMeshBuilder { get => navMeshBuilder; }
 
         #endregion
 

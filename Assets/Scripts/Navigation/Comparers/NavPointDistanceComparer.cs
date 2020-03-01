@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace Minima.Navigation
 {
+    /// <summary>
+    /// Sorts NavPoints by their distance to origin
+    /// </summary>
     public class NavPointDistanceComparer : IComparer<NavPoint>
     {
         public NavPoint Origin { get; set; }

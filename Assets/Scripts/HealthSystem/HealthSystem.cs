@@ -8,7 +8,6 @@ public enum HealthChangeType
     Restore,
 }
 
-
 public class HealthSystem : MonoBehaviour
 {
     public delegate void DeathHandler(Character killer, Character victim);
@@ -24,6 +23,9 @@ public class HealthSystem : MonoBehaviour
 
     [SerializeField]
     private Character owner;
+
+    [SerializeField]
+    private bool canBeDamaged = true;
 
     private float _currentHealth;
     private bool isAlive = true;
@@ -56,13 +58,16 @@ public class HealthSystem : MonoBehaviour
 
     public void ApplyDamage(float amount, Character from = null)
     {
-        currentHealth -= amount;
-        OnHealthChanged?.Invoke(HealthChangeType.Damage);
-
-        if (currentHealth <= 0)
+        if (canBeDamaged)
         {
-            isAlive = false;
-            OnDeath?.Invoke(from, owner);
+            currentHealth -= amount;
+            OnHealthChanged?.Invoke(HealthChangeType.Damage);
+
+            if (currentHealth <= 0)
+            {
+                isAlive = false;
+                OnDeath?.Invoke(from, owner);
+            }
         }
     }
 

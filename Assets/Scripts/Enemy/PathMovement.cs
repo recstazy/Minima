@@ -19,9 +19,9 @@ public class PathMovement : TargetMovement
     private float updateTime = 0.2f;
 
     private NavPath path;
-    private Vector2 currentTargetPoint;
     private Coroutine movingCoroutine;
     protected MovementType movementType = MovementType.Path;
+    protected System.Action reachedCallback;
 
     #endregion
 
@@ -29,32 +29,26 @@ public class PathMovement : TargetMovement
 
     #endregion
 
-    public void MoveToTarget(Transform target, MovementType movementType, System.Action reachedCallback = null)
+    public void MoveToTarget(Transform target, MovementType movementType)
     {
         this.movementType = movementType;
         StopMoving();
-
-        if (reachedCallback != null)
-        {
-            OnTargetReached += reachedCallback;
-        }
-        
         MoveToTarget(target);
     }
 
     public override void MoveToTarget(Transform target)
     {
-        currentTarget = target;
-        path = navAgent.GetPath(target.position);
-        MoveOnPath(path);
-    }
-
-    public override void MoveToTarget()
-    {
-        if (currentTarget != null && currentTargetPoint != Vector2.zero)
+        if (movementType == MovementType.Path)
         {
-            var direction = currentTargetPoint - thisTransform.position.ToVector2();
-            MoveOnDirection(direction);
+            updateEveryFrame = false;
+            currentTarget = target;
+            movingCoroutine = StartCoroutine(MoveOnPathCycle());
+            navAgent.GetPathAsync(target.position, SetPath);
+        }
+        else
+        {
+            updateEveryFrame = true;
+            base.MoveToTarget(target);
         }
     }
 
@@ -62,6 +56,7 @@ public class PathMovement : TargetMovement
     {
         base.StopMoving();
         currentTargetPoint = Vector2.zero;
+        path = default;
 
         if (movingCoroutine != null)
         {
@@ -70,17 +65,25 @@ public class PathMovement : TargetMovement
         }
     }
 
-    private void MoveOnPath(NavPath path)
+    private void SetPath(NavPath path)
     {
-        movingCoroutine = StartCoroutine(MoveOnPathCycle(path));
+        this.path = path;
     }
 
-    private IEnumerator MoveOnPathCycle(NavPath path)
+    private IEnumerator MoveOnPathCycle()
     {
         int index = 0;
 
+        yield return new WaitUntil(() => path.IsValid);
+
         while (index != path.NavPoints.Length)
         {
+            if (index < 0 || index >= path.Length)
+            {
+                Debug.LogError("PathMovement: Index out of path range");
+                break;
+            }
+
             currentTargetPoint = path.Points[index];
 
             while (!Helpers.IsPointInRadius(thisTransform.position, currentTargetPoint, acceptableRadius))
@@ -93,9 +96,9 @@ public class PathMovement : TargetMovement
 
         StopMoving();
 
-        if (index == path.NavPoints.Length)
+        if (!path.IsValid || index == path.NavPoints.Length)
         {
-            CallTargetTeached();
+            CallTargetReached();
         }
         
         movingCoroutine = null;
@@ -103,12 +106,11 @@ public class PathMovement : TargetMovement
 
     protected override void ReachedObstacle()
     {
-        FindNewPath();
+        CallOnFail();
     }
 
     private void FindNewPath()
     {
-        Debug.Log("FindNewPath");
         StopMoving();
         MoveToTarget(currentTarget);
     }
