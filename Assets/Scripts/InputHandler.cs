@@ -31,7 +31,13 @@ public class InputHandler : MonoBehaviour
 
     #endregion
 
-    void Update()
+    #region Properties
+
+    public bool KeyboardActive { get => activeInputsCount > 0; }
+
+    #endregion
+
+    protected virtual void Update()
     {
         ProcessInput();
     }
@@ -84,7 +90,7 @@ public class InputHandler : MonoBehaviour
 
         if (Input.GetKeyDown(ActionButton))
         {
-            OnActionPressed?.Invoke();
+            CallActionPressed();
         }
     }
 
@@ -115,6 +121,16 @@ public class InputHandler : MonoBehaviour
             }
         }
 
-        OnInputChanged?.Invoke(currentDirection, isActiveResult);
+        CallInputChanged(currentDirection, isActiveResult);
+    }
+
+    protected void CallInputChanged(Vector2 direction, bool isActive)
+    {
+        OnInputChanged?.Invoke(direction, isActive);
+    }
+
+    protected void CallActionPressed()
+    {
+        OnActionPressed?.Invoke();
     }
 }

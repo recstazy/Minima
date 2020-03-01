@@ -43,7 +43,7 @@ public class PathMovement : TargetMovement
             updateEveryFrame = false;
             currentTarget = target;
             movingCoroutine = StartCoroutine(MoveOnPathCycle());
-            navAgent.GetPathAsync(target.position, SetPath);
+            navAgent.GetPath(target.position, SetPath);
         }
         else
         {

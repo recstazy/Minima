@@ -30,7 +30,7 @@ namespace Minima.Navigation
             thisTransform = transform;
         }
 
-        public void GetPathAsync(Vector2 target, PathFoundHandler callback)
+        public void GetPath(Vector2 target, PathFoundHandler callback)
         {
             ownerCallback = callback;
             finder.FindPath(thisTransform.position, target, PathFoundCallBack);
