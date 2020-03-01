@@ -12,7 +12,6 @@ namespace Minima.Navigation
         public NavPoint[] NavPoints { get; set; }
         public Vector2[] Points { get; set; }
         public NavPoint[] Except { get; set; }
-        public NavMeshBuilder[] Builders { get; set; }
         public bool IsValid { get; private set; }
         public int Length { get => Points.Length; }
 
@@ -23,7 +22,6 @@ namespace Minima.Navigation
             NavPoints = new NavPoint[0];
             Points = new Vector2[0];
             Except = new NavPoint[0];
-            Builders = new NavMeshBuilder[0];
             IsValid = true;
 
             foreach (var t in points)
@@ -37,7 +35,6 @@ namespace Minima.Navigation
             NavPoints = new NavPoint[0];
             Points = new Vector2[0];
             Except = new NavPoint[0];
-            Builders = new NavMeshBuilder[0];
             IsValid = true;
 
             foreach (var t in points)
@@ -51,7 +48,6 @@ namespace Minima.Navigation
             NavPoints = new NavPoint[0];
             Points = new Vector2[0];
             Except = new NavPoint[0];
-            Builders = new NavMeshBuilder[0];
             IsValid = true;
         }
 
@@ -80,11 +76,6 @@ namespace Minima.Navigation
             Points = Points.Concat(points.Select(p => p.Position)).ToArray();
         }
 
-        public void AddBuilder(NavMeshBuilder builder)
-        {
-            Builders = Builders.ConcatOne(builder);
-        }
-
         public static NavPath operator+(NavPath a, NavPath b)
         {
             var result = new NavPath();
@@ -92,7 +83,6 @@ namespace Minima.Navigation
             result.Points = a.Points.Concat(b.Points).ToArray();
             result.NavPoints = a.NavPoints.Concat(b.NavPoints).ToArray();
             result.Except = a.Except.Concat(b.Except).ToArray();
-            result.Builders = a.Builders.ConcatUniq(b.Builders).ToArray();
             result.IsValid = true;
 
             return result;

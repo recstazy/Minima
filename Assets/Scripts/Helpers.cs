@@ -112,24 +112,6 @@ public static class Helpers
 
     }
 
-    public static NavTriangle GetNearestTriangle(Vector2 point, IEnumerable<NavTriangle> triangles)
-    {
-        if (triangles.Count() < 2 && triangles.Count() > 0)
-        {
-            return triangles.ToArray()[0];
-        }
-        else if (triangles.Count() == 0)
-        {
-            return new NavTriangle();
-        }
-
-        var trianglesArray = triangles.ToArray();
-        var comparer = new TriangleDistanceComparer(point);
-        System.Array.Sort(trianglesArray, comparer);
-
-        return trianglesArray[0];
-    }
-
     public static bool IsPointInRadius(Vector2 point, Vector2 origin, float radius)
     {
         if (Vector2.Distance(point, origin) < radius)
