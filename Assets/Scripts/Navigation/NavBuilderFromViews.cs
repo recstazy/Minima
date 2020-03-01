@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using System.Linq;
 
@@ -9,7 +10,12 @@ namespace Minima.Navigation
     {
         #region Fields
 
+        [SerializeField]
+        [Tooltip("How many nearest points should be checked for connection when building")]
+        private int nearestPointsCount = 5;
+
         private Dictionary<NavPoint, NavPoint[]> invisiblePoints = new Dictionary<NavPoint, NavPoint[]>();
+        private NavPointView[] views;
         private NavEdge[] edges = new NavEdge[0];
 
         #endregion
@@ -20,8 +26,10 @@ namespace Minima.Navigation
 
         public override void BuildNavMeshImmediately()
         {
+            GetViews();
             CreatePoints();
             ConnectAllPoints();
+            RemoveViews();
         }
 
         public override int GetPointsCount()
@@ -34,9 +42,21 @@ namespace Minima.Navigation
             return points;
         }
 
+        public override NavPoint GetNearestPoint(Vector2 position)
+        {
+            return base.GetNearestPoint(position);
+        }
+
+        protected override void DrawEdges()
+        {
+            foreach (var e in edges)
+            {
+                Debug.DrawLine(e.Start.Position, e.End.Position, Color.blue);
+            }
+        }
+
         private void CreatePoints()
         {
-            var views = FindObjectsOfType<NavPointView>();
             var positions = views.Select(p => p.transform.position);
             points = positions.Select(p => new NavPoint(p)).ToArray();
         }
@@ -45,7 +65,15 @@ namespace Minima.Navigation
         {
             foreach (var p in points)
             {
-                foreach (var n in points)
+                var copy = points.ToArray();
+                var comparer = new NavPointDistanceComparer(p.Position);
+                Array.Sort(copy, comparer);
+
+                var count = copy.Length < nearestPointsCount ? copy.Length : nearestPointsCount;
+
+                var nearest = copy.Take(count);
+
+                foreach (var n in nearest)
                 {
                     if (!invisiblePoints.ContainsKey(p) || !invisiblePoints[p].Contains(n))
                     {
@@ -64,11 +92,19 @@ namespace Minima.Navigation
             }
         }
 
-        protected override void DrawEdges()
+        private void GetViews()
         {
-            foreach (var e in edges)
+            views = FindObjectsOfType<NavPointView>();
+        }
+
+        private void RemoveViews()
+        {
+            if (!ShowPoints)
             {
-                Debug.DrawLine(e.Start.Position, e.End.Position, Color.blue);
+                foreach (var v in views)
+                {
+                    Destroy(v.gameObject);
+                }
             }
         }
 
