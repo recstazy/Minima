@@ -7,14 +7,7 @@ public class PlayerMovement : MovementComponent
 {
     #region Fields
 
-    [SerializeField]
-    private JoysticInputHandler movementHandler;
-
-    [SerializeField]
-    private JoysticInputHandler rotationHandler;
-
     private InputHandler inputHandler;
-    private bool isButtonInputActive;
 
     #endregion
 
@@ -27,43 +20,16 @@ public class PlayerMovement : MovementComponent
         base.Start();
 
         inputHandler = GetComponent<InputHandler>();
-        inputHandler.OnInputChanged += ButtonInputChanged;
-
-        if (movementHandler != null)
-        {
-            movementHandler.OnAxisChanged += MovementJoysticAxisChanged;
-        }
+        inputHandler.OnInputChanged += InputChanged;
     }
 
     private void OnDestroy()
     {
-        inputHandler.OnInputChanged -= ButtonInputChanged;
-
-        if (movementHandler != null)
-        {
-            movementHandler.OnAxisChanged -= MovementJoysticAxisChanged;
-        }
+        inputHandler.OnInputChanged -= InputChanged;
     }
 
-    private void MovementJoysticAxisChanged(Vector2 axisValue)
+    private void InputChanged(Vector2 direction, bool isActive)
     {
-        if (!isButtonInputActive)
-        {
-            if (axisValue.sqrMagnitude > Vector2.one.sqrMagnitude)
-            {
-                MoveOnDirection(axisValue.normalized);
-            }
-            else
-            {
-                StopMoving();
-            }
-        }
-    }
-
-    private void ButtonInputChanged(Vector2 direction, bool isActive)
-    {
-        isButtonInputActive = isActive;
-
         if (isActive)
         {
             MoveOnDirection(direction);

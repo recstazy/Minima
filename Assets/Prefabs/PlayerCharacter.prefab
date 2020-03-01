@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3babc46ad89a7fb4b9b0a35470210959, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputHandler: {fileID: 6844262298024995349}
+  inputHandler: {fileID: 0}
   weapon: {fileID: 8859580943042727893}
 --- !u!114 &2541223726879861175
 MonoBehaviour:
@@ -118,6 +118,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -165,7 +166,7 @@ GameObject:
   - component: {fileID: 6844262298024995347}
   - component: {fileID: 6844262298024995350}
   - component: {fileID: 6844262298024995351}
-  - component: {fileID: 6844262298024995349}
+  - component: {fileID: 5197764426085827952}
   - component: {fileID: 6844262298024995346}
   - component: {fileID: 6844262298024995337}
   m_Layer: 8
@@ -220,7 +221,7 @@ MonoBehaviour:
   speed: 20
   inertia: 0.84
   rotateToDirection: 0
---- !u!114 &6844262298024995349
+--- !u!114 &5197764426085827952
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -229,7 +230,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6844262298024995344}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4a485d32433ed24b954c37871ddea9f, type: 3}
+  m_Script: {fileID: 11500000, guid: 8e588d44c413ca6408b11d1d70f422ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   UpButton: 119
@@ -237,6 +238,7 @@ MonoBehaviour:
   RightButton: 100
   LeftButton: 97
   ActionButton: 32
+  stick: {fileID: 0}
 --- !u!50 &6844262298024995346
 Rigidbody2D:
   serializedVersion: 4

@@ -80,7 +80,7 @@ public class MovementComponent : MonoBehaviour
             movingDirection = Vector2.zero;
         }
 
-        rigidbody.velocity = Vector2.Lerp(rigidbody.velocity, movingDirection.normalized * speed, 1 - inertia);
+        rigidbody.velocity = Vector2.Lerp(rigidbody.velocity, Vector2.ClampMagnitude(movingDirection, 1f) * speed, 1 - inertia);
     }
 
     private void UpdateRotation()
