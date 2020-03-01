@@ -43,6 +43,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f06bb6fae6ba6344dbf51a56ba14d88a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomDraftPrefab: {fileID: 2763896842356885165, guid: 188708a703dc29a4caee76885371e86a,
+  roomDraftPrefab: {fileID: 6405258400607120748, guid: a3119cf18dca4e44ab5aab6a69027cdb,
     type: 3}
   exitsCount: 4

@@ -43,10 +43,10 @@ namespace Minima.LevelGeneration
             Vector2 positionVariantB = new Vector2(endB.position.x, endA.position.y);
             Vector2 result = positionVariantA;
 
-            if ((positionVariantA - center).sqrMagnitude < (positionVariantB - center).sqrMagnitude)
-            {
-                result = positionVariantB;
-            }
+            //if ((positionVariantA - center).sqrMagnitude < (positionVariantB - center).sqrMagnitude)
+            //{
+            //    result = positionVariantB;
+            //}
 
             return result;
         }
