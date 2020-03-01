@@ -22,13 +22,13 @@ namespace Minima.Navigation
         private float collapsePointsTreshold = 0.3f;
 
         [SerializeField]
-        private NavMeshBuilder builder;
+        private NavMeshBuilderBase builder;
 
         #endregion
 
         #region Properties
 
-        public List<NavMeshBuilder> Builders { get; private set; } = new List<NavMeshBuilder>();
+        public List<NavMeshBuilderBase> Builders { get; private set; } = new List<NavMeshBuilderBase>();
 
         #endregion
 
@@ -52,13 +52,13 @@ namespace Minima.Navigation
             //}
         }
 
-        public void CreateChunkConnections()
-        {
-            foreach (var b in Builders)
-            {
-                b.CreateChunkConnections();
-            }
-        }
+        //public void CreateChunkConnections()
+        //{
+        //    foreach (var b in Builders)
+        //    {
+        //        b.CreateChunkConnections();
+        //    }
+        //}
 
         protected void BuildImmediatley()
         {
@@ -71,7 +71,7 @@ namespace Minima.Navigation
 
             //CreateChunkConnections();
 
-            builder.BuildNavMesh();
+            builder.BuildNavMeshImmediately();
 
             TimeSpan timeElapsed = DateTime.Now - startTime;
 

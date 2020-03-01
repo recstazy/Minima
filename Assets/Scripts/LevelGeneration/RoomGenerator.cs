@@ -57,11 +57,6 @@ namespace Minima.LevelGeneration
             RoomDraft.SpawnGenerator.GeneratePoints();
         }
 
-        public void GenerateNavigation()
-        {
-            RoomDraft.NavMeshBuilder.BuildNavMesh();
-        }
-
         public void SetExitsCount(int count)
         {
             if (!exitsDeleted)

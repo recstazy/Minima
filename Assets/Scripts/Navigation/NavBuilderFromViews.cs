@@ -5,11 +5,10 @@ using System.Linq;
 
 namespace Minima.Navigation
 {
-    public class NavBuilderFromViews : NavMeshBuilder
+    public class NavBuilderFromViews : NavMeshBuilderBase
     {
         #region Fields
 
-        private NavPoint[] navPoints;
         private Dictionary<NavPoint, NavPoint[]> invisiblePoints = new Dictionary<NavPoint, NavPoint[]>();
         private NavEdge[] edges = new NavEdge[0];
 
@@ -19,73 +18,34 @@ namespace Minima.Navigation
 
         #endregion
 
-        public override void BuildNavMesh()
+        public override void BuildNavMeshImmediately()
         {
             CreatePoints();
             ConnectAllPoints();
         }
 
-        public override bool IsPointInBounds(Vector2 point)
-        {
-            return true;
-        }
-
         public override int GetPointsCount()
         {
-            return navPoints.Length;
+            return points.Length;
         }
 
-        public override NavPoint NearestVisiblePoint(Vector2 position)
+        public override NavPoint[] GetPoints()
         {
-            NavPoint result = new NavPoint();
-            return GetNearestPoint(position, navPoints);
-            bool isVisible = false;
-            var searchField = navPoints.ToArray();
-
-            while (!isVisible && searchField.Length > 0)
-            {
-                result = GetNearestPoint(position, searchField);
-
-                isVisible = Helpers.CheckVisibility(position, result.Position, TargetType.Enemy, TargetType.Player);
-
-                if (!isVisible)
-                {
-                    searchField = searchField.RemoveAt(System.Array.IndexOf(searchField, result));
-                }
-            }
-
-            if (!isVisible)
-            {
-                result = GetNearestPoint(position, navPoints);
-            }
-
-            return result;
-        }
-
-        private NavPoint GetNearestPoint(Vector2 position, NavPoint[] searchField)
-        {
-            return searchField
-                .Aggregate((p, next) =>
-                Vector2.Distance(position, p.Position) < Vector2.Distance(position, next.Position) ? p : next);
-        }
-
-        protected override NavPoint[] GetPoints()
-        {
-            return navPoints;
+            return points;
         }
 
         private void CreatePoints()
         {
             var views = FindObjectsOfType<NavPointView>();
             var positions = views.Select(p => p.transform.position);
-            navPoints = positions.Select(p => new NavPoint(p)).ToArray();
+            points = positions.Select(p => new NavPoint(p)).ToArray();
         }
 
         private void ConnectAllPoints()
         {
-            foreach (var p in navPoints)
+            foreach (var p in points)
             {
-                foreach (var n in navPoints)
+                foreach (var n in points)
                 {
                     if (!invisiblePoints.ContainsKey(p) || !invisiblePoints[p].Contains(n))
                     {

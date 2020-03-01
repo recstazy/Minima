@@ -10,14 +10,25 @@ namespace Minima.Navigation
         #region Fields
 
         [SerializeField]
+        private GameObject pointPrefab;
+
+        [SerializeField]
         [Range(0.1f, 10f)]
         protected float density = 1f;
 
         [SerializeField]
         private bool autoActivate = false;
 
+        [SerializeField]
+        protected Collider2D buildArea;
+
         protected List<List<NavCell>> cellLines = new List<List<NavCell>>();
         protected NavCell[] cells = new NavCell[0];
+
+        protected List<Collider2D> obstacles = new List<Collider2D>();
+        protected NavPoint[][] pointLines = new NavPoint[0][];
+
+        protected Rect buildRect;
 
         protected List<float> xAxes = new List<float>();
         protected List<float> yAxes = new List<float>();
@@ -30,30 +41,10 @@ namespace Minima.Navigation
         private ChunkConnection bottomConnection = new ChunkConnection(Vector2.down);
 
         private List<List<NavCell>> chunkConnections = new List<List<NavCell>>();
-        private NavPoint[] points;
 
         #endregion
 
         #region Properties
-
-        public virtual int GetPointsCount()
-        {
-            int count = 0;
-            foreach (var c in cells)
-            {
-                count += c.Points.Length;
-            }
-
-            return count;
-        }
-
-        public NavPoint[] Points
-        {
-            get
-            {
-                return GetPoints();
-            }
-        }
 
         private float Step { get => 1f / density; }
 
@@ -78,14 +69,6 @@ namespace Minima.Navigation
             }
         }
 
-        protected virtual void Update()
-        {
-            if (ShowDebug)
-            {
-                DrawEdges();
-            }
-        }
-
         /// <summary>
         /// Because colliders doesn't update their bounds until new frame
         /// </summary>
@@ -94,7 +77,7 @@ namespace Minima.Navigation
             StartCoroutine(DelayedBuild());
         }
 
-        public override void BuildNavMesh()
+        public override void BuildNavMeshImmediately()
         {
             GetAllObstacles();
             InitializeGridAxes();
@@ -102,7 +85,18 @@ namespace Minima.Navigation
             CreateCells();
         }
 
-        protected virtual NavPoint[] GetPoints()
+        public override int GetPointsCount()
+        {
+            int count = 0;
+            foreach (var c in cells)
+            {
+                count += c.Points.Length;
+            }
+
+            return count;
+        }
+
+        public override NavPoint[] GetPoints()
         {
             if (points == null)
             {
@@ -115,6 +109,11 @@ namespace Minima.Navigation
             }
 
             return points;
+        }
+
+        public virtual bool IsPointInBounds(Vector2 point)
+        {
+            return buildRect.Contains(point);
         }
 
         public void CreateChunkConnections()
@@ -138,7 +137,7 @@ namespace Minima.Navigation
             return cell.GetNearestTriangle(point);
         }
 
-        public virtual NavPoint NearestVisiblePoint(Vector2 position)
+        public override NavPoint GetNearestPoint(Vector2 position)
         {
             return GetNearestTriangle(position).ClosestVertex(position);
         }
@@ -146,6 +145,18 @@ namespace Minima.Navigation
         public void AddCells(params NavCell[] cells)
         {
             this.cells = this.cells.Concat(cells).ToArray();
+        }
+
+        protected virtual void GetAllObstacles()
+        {
+            if (obstacles.Count() == 0)
+            {
+                var filter = new ContactFilter2D();
+                filter.useLayerMask = true;
+                filter.SetLayerMask(LayerMask.GetMask("Obstacles"));
+
+                buildArea.OverlapCollider(filter, obstacles);
+            }
         }
 
         protected virtual void InitializeGridAxes()
@@ -203,6 +214,55 @@ namespace Minima.Navigation
 
                 cellLines.Add(line);
             }
+        }
+
+
+        protected NavPoint CreatePoint(Vector2 position)
+        {
+            var point = new NavPoint(position);
+            point.Activated = CheckPointActivation(point);
+
+            if (ShowPoints)
+            {
+                InstantiatePoint(point);
+            }
+
+            return point;
+        }
+
+        protected bool CheckPointActivation(NavPoint point)
+        {
+            foreach (var o in obstacles)
+            {
+                bool overlap = o.OverlapPoint(point.Position);
+
+                if (overlap)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        protected void InstantiatePoint(NavPoint point)
+        {
+            var pointGO = Instantiate(pointPrefab, point.Position, Quaternion.identity, this.transform);
+
+            Color color;
+
+            if (point.Activated)
+            {
+                color = Color.white;
+            }
+            else
+            {
+                color = Color.black;
+            }
+
+            var view = pointGO.GetComponent<NavPointView>();
+            point.View = view;
+            point.View.SetColor(color);
         }
 
         protected void ConnectChunks(ChunkConnection connection)
@@ -297,7 +357,7 @@ namespace Minima.Navigation
         {
             yield return new WaitForEndOfFrame();
 
-            BuildNavMesh();
+            BuildNavMeshImmediately();
         }
 
         private void SetConnections()

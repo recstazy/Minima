@@ -14,7 +14,7 @@ namespace Minima.Navigation
     {
         #region Fields
 
-        private NavBuildManager buildManager;
+        private NavMeshBuilderBase navBuilder;
 
         #endregion
 
@@ -25,9 +25,9 @@ namespace Minima.Navigation
         /// <summary>
         /// Provide the build manager to give finder navigation info
         /// </summary>
-        public NavPathFinder(NavBuildManager buildManager)
+        public NavPathFinder(NavMeshBuilderBase navMeshBuider)
         {
-            this.buildManager = buildManager;
+            navBuilder = navMeshBuider;
         }
 
         public async void FindPathAsync(Vector2 origin, Vector2 target, PathFoundHandler callback)
@@ -46,33 +46,18 @@ namespace Minima.Navigation
         {
             var path = new NavPath(origin);
 
-            var containingChunk = FindBuilder(origin);
-
-            if (containingChunk != null)
+            if (navBuilder != null)
             {
-                var startPoint = containingChunk.NearestVisiblePoint(origin);
-                var endPoint = containingChunk.NearestVisiblePoint(target);
+                var startPoint = navBuilder.GetNearestPoint(origin);
+                var endPoint = navBuilder.GetNearestPoint(target);
 
-                IPathFindAlgorithm dijkstra = new Dijkstra(containingChunk.Points);
+                IPathFindAlgorithm dijkstra = new Dijkstra(navBuilder.Points);
                 path += dijkstra.FindPath(startPoint, endPoint);
             }
 
             path.Add(target);
 
             return path;
-        }
-
-        private NavMeshBuilder FindBuilder(Vector2 point)
-        {
-            foreach (var b in buildManager.Builders)
-            {
-                if (b.IsPointInBounds(point))
-                {
-                    return b;
-                }
-            }
-
-            return null;
         }
     }
 }

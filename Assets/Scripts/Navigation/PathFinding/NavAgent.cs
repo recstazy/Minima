@@ -12,7 +12,7 @@ namespace Minima.Navigation
         private bool showDebug = false;
 
         private NavPathFinder finder;
-        private NavBuildManager buildManager;
+        private NavMeshBuilderBase navMeshBuilder;
         private Transform thisTransform;
         private NavPath path;
         private PathFoundHandler ownerCallback;
@@ -25,8 +25,8 @@ namespace Minima.Navigation
 
         private void Awake()
         {
-            buildManager = FindObjectOfType<NavBuildManager>();
-            finder = new NavPathFinder(buildManager);
+            navMeshBuilder = FindObjectOfType<NavMeshBuilderBase>();
+            finder = new NavPathFinder(navMeshBuilder);
             thisTransform = transform;
         }
 

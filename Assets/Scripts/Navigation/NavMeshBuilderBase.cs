@@ -10,20 +10,12 @@ namespace Minima.Navigation
         #region Fields
 
         [SerializeField]
-        private GameObject pointPrefab;
-
-        [SerializeField]
-        protected Collider2D buildArea;
-
-        [SerializeField]
         private bool showDebug = false;
 
         [SerializeField]
         private bool showPoints = false;
 
-        protected List<Collider2D> obstacles = new List<Collider2D>();
-        protected NavPoint[][] pointLines = new NavPoint[0][];
-        protected Rect buildRect;
+        protected NavPoint[] points;
 
         #endregion
 
@@ -31,76 +23,72 @@ namespace Minima.Navigation
 
         public bool ShowPoints { get => showPoints; set => showPoints = value; }
         public bool ShowDebug { get => showDebug; set => showDebug = value; }
+        public NavPoint[] Points { get => GetPoints(); }
 
         #endregion
 
-        public virtual void BuildNavMesh()
+        protected virtual void Update()
         {
-        }
-
-        public virtual bool IsPointInBounds(Vector2 point)
-        {
-            return buildRect.Contains(point);
-        }
-
-        protected NavPoint CreatePoint(Vector2 position)
-        {
-            var point = new NavPoint(position);
-            point.Activated = CheckPointActivation(point);
-
-            if (ShowPoints)
+            if (ShowDebug)
             {
-                InstantiatePoint(point);
-            }
-
-            return point;
-        }
-
-        protected virtual void GetAllObstacles()
-        {
-            if (obstacles.Count() == 0)
-            {
-                var filter = new ContactFilter2D();
-                filter.useLayerMask = true;
-                filter.SetLayerMask(LayerMask.GetMask("Obstacles"));
-
-                buildArea.OverlapCollider(filter, obstacles);
+                DrawEdges();
             }
         }
 
-        protected bool CheckPointActivation(NavPoint point)
+        public void BuildNavMesh()
         {
-            foreach (var o in obstacles)
-            {
-                bool overlap = o.OverlapPoint(point.Position);
+            ExecuteNextFrame(() => BuildNavMeshImmediately());
+        }
 
-                if (overlap)
+        public virtual void BuildNavMeshImmediately()
+        {
+        }
+
+        public virtual NavPoint[] GetPoints()
+        {
+            return points;
+        }
+
+        public virtual int GetPointsCount()
+        {
+            return points.Length;
+        }
+
+        public virtual NavPoint GetNearestPoint(Vector2 position)
+        {
+            return GetNearestPoint(position, points);
+        }
+
+        protected NavPoint GetNearestPoint(Vector2 position, NavPoint[] searchField)
+        {
+            return searchField
+                .Aggregate((p, next) =>
+                Vector2.Distance(position, p.Position) < Vector2.Distance(position, next.Position) ? p : next);
+        }
+
+        protected virtual void DrawEdges()
+        {
+            foreach (var p in points)
+            {
+                foreach (var connections in points.Select(point => point.ConnectedEdges))
                 {
-                    return false;
+                    foreach (var c in connections)
+                    {
+                        Debug.DrawLine(c.Start.Position, c.End.Position, Color.blue);
+                    }
                 }
             }
-
-            return true;
         }
 
-        protected void InstantiatePoint(NavPoint point)
+        protected void ExecuteNextFrame(System.Action method)
         {
-            var pointGO = Instantiate(pointPrefab, point.Position, Quaternion.identity, this.transform);
+            StartCoroutine(WaitNextFrameAndExecute(method));
+        }
 
-            Color color;
-
-            if (point.Activated)
-            {
-                color = Color.white;
-            }
-            else
-            {
-                color = Color.black;
-            }
-
-            var view = pointGO.GetComponent<NavPointView>();
-            point.View = view;
-            point.View.SetColor(color);
+        private IEnumerator WaitNextFrameAndExecute(System.Action method)
+        {
+            yield return new WaitForEndOfFrame();
+            method?.Invoke();
         }
     }
 }
