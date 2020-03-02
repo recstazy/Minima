@@ -32,9 +32,6 @@ namespace Minima.LevelGeneration
         [Range(1f, 50f)]
         private float maxWidth = 3f;
 
-        [SerializeField]
-        private GameObject exitCloser;
-
         #endregion
 
         #region Properties
@@ -87,14 +84,6 @@ namespace Minima.LevelGeneration
             {
                 var width = Random.Range(minWidth, maxWidth);
                 SetExitWidth(width);
-            }
-        }
-
-        public void SetIsClosed(bool isClosed)
-        {
-            if (!isClosed)
-            {
-                Destroy(exitCloser);
             }
         }
 
