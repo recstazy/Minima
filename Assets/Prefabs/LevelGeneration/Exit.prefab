@@ -46,7 +46,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 2.3333333
+  m_Radius: 1
 --- !u!1 &2318354571018629365
 GameObject:
   m_ObjectHideFlags: 0
@@ -107,7 +107,7 @@ Transform:
   m_GameObject: {fileID: 2857668213167258419}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 1, z: 1}
+  m_LocalScale: {x: 7, y: 1, z: 1}
   m_Children:
   - {fileID: 8111191757537158669}
   - {fileID: 5554583227722907053}
@@ -129,13 +129,14 @@ MonoBehaviour:
   nextCorner: {fileID: 0}
   snapArea: {fileID: 6422087852761586701}
   snapAreaRadius: 7
-  exitWidth: 3
+  exitWidth: 7
   wallEndPoints:
   - {fileID: 8057465930248953515}
   - {fileID: 768353727504984281}
   randomizeWidth: 1
-  minWidth: 3
-  maxWidth: 18
+  minWidth: 7
+  maxWidth: 20
+  exitCloser: {fileID: 0}
 --- !u!212 &2857668213167258416
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -161,6 +162,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0

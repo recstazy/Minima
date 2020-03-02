@@ -11,25 +11,11 @@ namespace Minima.LevelGeneration
         [SerializeField]
         private GameObject roomDraftPrefab;
 
-        [SerializeField]
-        [Range(1, 4)]
-        private int exitsCount = 2;
-
         #endregion
 
         #region Properties
 
-        private int ExitsCount
-        {
-            get => exitsCount;
-            set
-            {
-                exitsCount = Mathf.Clamp(value, 1, 4);
-            }
-        }
-
         public RoomDraft RoomDraft { get; private set; }
-        bool exitsDeleted = false;
 
         #endregion
 
@@ -55,23 +41,6 @@ namespace Minima.LevelGeneration
         public void GenerateSpawn()
         {
             RoomDraft.SpawnGenerator.GeneratePoints();
-        }
-
-        public void SetExitsCount(int count)
-        {
-            if (!exitsDeleted)
-            {
-                ExitsCount = count;
-
-                for (int i = 0; i < 4 - ExitsCount; i++)
-                {
-                    int n = Random.Range(0, RoomDraft.Exits.Count);
-                    var exitToDelete = RoomDraft.Exits[n];
-                    RoomDraft.DeleteExit(exitToDelete);
-                }
-
-                exitsDeleted = true;
-            }
         }
 
         private RoomDraft InstantiateDraft()
@@ -101,6 +70,8 @@ namespace Minima.LevelGeneration
             {
                 RoomDraft.DeleteExit(e);
             }
+
+            RoomDraft.ExitsDeleted();
         }
     }
 }

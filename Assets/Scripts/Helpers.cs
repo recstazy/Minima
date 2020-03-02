@@ -92,6 +92,13 @@ public static class Helpers
         return origin + offset;
     }
 
+    public static Vector2 RandomVectorNormalized()
+    {
+        float x = Random.Range(-1f, 1f);
+        float y = Random.Range(-1f, 1f);
+        return new Vector2(x, y).normalized;
+    }
+
     public static float GetTriangleSurface(Vector2 a, Vector2 b, Vector2 c, bool showDebug = false)
     {
         var ab = Vector2.Distance(a, b);

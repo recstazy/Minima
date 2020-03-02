@@ -98,8 +98,6 @@ MonoBehaviour:
   - {fileID: 7235899948034672808}
   - {fileID: 7235899947435476516}
   - {fileID: 7235899948272487146}
-  randomizeExits: 0
-  maxOffset: 15
 --- !u!1 &6405258400479029572
 GameObject:
   m_ObjectHideFlags: 0
@@ -255,10 +253,10 @@ MonoBehaviour:
   spawnParams:
   - prefab: {fileID: 4601056734282181986, guid: 74204d7a27ccf804faa4ad1ccf40c287,
       type: 3}
-    count: 4
+    count: 10
   - prefab: {fileID: 3351443242901170636, guid: d9d687012c2516241a5ed067a941b3f5,
       type: 3}
-    count: 1
+    count: 0
   spawnPointPrefab: {fileID: 903070718872153714, guid: 245aa136bc5cdee43aa7e6414a1ebf11,
     type: 3}
   spawnableRadius: 2
@@ -698,7 +696,7 @@ PrefabInstance:
     - target: {fileID: 2857668213167258431, guid: a00f0bf51b76f0347a9a4b94ad72fd3b,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 3
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4363733220566725629, guid: a00f0bf51b76f0347a9a4b94ad72fd3b,
         type: 3}
@@ -708,7 +706,7 @@ PrefabInstance:
     - target: {fileID: 6422087852761586701, guid: a00f0bf51b76f0347a9a4b94ad72fd3b,
         type: 3}
       propertyPath: m_Radius
-      value: 2.3333333
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a00f0bf51b76f0347a9a4b94ad72fd3b, type: 3}
@@ -800,7 +798,7 @@ PrefabInstance:
     - target: {fileID: 2857668213167258431, guid: a00f0bf51b76f0347a9a4b94ad72fd3b,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 3
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4363733220566725629, guid: a00f0bf51b76f0347a9a4b94ad72fd3b,
         type: 3}
@@ -810,7 +808,7 @@ PrefabInstance:
     - target: {fileID: 6422087852761586701, guid: a00f0bf51b76f0347a9a4b94ad72fd3b,
         type: 3}
       propertyPath: m_Radius
-      value: 2.3333333
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a00f0bf51b76f0347a9a4b94ad72fd3b, type: 3}
@@ -994,7 +992,7 @@ PrefabInstance:
     - target: {fileID: 2857668213167258431, guid: a00f0bf51b76f0347a9a4b94ad72fd3b,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 3
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4363733220566725629, guid: a00f0bf51b76f0347a9a4b94ad72fd3b,
         type: 3}
@@ -1004,7 +1002,7 @@ PrefabInstance:
     - target: {fileID: 6422087852761586701, guid: a00f0bf51b76f0347a9a4b94ad72fd3b,
         type: 3}
       propertyPath: m_Radius
-      value: 2.3333333
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a00f0bf51b76f0347a9a4b94ad72fd3b, type: 3}
@@ -1188,7 +1186,7 @@ PrefabInstance:
     - target: {fileID: 2857668213167258431, guid: a00f0bf51b76f0347a9a4b94ad72fd3b,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 3
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4363733220566725629, guid: a00f0bf51b76f0347a9a4b94ad72fd3b,
         type: 3}
@@ -1198,7 +1196,7 @@ PrefabInstance:
     - target: {fileID: 6422087852761586701, guid: a00f0bf51b76f0347a9a4b94ad72fd3b,
         type: 3}
       propertyPath: m_Radius
-      value: 2.3333333
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a00f0bf51b76f0347a9a4b94ad72fd3b, type: 3}

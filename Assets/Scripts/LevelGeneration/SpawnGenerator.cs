@@ -6,6 +6,8 @@ namespace Minima.LevelGeneration
 {
     public class SpawnGenerator : MonoBehaviour
     {
+        private enum GetPositionMethod { RoomCorner, Raycast }
+
         #region Fields
 
         [SerializeField]
@@ -19,6 +21,7 @@ namespace Minima.LevelGeneration
 
         private List<SpawnPoint> spawnPoints = new List<SpawnPoint>();
         private EnemiesParent enemiesParent;
+        private Rect spawnableArea;
 
         #endregion
 
@@ -39,15 +42,21 @@ namespace Minima.LevelGeneration
             }
 
             enemiesParent = FindObjectOfType<EnemiesParent>();
+
         }
 
         public void GeneratePoints()
+        {
+            ExecuteNextFrame(() => GeneratePointsImmediately());
+        }
+
+        private void GeneratePointsImmediately()
         {
             foreach (var p in spawnParams)
             {
                 for (int i = 0; i < p.Count; i++)
                 {
-                    var point = CreatePoint(GetPointPosition());
+                    var point = CreatePoint(GetPointPosition(GetPositionMethod.Raycast));
 
                     if (point != null)
                     {
@@ -73,7 +82,46 @@ namespace Minima.LevelGeneration
             return null;
         }
 
-        private Vector2 GetPointPosition()
+        private Vector2 GetPointPosition(GetPositionMethod method)
+        {
+            switch (method)
+            {
+                case GetPositionMethod.RoomCorner:
+                    {
+                        return GetPositionByRoomCorner();
+                    }
+                case GetPositionMethod.Raycast:
+                    {
+                        return GetPositionByRaycast();
+                    }
+                default: throw new System.NotImplementedException("No such case: " + method);
+            }
+        }
+
+        private Vector2 GetPositionByRaycast()
+        {
+            Vector2 origin = ThisRoom.transform.position;
+            Vector2 direction = Helpers.RandomVectorNormalized();
+            Vector2 spawnPosition = origin;
+
+            var hits = new List<RaycastHit2D>();
+            var filter = new ContactFilter2D();
+            filter.useLayerMask = true;
+            filter.layerMask = LayerMask.GetMask("Obstacles", "Exits");
+            filter.useTriggers = true;
+
+            int hitsCount = Physics2D.Raycast(origin, direction, filter, hits);
+
+            if (hitsCount > 0)
+            {
+                var hit = hits[0];
+                spawnPosition += (hit.point - origin) / 2;
+            }
+
+            return spawnPosition;
+        }
+
+        private Vector2 GetPositionByRoomCorner()
         {
             var corners = ThisRoom.Corners;
             corners.Shuffle();
@@ -116,6 +164,17 @@ namespace Minima.LevelGeneration
         private bool IsPointInRoom(Vector2 point)
         {
             return Helpers.CheckVisibility(point.ToVector3(), ThisRoom.transform.position);
+        }
+
+        protected void ExecuteNextFrame(System.Action method)
+        {
+            StartCoroutine(WaitNextFrameAndExecute(method));
+        }
+
+        private IEnumerator WaitNextFrameAndExecute(System.Action method)
+        {
+            yield return new WaitForEndOfFrame();
+            method?.Invoke();
         }
     }
 }

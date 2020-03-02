@@ -46,10 +46,10 @@ MonoBehaviour:
   spawnParams:
   - prefab: {fileID: 4601056734282181986, guid: 74204d7a27ccf804faa4ad1ccf40c287,
       type: 3}
-    count: 4
+    count: 10
   - prefab: {fileID: 3351443242901170636, guid: d9d687012c2516241a5ed067a941b3f5,
       type: 3}
-    count: 1
+    count: 0
   spawnPointPrefab: {fileID: 903070718872153714, guid: 245aa136bc5cdee43aa7e6414a1ebf11,
     type: 3}
   spawnableRadius: 2
@@ -162,7 +162,6 @@ MonoBehaviour:
   exits: {fileID: 2763896842970934329}
   wallsGenerator: {fileID: 7459346419100925081}
   spawnGenerator: {fileID: 5335019796253877920}
-  navMeshBuilder: {fileID: 0}
 --- !u!1 &2763896842970934331
 GameObject:
   m_ObjectHideFlags: 0
@@ -215,8 +214,7 @@ MonoBehaviour:
   - {fileID: 1933255587124503401}
   - {fileID: 1933255587608358373}
   - {fileID: 1933255587303989547}
-  randomizeExits: 0
-  maxOffset: 5
+  exitCloseChance: 50
 --- !u!1 &6693653433195949843
 GameObject:
   m_ObjectHideFlags: 0
@@ -803,7 +801,7 @@ PrefabInstance:
     - target: {fileID: 6422087852761586701, guid: a00f0bf51b76f0347a9a4b94ad72fd3b,
         type: 3}
       propertyPath: m_Radius
-      value: 2.3333333
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 145410885037516395, guid: a00f0bf51b76f0347a9a4b94ad72fd3b,
         type: 3}
@@ -834,6 +832,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3909361233507097766, guid: a00f0bf51b76f0347a9a4b94ad72fd3b,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a00f0bf51b76f0347a9a4b94ad72fd3b, type: 3}
@@ -1022,7 +1025,7 @@ PrefabInstance:
     - target: {fileID: 6422087852761586701, guid: a00f0bf51b76f0347a9a4b94ad72fd3b,
         type: 3}
       propertyPath: m_Radius
-      value: 2.3333333
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 145410885037516395, guid: a00f0bf51b76f0347a9a4b94ad72fd3b,
         type: 3}
@@ -1053,6 +1056,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3909361233507097766, guid: a00f0bf51b76f0347a9a4b94ad72fd3b,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a00f0bf51b76f0347a9a4b94ad72fd3b, type: 3}
@@ -1149,13 +1157,18 @@ PrefabInstance:
     - target: {fileID: 6422087852761586701, guid: a00f0bf51b76f0347a9a4b94ad72fd3b,
         type: 3}
       propertyPath: m_Radius
-      value: 2.3333333
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 145410885037516395, guid: a00f0bf51b76f0347a9a4b94ad72fd3b,
         type: 3}
       propertyPath: nextCorner
       value: 
       objectReference: {fileID: 184754220410069771}
+    - target: {fileID: 3909361233507097766, guid: a00f0bf51b76f0347a9a4b94ad72fd3b,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a00f0bf51b76f0347a9a4b94ad72fd3b, type: 3}
 --- !u!114 &1933255587124503401 stripped
@@ -1246,7 +1259,7 @@ PrefabInstance:
     - target: {fileID: 2857668213167258431, guid: a00f0bf51b76f0347a9a4b94ad72fd3b,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 3
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4363733220566725629, guid: a00f0bf51b76f0347a9a4b94ad72fd3b,
         type: 3}
@@ -1256,13 +1269,18 @@ PrefabInstance:
     - target: {fileID: 6422087852761586701, guid: a00f0bf51b76f0347a9a4b94ad72fd3b,
         type: 3}
       propertyPath: m_Radius
-      value: 2.3333333
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 145410885037516395, guid: a00f0bf51b76f0347a9a4b94ad72fd3b,
         type: 3}
       propertyPath: nextCorner
       value: 
       objectReference: {fileID: 184754222034923158}
+    - target: {fileID: 3909361233507097766, guid: a00f0bf51b76f0347a9a4b94ad72fd3b,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a00f0bf51b76f0347a9a4b94ad72fd3b, type: 3}
 --- !u!114 &1933255587183450326 stripped

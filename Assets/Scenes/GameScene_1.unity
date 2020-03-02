@@ -5788,7 +5788,6 @@ MonoBehaviour:
   roomsCount: 50
   generatorExitsPerRoom: 3
   lineGeneratingChance: 20
-  randomizeExitsCount: 0
   navBuilder: {fileID: 476582117}
 --- !u!4 &1400033323
 Transform:
