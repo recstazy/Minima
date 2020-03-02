@@ -5,6 +5,8 @@ using System.Linq;
 
 public static class ListExtentions
 {
+    private static Random random = new Random();
+
     public static T[] ConcatOne<T>(this T[] array, T item)
     {
         Array.Resize(ref array, array.Length + 1);
@@ -48,7 +50,11 @@ public static class ListExtentions
         }
     }
 
-    private static Random random = new Random();
+    public static T Random<T>(this IList<T> list)
+    {
+        return list[random.Next(0, list.Count)];
+    }
+
     /// <summary>
     /// Copied this from StackOverflow
     /// </summary>

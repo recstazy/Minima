@@ -5784,11 +5784,10 @@ MonoBehaviour:
   roomsParent: {fileID: 99376109}
   roomGeneratorPrefab: {fileID: 7963234438967846403, guid: f5ddb31deef6b4b4cb2dc79f2184f722,
     type: 3}
-  roomRawOffset: 30
-  roomsCount: 30
+  roomRawOffset: 50
+  roomsCount: 50
   generatorExitsPerRoom: 3
   lineGeneratingChance: 20
-  randomizeExitsCount: 0
   navBuilder: {fileID: 476582117}
 --- !u!4 &1400033323
 Transform:
@@ -6093,6 +6092,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerCharacter
       objectReference: {fileID: 0}
+    - target: {fileID: 5197764426085827952, guid: 190e629a0f0172444bb0500229ce020a,
+        type: 3}
+      propertyPath: movementStick
+      value: 
+      objectReference: {fileID: 1584371621}
     - target: {fileID: 6844262298024995347, guid: 190e629a0f0172444bb0500229ce020a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6162,10 +6166,5 @@ PrefabInstance:
       propertyPath: inputHandler
       value: 
       objectReference: {fileID: 147832494}
-    - target: {fileID: 5197764426085827952, guid: 190e629a0f0172444bb0500229ce020a,
-        type: 3}
-      propertyPath: movementStick
-      value: 
-      objectReference: {fileID: 1584371621}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 190e629a0f0172444bb0500229ce020a, type: 3}

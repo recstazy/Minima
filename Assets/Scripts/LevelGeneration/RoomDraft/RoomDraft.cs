@@ -59,6 +59,11 @@ namespace Minima.LevelGeneration
             Destroy(exit.gameObject);
         }
 
+        public void ExitsDeleted()
+        {
+            exits.ExitsDeleted();
+        }
+
         public WallCorner GetRandomCorner()
         {
             int n = Random.Range(0, Corners.Count);

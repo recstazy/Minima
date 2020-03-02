@@ -24,9 +24,6 @@ namespace Minima.LevelGeneration
         private int lineGeneratingChance = 50;
 
         [SerializeField]
-        private bool randomizeExitsCount = false;
-
-        [SerializeField]
         private Navigation.NavMeshBuilderBase navBuilder;
 
         private List<RoomGenerator> roomGenerators = new List<RoomGenerator>();
@@ -90,11 +87,6 @@ namespace Minima.LevelGeneration
         {
             foreach (var g in roomGenerators)
             {
-                if (randomizeExitsCount)
-                {
-                    g.SetExitsCount(UnityEngine.Random.Range(1, 4));
-                }
-
                 g.GenerateRoom();
             }
         }

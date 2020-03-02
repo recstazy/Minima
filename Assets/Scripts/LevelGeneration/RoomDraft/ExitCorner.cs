@@ -25,11 +25,11 @@ namespace Minima.LevelGeneration
         private bool randomizeWidth = true;
 
         [SerializeField]
-        [Range(1f, 20f)]
+        [Range(1f, 50f)]
         private float minWidth = 3f;
 
         [SerializeField]
-        [Range(1f, 20f)]
+        [Range(1f, 50f)]
         private float maxWidth = 3f;
 
         #endregion
@@ -39,9 +39,7 @@ namespace Minima.LevelGeneration
         public RoomGenerator ThisRoom { get; set; }
         public RoomGenerator NextRoom { get; set; }
         public List<WallCorner> ConnectPoints { get; }
-
         public ExitCorner NextExit { get; set; }
-
         public SpriteRenderer Sprite { get; private set; }
 
         #endregion
@@ -74,6 +72,12 @@ namespace Minima.LevelGeneration
             return points[nearest];
         }
 
+        public void SetExitWidth(float newWidth)
+        {
+            exitWidth = newWidth;
+            UpdateWidth();
+        }
+
         private void RandomizeExitWidth()
         {
             if (randomizeWidth)
@@ -81,12 +85,6 @@ namespace Minima.LevelGeneration
                 var width = Random.Range(minWidth, maxWidth);
                 SetExitWidth(width);
             }
-        }
-
-        public void SetExitWidth(float newWidth)
-        {
-            exitWidth = newWidth;
-            UpdateWidth();
         }
 
         private void BindNearestExit()
