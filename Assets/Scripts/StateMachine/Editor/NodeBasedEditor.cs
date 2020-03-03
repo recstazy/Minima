@@ -15,9 +15,12 @@ public class NodeBasedEditor : EditorWindow
 
     private Node selectedInNode;
     private Node selectedOutNode;
+    public bool IsPerformingConnection { get; private set; }
 
     private Vector2 offset;
     private Vector2 drag;
+
+    private NodeEditorEventArgs eventArgs;
 
     [MenuItem("Window/Node Based Editor")]
     private static void OpenWindow()
@@ -28,6 +31,8 @@ public class NodeBasedEditor : EditorWindow
 
     private void OnEnable()
     {
+        eventArgs = new NodeEditorEventArgs(this);
+
         nodeStyle = new GUIStyle();
         nodeStyle.normal.background = EditorGUIUtility.Load("builtin skins/darkskin/images/node1.png") as Texture2D;
         nodeStyle.border = new RectOffset(12, 12, 12, 12);
@@ -143,7 +148,7 @@ public class NodeBasedEditor : EditorWindow
         {
             for (int i = nodes.Count - 1; i >= 0; i--)
             {
-                bool guiChanged = nodes[i].ProcessEvents(e);
+                bool guiChanged = nodes[i].ProcessEvents(e, eventArgs);
 
                 if (guiChanged)
                 {
@@ -170,20 +175,20 @@ public class NodeBasedEditor : EditorWindow
             GUI.changed = true;
         }
 
-        if (selectedOutNode != null && selectedInNode == null)
-        {
-            Handles.DrawBezier(
-                selectedOutNode.rect.center,
-                e.mousePosition,
-                selectedOutNode.rect.center,
-                e.mousePosition,
-                Color.white,
-                null,
-                2f
-            );
+        //if (selectedOutNode != null && selectedInNode == null)
+        //{
+        //    Handles.DrawBezier(
+        //        selectedOutNode.rect.center,
+        //        e.mousePosition,
+        //        selectedOutNode.rect.center,
+        //        e.mousePosition,
+        //        Color.white,
+        //        null,
+        //        2f
+        //    );
 
-            GUI.changed = true;
-        }
+        //    GUI.changed = true;
+        //}
     }
 
     private void ProcessContextMenu(Vector2 mousePosition)
@@ -220,6 +225,8 @@ public class NodeBasedEditor : EditorWindow
 
     private void NodeConnectionClicked(Node clickedNode)
     {
+        IsPerformingConnection = true;
+
         if (selectedInNode == null)
         {
             selectedInNode = clickedNode;
@@ -289,5 +296,6 @@ public class NodeBasedEditor : EditorWindow
     {
         selectedInNode = null;
         selectedOutNode = null;
+        IsPerformingConnection = false;
     }
 }

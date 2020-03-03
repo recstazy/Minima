@@ -53,47 +53,56 @@ public class Node
         return point;
     }
 
-    public bool ProcessEvents(Event e)
+    public bool ProcessEvents(Event e, NodeEditorEventArgs eventArgs)
     {
         switch (e.type)
         {
             case EventType.MouseDown:
-                if (e.button == 0)
                 {
-                    if (rect.Contains(e.mousePosition))
+                    if (e.button == 0)
                     {
-                        isDragged = true;
-                        GUI.changed = true;
-                        isSelected = true;
-                        style = selectedNodeStyle;
+                        if (rect.Contains(e.mousePosition))
+                        {
+                            isDragged = true;
+                            GUI.changed = true;
+                            isSelected = true;
+                            style = selectedNodeStyle;
+
+                            if (eventArgs.IsPerformingConnection)
+                            {
+                                ConnectNodeClicked();
+                            }
+                        }
+                        else
+                        {
+                            GUI.changed = true;
+                            isSelected = false;
+                            style = defaultNodeStyle;
+                        }
                     }
-                    else
+
+                    if (e.button == 1 && isSelected && rect.Contains(e.mousePosition))
                     {
-                        GUI.changed = true;
-                        isSelected = false;
-                        style = defaultNodeStyle;
+                        ProcessContextMenu();
+                        e.Use();
                     }
+                    break;
                 }
-
-                if (e.button == 1 && isSelected && rect.Contains(e.mousePosition))
-                {
-                    ProcessContextMenu();
-                    e.Use();
-                }
-                break;
-
             case EventType.MouseUp:
-                isDragged = false;
-                break;
-
-            case EventType.MouseDrag:
-                if (e.button == 0 && isDragged)
                 {
-                    Drag(e.delta);
-                    e.Use();
-                    return true;
+                    isDragged = false;
+                    break;
                 }
-                break;
+            case EventType.MouseDrag:
+                {
+                    if (e.button == 0 && isDragged)
+                    {
+                        Drag(e.delta);
+                        e.Use();
+                        return true;
+                    }
+                    break;
+                }
         }
 
         return false;
