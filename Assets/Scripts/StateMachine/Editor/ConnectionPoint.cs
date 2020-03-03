@@ -2,18 +2,18 @@
 using UnityEngine;
 using UnityEditor;
 
-public enum ConnectionAreaDirection { Left, Right, Up, Down }
+public enum ConnectionDirection { Left, Right, Up, Down }
 
 public class ConnectionPoint
 {
     public Action<ConnectionPoint> OnClickConnectionPoint;
 
     public Rect rect;
-    public ConnectionAreaDirection type;
+    public ConnectionDirection type;
     public Node node;
     public GUIStyle style;
     
-    public ConnectionPoint(Node node, ConnectionAreaDirection type)
+    public ConnectionPoint(Node node, ConnectionDirection type)
     {
         this.node = node;
         this.type = type;
@@ -25,25 +25,25 @@ public class ConnectionPoint
     {
         switch (type)
         {
-            case ConnectionAreaDirection.Left:
+            case ConnectionDirection.Left:
                 {
                     rect.x = node.rect.x - rect.width * 0.5f;
                     rect.y = node.rect.y + (node.rect.height * 0.5f) - rect.height * 0.5f;
                     break;
                 }
-            case ConnectionAreaDirection.Right:
+            case ConnectionDirection.Right:
                 {
                     rect.x = node.rect.x + node.rect.width - rect.width * 0.5f;
                     rect.y = node.rect.y + node.rect.height * 0.5f - rect.height * 0.5f;
                     break;
                 }
-            case ConnectionAreaDirection.Up:
+            case ConnectionDirection.Up:
                 {
                     rect.x = node.rect.x + node.rect.width * 0.5f - rect.width * 0.5f;
                     rect.y = node.rect.y - rect.height / 2;
                     break;
                 }
-            case ConnectionAreaDirection.Down:
+            case ConnectionDirection.Down:
                 {
                     rect.x = node.rect.x + node.rect.width * 0.5f - rect.width * 0.5f;
                     rect.y = node.rect.y + node.rect.height - rect.height * 0.5f;

@@ -128,10 +128,10 @@ public class Node
 
     private void CreateConnectionArea(Action<Node> areaClicked)
     {
-        var left = new ConnectionPoint(this, ConnectionAreaDirection.Left);
-        var right = new ConnectionPoint(this, ConnectionAreaDirection.Right);
-        var up = new ConnectionPoint(this, ConnectionAreaDirection.Up);
-        var down = new ConnectionPoint(this, ConnectionAreaDirection.Down);
+        var left = new ConnectionPoint(this, ConnectionDirection.Left);
+        var right = new ConnectionPoint(this, ConnectionDirection.Right);
+        var up = new ConnectionPoint(this, ConnectionDirection.Up);
+        var down = new ConnectionPoint(this, ConnectionDirection.Down);
 
         connectPoints = new ConnectionPoint[] { left, right, up, down };
     }
