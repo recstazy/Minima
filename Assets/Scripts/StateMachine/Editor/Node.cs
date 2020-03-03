@@ -64,9 +64,7 @@ public class Node
                         if (rect.Contains(e.mousePosition))
                         {
                             isDragged = true;
-                            GUI.changed = true;
-                            isSelected = true;
-                            style = selectedNodeStyle;
+                            SetSelected(true);
 
                             if (eventArgs.IsPerformingConnection)
                             {
@@ -75,16 +73,26 @@ public class Node
                         }
                         else
                         {
-                            GUI.changed = true;
-                            isSelected = false;
-                            style = defaultNodeStyle;
+                            SetSelected(false);
                         }
                     }
 
-                    if (e.button == 1 && isSelected && rect.Contains(e.mousePosition))
+                    if (e.button == 1)
                     {
-                        ProcessContextMenu();
-                        e.Use();
+                        if (!rect.Contains(e.mousePosition))
+                        {
+                            SetSelected(false);
+                        }
+                        else
+                        {
+                            if (!isSelected)
+                            {
+                                SetSelected(true);
+                            }
+
+                            ProcessContextMenu();
+                            e.Use();
+                        }
                     }
                     break;
                 }
@@ -103,9 +111,37 @@ public class Node
                     }
                     break;
                 }
+            case EventType.KeyUp:
+                {
+                    if (isSelected && !eventArgs.IsPerformingConnection)
+                    {
+                        if (e.keyCode == KeyCode.C)
+                        {
+                            ConnectNodeClicked();
+                            GUI.changed = true;
+                        }
+                    }
+                    break;
+                }
         }
 
         return false;
+    }
+
+    private void SetSelected(bool isSelected)
+    {
+        this.isSelected = isSelected;
+
+        if (isSelected)
+        {
+            style = selectedNodeStyle;
+        }
+        else
+        {
+            style = defaultNodeStyle;
+        }
+
+        GUI.changed = true;
     }
 
     private void ProcessContextMenu()

@@ -174,21 +174,6 @@ public class NodeBasedEditor : EditorWindow
 
             GUI.changed = true;
         }
-
-        //if (selectedOutNode != null && selectedInNode == null)
-        //{
-        //    Handles.DrawBezier(
-        //        selectedOutNode.rect.center,
-        //        e.mousePosition,
-        //        selectedOutNode.rect.center,
-        //        e.mousePosition,
-        //        Color.white,
-        //        null,
-        //        2f
-        //    );
-
-        //    GUI.changed = true;
-        //}
     }
 
     private void ProcessContextMenu(Vector2 mousePosition)
