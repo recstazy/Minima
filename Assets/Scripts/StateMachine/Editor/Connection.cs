@@ -4,21 +4,22 @@ using UnityEngine;
 
 public class Connection
 {
-    public Node InNode;
-    public Node OutNode;
+    public Node InNode { get; private set; }
+    public Node OutNode { get; private set; }
     public Action<Connection> OnClickRemoveConnection;
 
     public Connection(Node inNode, Node outNode, Action<Connection> OnClickRemoveConnection)
     {
-        this.InNode = inNode;
-        this.OutNode = outNode;
+        InNode = inNode;
+        OutNode = outNode;
+        AddSelf();
         this.OnClickRemoveConnection = OnClickRemoveConnection;
     }
 
     public void Draw()
     {
-        var inPoint = InNode.GetClosestConnectionPoint(OutNode.rect.center).rect.center;
-        var outPoint = OutNode.GetClosestConnectionPoint(InNode.rect.center).rect.center;
+        var inPoint = InNode.GetClosestPointOnRect(OutNode.rect.center);
+        var outPoint = OutNode.GetClosestPointOnRect(InNode.rect.center);
 
         Handles.DrawBezier(
                 inPoint,
@@ -32,10 +33,22 @@ public class Connection
 
         if (Handles.Button((InNode.rect.center + OutNode.rect.center) * 0.5f, Quaternion.identity, 4, 8, Handles.RectangleHandleCap))
         {
-            OnClickRemoveConnection?.Invoke(this);
+            RemoveSelf();
         }
 
         DrawArrowCap(inPoint, outPoint, 10f);
+    }
+
+    public void AddSelf()
+    {
+        InNode.AddConnection(this);
+        OutNode.AddConnection(this);
+    }
+
+    public void RemoveSelf()
+    {
+        InNode.RemoveConnection(this);
+        OutNode.RemoveConnection(this);
     }
 
     private void DrawArrowCap(Vector2 origin, Vector2 target, float size)

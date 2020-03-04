@@ -10,11 +10,22 @@ public class Node
     public bool isDragged;
     public bool isSelected;
 
-    public ConnectionPoint[] connectPoints;
-
     public GUIStyle style;
     public GUIStyle defaultNodeStyle;
     public GUIStyle selectedNodeStyle;
+
+    public Connection[] Connections { get; private set; } = new Connection[0];
+
+    public Node[] ConnectedNodes 
+    {
+        get
+        {
+            return Connections
+                .Select(c => c.InNode)
+                .Concat(Connections.Select(c => c.OutNode))
+                .ToArray();
+        } 
+    }
 
     public Action<Node> OnRemoveNode;
     public Action<Node> OnConnectClicked;
@@ -23,7 +34,6 @@ public class Node
     {
         rect = new Rect(position.x, position.y, width, height);
         style = nodeStyle;
-        CreateConnectionArea(connectionClicked);
         defaultNodeStyle = nodeStyle;
         selectedNodeStyle = selectedStyle;
         OnRemoveNode = OnClickRemoveNode;
@@ -37,20 +47,70 @@ public class Node
 
     public void Draw()
     {
-        foreach (var a in connectPoints)
-        {
-            a.Draw();
-        }
-
         GUI.Box(rect, title, style);
+
+        foreach (var c in Connections.Where(c => c.InNode == this))
+        {
+            c.Draw();
+        }
     }
 
-    public ConnectionPoint GetClosestConnectionPoint(Vector2 origin)
+    public void AddConnection(Connection connection)
     {
-        var point = connectPoints
-            .Aggregate((p, n) => Vector2.Distance(origin, p.rect.center) < Vector2.Distance(origin, n.rect.center) ? p : n);
+        Connections = Connections.ConcatOne(connection);
+    }
 
-        return point;
+    public void RemoveConnection(Connection connection)
+    {
+        var index = Array.IndexOf(Connections, connection);
+
+        if (index >= 0)
+        {
+            Connections = Connections.RemoveAt(index);
+        }
+    }
+
+    public Vector2 GetClosestPointOnRect(Vector2 origin)
+    {
+        var a = origin;
+        var b = rect.center;
+        var slope = (a.y - b.y) / (a.x - b.x);
+
+        float x;
+        float y;
+
+        var yOffset = slope * rect.width / 2f;
+
+        if (yOffset.InBounds(-rect.height / 2f, rect.height / 2f))
+        {
+            if (a.x > b.x)
+            {
+                x = b.x + rect.width / 2f;
+                y = b.y + yOffset;
+            }
+            else
+            {
+                x = b.x - rect.width / 2f;
+                y = b.y - yOffset;
+            }
+        }
+        else
+        {
+            var xOffset = (rect.height / 2f) / slope;
+
+            if (a.y > b.y)
+            {
+                x = b.x + xOffset;
+                y = b.y + rect.height / 2f;
+            }
+            else
+            {
+                x = b.x - xOffset;
+                y = b.y - rect.height / 2f;
+            }
+        }
+
+        return new Vector2(x, y);
     }
 
     public bool ProcessEvents(Event e, NodeEditorEventArgs eventArgs)
@@ -160,15 +220,5 @@ public class Node
     private void ConnectNodeClicked()
     {
         OnConnectClicked?.Invoke(this);
-    }
-
-    private void CreateConnectionArea(Action<Node> areaClicked)
-    {
-        var left = new ConnectionPoint(this, ConnectionDirection.Left);
-        var right = new ConnectionPoint(this, ConnectionDirection.Right);
-        var up = new ConnectionPoint(this, ConnectionDirection.Up);
-        var down = new ConnectionPoint(this, ConnectionDirection.Down);
-
-        connectPoints = new ConnectionPoint[] { left, right, up, down };
     }
 }
