@@ -6,14 +6,12 @@ public class Connection
 {
     public Node InNode { get; private set; }
     public Node OutNode { get; private set; }
-    public Action<Connection> OnClickRemoveConnection;
 
-    public Connection(Node inNode, Node outNode, Action<Connection> OnClickRemoveConnection)
+    public Connection(Node inNode, Node outNode)
     {
         InNode = inNode;
         OutNode = outNode;
         AddSelf();
-        this.OnClickRemoveConnection = OnClickRemoveConnection;
     }
 
     public void Draw()

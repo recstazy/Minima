@@ -48,7 +48,6 @@ public class NodeBasedEditor : EditorWindow
         DrawGrid(100, 0.4f, Color.gray);
 
         DrawNodes();
-        //DrawConnections();
 
         DrawConnectionLine(Event.current);
 
@@ -90,17 +89,6 @@ public class NodeBasedEditor : EditorWindow
             for (int i = 0; i < nodes.Count; i++)
             {
                 nodes[i].Draw();
-            }
-        }
-    }
-
-    private void DrawConnections()
-    {
-        if (connections != null)
-        {
-            for (int i = 0; i < connections.Count; i++)
-            {
-                connections[i].Draw();
             }
         }
     }
@@ -254,11 +242,6 @@ public class NodeBasedEditor : EditorWindow
         nodes.Remove(node);
     }
 
-    private void OnClickRemoveConnection(Connection connection)
-    {
-        //connections.Remove(connection);
-    }
-
     private void CreateConnection()
     {
         if (connections == null)
@@ -266,7 +249,7 @@ public class NodeBasedEditor : EditorWindow
             connections = new List<Connection>();
         }
 
-        connections.Add(new Connection(selectedInNode, selectedOutNode, OnClickRemoveConnection));
+        connections.Add(new Connection(selectedInNode, selectedOutNode));
     }
 
     private void ClearConnectionSelection()
