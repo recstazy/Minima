@@ -25,6 +25,49 @@ public static class Helpers
         }
     }
 
+    public static Vector2 GetClosestPointOnRect(Vector2 origin, Rect rect)
+    {
+        var a = origin;
+        var b = rect.center;
+        var slope = (a.y - b.y) / (a.x - b.x);
+
+        float x;
+        float y;
+
+        var yOffset = slope * rect.width / 2f;
+
+        if (yOffset.InBounds(-rect.height / 2f, rect.height / 2f))
+        {
+            if (a.x > b.x)
+            {
+                x = b.x + rect.width / 2f;
+                y = b.y + yOffset;
+            }
+            else
+            {
+                x = b.x - rect.width / 2f;
+                y = b.y - yOffset;
+            }
+        }
+        else
+        {
+            var xOffset = (rect.height / 2f) / slope;
+
+            if (a.y > b.y)
+            {
+                x = b.x + xOffset;
+                y = b.y + rect.height / 2f;
+            }
+            else
+            {
+                x = b.x - xOffset;
+                y = b.y - rect.height / 2f;
+            }
+        }
+
+        return new Vector2(x, y);
+    }
+
     public static Vector2 RandomPointInTriangle(Vector2 a, Vector2 b, Vector2 c, bool showDebug = false)
     {
         if (showDebug)

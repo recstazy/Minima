@@ -5,16 +5,24 @@ using System.Linq;
 
 public class NodeBasedEditor : EditorWindow
 {
-    private List<Node> nodes;
+    #region Fields
 
-    private Node selectedInNode;
-    private Node selectedOutNode;
-    public bool IsPerformingConnection { get; private set; }
+    private List<Node> nodes = new List<Node>();
+    private NodeEditorEventArgs eventArgs;
+    private NodeConnector nodeConnector;
+    private GenericMenu contextMenu;
 
+    private Vector2 lastMousePosition;
     private Vector2 offset;
     private Vector2 drag;
 
-    private NodeEditorEventArgs eventArgs;
+    #endregion
+
+    #region Properties
+
+    public bool IsPerformingConnection { get => nodeConnector.IsPerformingConnection; }
+
+    #endregion
 
     [MenuItem("Window/Node Based Editor")]
     private static void OpenWindow()
@@ -26,20 +34,26 @@ public class NodeBasedEditor : EditorWindow
     private void OnEnable()
     {
         eventArgs = new NodeEditorEventArgs(this);
+        nodeConnector = new NodeConnector();
+        CreateContextMenu();
     }
 
     private void OnGUI()
     {
+        lastMousePosition = Event.current.mousePosition;
         DrawGrid(20, 0.2f, Color.gray);
         DrawGrid(100, 0.4f, Color.gray);
 
         DrawNodes();
-        DrawConnectionLine(Event.current);
 
         ProcessNodeEvents(Event.current);
+        nodeConnector.ProcessEvents(Event.current);
         ProcessEvents(Event.current);
 
-        if (GUI.changed) Repaint();
+        if (GUI.changed)
+        {
+            Repaint();
+        }
     }
 
     private void DrawGrid(float gridSpacing, float gridOpacity, Color gridColor)
@@ -85,23 +99,21 @@ public class NodeBasedEditor : EditorWindow
         switch (e.type)
         {
             case EventType.MouseDown:
-                if (e.button == 0)
                 {
-                    ClearConnectionSelection();
+                    if (e.button == 1)
+                    {
+                        contextMenu.ShowAsContext();
+                    }
+                    break;
                 }
-
-                if (e.button == 1)
-                {
-                    ProcessContextMenu(e.mousePosition);
-                }
-                break;
-
             case EventType.MouseDrag:
-                if (e.button == 0)
                 {
-                    OnDrag(e.delta);
+                    if (e.button == 0)
+                    {
+                        OnDrag(e.delta);
+                    }
+                    break;
                 }
-                break;
         }
     }
 
@@ -121,31 +133,6 @@ public class NodeBasedEditor : EditorWindow
         }
     }
 
-    private void DrawConnectionLine(Event e)
-    {
-        if (selectedInNode != null && selectedOutNode == null)
-        {
-            Handles.DrawBezier(
-                selectedInNode.Rect.center,
-                e.mousePosition,
-                selectedInNode.Rect.center,
-                e.mousePosition,
-                Color.white,
-                null,
-                2f
-            );
-
-            GUI.changed = true;
-        }
-    }
-
-    private void ProcessContextMenu(Vector2 mousePosition)
-    {
-        GenericMenu genericMenu = new GenericMenu();
-        genericMenu.AddItem(new GUIContent("Add node"), false, () => OnClickAddNode(mousePosition));
-        genericMenu.ShowAsContext();
-    }
-
     private void OnDrag(Vector2 delta)
     {
         drag = delta;
@@ -161,57 +148,30 @@ public class NodeBasedEditor : EditorWindow
         GUI.changed = true;
     }
 
-    private void OnClickAddNode(Vector2 mousePosition)
+    private void AddNodeClicked()
     {
-        if (nodes == null)
-        {
-            nodes = new List<Node>();
-        }
-
-        nodes.Add(new Node(mousePosition, 200, 50, ConnectNodeClicked, RemoveNodeClicked));
+        CreateNode(lastMousePosition);
     }
 
-    private void ConnectNodeClicked(Node clickedNode)
+    private void CreateNode(Vector2 position)
     {
-        IsPerformingConnection = true;
+        var node = new Node(position, 200, 50);
 
-        if (selectedInNode == null)
-        {
-            selectedInNode = clickedNode;
-        }
-        else
-        {
-            selectedOutNode = clickedNode;
-        }
-
-        if (selectedOutNode != null)
-        {
-            if (selectedOutNode != selectedInNode)
-            {
-                CreateConnection();
-                ClearConnectionSelection();
-            }
-            else
-            {
-                ClearConnectionSelection();
-            }
-        }
+        nodes.Add(node);
+        node.OnConnectClicked += nodeConnector.ConnectNodeClicked;
+        node.OnRemoveNode += NodeRemoved;
     }
 
-    private void RemoveNodeClicked(Node node)
+    private void NodeRemoved(Node node)
     {
         nodes.Remove(node);
+        node.OnConnectClicked -= nodeConnector.ConnectNodeClicked;
+        node.OnRemoveNode -= NodeRemoved;
     }
 
-    private void CreateConnection()
+    private void CreateContextMenu()
     {
-        new Connection(selectedInNode, selectedOutNode);
-    }
-
-    private void ClearConnectionSelection()
-    {
-        selectedInNode = null;
-        selectedOutNode = null;
-        IsPerformingConnection = false;
+        contextMenu = new GenericMenu();
+        contextMenu.AddItem(new GUIContent("Add node"), false, AddNodeClicked);
     }
 }

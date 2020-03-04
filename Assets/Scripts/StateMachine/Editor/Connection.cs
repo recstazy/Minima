@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class Connection
 {
+    #region Properties
+
     public Node InNode { get; private set; }
     public Node OutNode { get; private set; }
+
+    #endregion
 
     public Connection(Node inNode, Node outNode)
     {
@@ -19,22 +23,13 @@ public class Connection
         var inPoint = InNode.GetClosestPointOnRect(OutNode.Rect.center);
         var outPoint = OutNode.GetClosestPointOnRect(InNode.Rect.center);
 
-        Handles.DrawBezier(
-                inPoint,
-                outPoint,
-                inPoint,
-                outPoint,
-                Color.white,
-                null,
-                2f
-            );
+        Handles.DrawBezier(inPoint, outPoint, inPoint, outPoint, Color.white, null, 2f);
+        DrawArrowCap(inPoint, outPoint, 10f);
 
         if (Handles.Button((InNode.Rect.center + OutNode.Rect.center) * 0.5f, Quaternion.identity, 4, 8, Handles.RectangleHandleCap))
         {
             RemoveSelf();
         }
-
-        DrawArrowCap(inPoint, outPoint, 10f);
     }
 
     public void AddSelf()

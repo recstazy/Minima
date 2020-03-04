@@ -5,8 +5,10 @@ using UnityEngine;
 
 public class Node
 {
-    public Action<Node> OnRemoveNode;
-    public Action<Node> OnConnectClicked;
+    public event Action<Node> OnRemoveNode;
+    public event Action<Node> OnConnectClicked;
+
+    #region Fields
 
     private Rect rect;
     private bool isDragged;
@@ -15,6 +17,10 @@ public class Node
     private GUIStyle currentStyle;
     private GUIStyle defaultStyle;
     private GUIStyle selectedStyle;
+
+    #endregion
+
+    #region Properties
 
     public Rect Rect { get => rect; }
     public string Title { get; private set; }
@@ -32,12 +38,12 @@ public class Node
         } 
     }
 
-    public Node(Vector2 position, float width, float height, Action<Node> connectionClicked, Action<Node> OnClickRemoveNode)
+    #endregion
+
+    public Node(Vector2 position, float width, float height)
     {
         rect = new Rect(position.x, position.y, width, height);
         CreateStyle();
-        OnRemoveNode = OnClickRemoveNode;
-        OnConnectClicked = connectionClicked;
     }
 
     public void Drag(Vector2 delta)
@@ -49,6 +55,7 @@ public class Node
     {
         GUI.Box(Rect, Title, currentStyle);
 
+        // Draw only connections where this node is InNode
         foreach (var c in Connections.Where(c => c.InNode == this))
         {
             c.Draw();
@@ -72,45 +79,7 @@ public class Node
 
     public Vector2 GetClosestPointOnRect(Vector2 origin)
     {
-        var a = origin;
-        var b = Rect.center;
-        var slope = (a.y - b.y) / (a.x - b.x);
-
-        float x;
-        float y;
-
-        var yOffset = slope * Rect.width / 2f;
-
-        if (yOffset.InBounds(-Rect.height / 2f, Rect.height / 2f))
-        {
-            if (a.x > b.x)
-            {
-                x = b.x + Rect.width / 2f;
-                y = b.y + yOffset;
-            }
-            else
-            {
-                x = b.x - Rect.width / 2f;
-                y = b.y - yOffset;
-            }
-        }
-        else
-        {
-            var xOffset = (Rect.height / 2f) / slope;
-
-            if (a.y > b.y)
-            {
-                x = b.x + xOffset;
-                y = b.y + Rect.height / 2f;
-            }
-            else
-            {
-                x = b.x - xOffset;
-                y = b.y - Rect.height / 2f;
-            }
-        }
-
-        return new Vector2(x, y);
+        return Helpers.GetClosestPointOnRect(origin, Rect);
     }
 
     public bool ProcessEvents(Event e, NodeEditorEventArgs eventArgs)
@@ -119,41 +88,7 @@ public class Node
         {
             case EventType.MouseDown:
                 {
-                    if (e.button == 0)
-                    {
-                        if (Rect.Contains(e.mousePosition))
-                        {
-                            isDragged = true;
-                            SetSelected(true);
-
-                            if (eventArgs.IsPerformingConnection)
-                            {
-                                ConnectNodeClicked();
-                            }
-                        }
-                        else
-                        {
-                            SetSelected(false);
-                        }
-                    }
-
-                    if (e.button == 1)
-                    {
-                        if (!Rect.Contains(e.mousePosition))
-                        {
-                            SetSelected(false);
-                        }
-                        else
-                        {
-                            if (!isSelected)
-                            {
-                                SetSelected(true);
-                            }
-
-                            ProcessContextMenu();
-                            e.Use();
-                        }
-                    }
+                    ProcessMouseDown(e, eventArgs);
                     break;
                 }
             case EventType.MouseUp:
@@ -173,19 +108,66 @@ public class Node
                 }
             case EventType.KeyUp:
                 {
-                    if (isSelected && !eventArgs.IsPerformingConnection)
-                    {
-                        if (e.keyCode == KeyCode.C)
-                        {
-                            ConnectNodeClicked();
-                            GUI.changed = true;
-                        }
-                    }
+                    ProcessKeyUp(e, eventArgs);
                     break;
                 }
         }
 
         return false;
+    }
+
+    private void ProcessMouseDown(Event e, NodeEditorEventArgs eventArgs)
+    {
+        if (e.button == 0)
+        {
+            if (Rect.Contains(e.mousePosition))
+            {
+                isDragged = true;
+                SetSelected(true);
+
+                if (eventArgs.IsPerformingConnection)
+                {
+                    ConnectNodeClicked();
+                }
+            }
+            else
+            {
+                SetSelected(false);
+            }
+        }
+        else if (e.button == 1)
+        {
+            if (!Rect.Contains(e.mousePosition))
+            {
+                SetSelected(false);
+            }
+            else
+            {
+                if (!isSelected)
+                {
+                    SetSelected(true);
+                }
+
+                ProcessContextMenu();
+                e.Use();
+            }
+        }
+    }
+
+    private void ProcessKeyUp(Event e, NodeEditorEventArgs eventArgs)
+    {
+        if (isSelected && !eventArgs.IsPerformingConnection)
+        {
+            if (e.keyCode == KeyCode.C)
+            {
+                ConnectNodeClicked();
+                GUI.changed = true;
+            }
+            if (e.keyCode == KeyCode.Delete)
+            {
+                RemoveSelf();
+            }
+        }
     }
 
     private void SetSelected(bool isSelected)
@@ -220,6 +202,7 @@ public class Node
         }
 
         OnRemoveNode?.Invoke(this);
+        GUI.changed = true;
     }
 
     private void ConnectNodeClicked()
