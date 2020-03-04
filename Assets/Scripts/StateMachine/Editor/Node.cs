@@ -10,10 +10,10 @@ public class Node
 
     #region Fields
 
-    private Rect rect;
+    protected Rect rect;
+    protected bool isSelected;
     private bool isDragged;
-    private bool isSelected;
-
+    
     private GUIStyle currentStyle;
     private GUIStyle defaultStyle;
     private GUIStyle selectedStyle;
@@ -51,7 +51,7 @@ public class Node
         rect.position += delta;
     }
 
-    public void Draw()
+    public virtual void Draw()
     {
         GUI.Box(Rect, Title, currentStyle);
 

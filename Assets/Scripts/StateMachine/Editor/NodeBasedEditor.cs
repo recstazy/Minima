@@ -41,6 +41,7 @@ public class NodeBasedEditor : EditorWindow
     private void OnGUI()
     {
         lastMousePosition = Event.current.mousePosition;
+
         DrawGrid(20, 0.2f, Color.gray);
         DrawGrid(100, 0.4f, Color.gray);
 
@@ -155,7 +156,7 @@ public class NodeBasedEditor : EditorWindow
 
     private void CreateNode(Vector2 position)
     {
-        var node = new Node(position, 200, 50);
+        var node = new StateNode(position, 200, 50);
 
         nodes.Add(node);
         node.OnConnectClicked += nodeConnector.ConnectNodeClicked;
