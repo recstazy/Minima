@@ -5,14 +5,19 @@ using UnityEngine;
 
 public class Node
 {
-    public Rect rect;
-    public string title;
-    public bool isDragged;
-    public bool isSelected;
+    public Action<Node> OnRemoveNode;
+    public Action<Node> OnConnectClicked;
 
-    public GUIStyle style;
-    public GUIStyle defaultNodeStyle;
-    public GUIStyle selectedNodeStyle;
+    private Rect rect;
+    private bool isDragged;
+    private bool isSelected;
+
+    private GUIStyle currentStyle;
+    private GUIStyle defaultStyle;
+    private GUIStyle selectedStyle;
+
+    public Rect Rect { get => rect; }
+    public string Title { get; private set; }
 
     public Connection[] Connections { get; private set; } = new Connection[0];
 
@@ -27,15 +32,10 @@ public class Node
         } 
     }
 
-    public Action<Node> OnRemoveNode;
-    public Action<Node> OnConnectClicked;
-
-    public Node(Vector2 position, float width, float height, GUIStyle nodeStyle, GUIStyle selectedStyle, GUIStyle inPointStyle, GUIStyle outPointStyle, Action<Node> connectionClicked, Action<Node> OnClickRemoveNode)
+    public Node(Vector2 position, float width, float height, Action<Node> connectionClicked, Action<Node> OnClickRemoveNode)
     {
         rect = new Rect(position.x, position.y, width, height);
-        style = nodeStyle;
-        defaultNodeStyle = nodeStyle;
-        selectedNodeStyle = selectedStyle;
+        CreateStyle();
         OnRemoveNode = OnClickRemoveNode;
         OnConnectClicked = connectionClicked;
     }
@@ -47,7 +47,7 @@ public class Node
 
     public void Draw()
     {
-        GUI.Box(rect, title, style);
+        GUI.Box(Rect, Title, currentStyle);
 
         foreach (var c in Connections.Where(c => c.InNode == this))
         {
@@ -73,40 +73,40 @@ public class Node
     public Vector2 GetClosestPointOnRect(Vector2 origin)
     {
         var a = origin;
-        var b = rect.center;
+        var b = Rect.center;
         var slope = (a.y - b.y) / (a.x - b.x);
 
         float x;
         float y;
 
-        var yOffset = slope * rect.width / 2f;
+        var yOffset = slope * Rect.width / 2f;
 
-        if (yOffset.InBounds(-rect.height / 2f, rect.height / 2f))
+        if (yOffset.InBounds(-Rect.height / 2f, Rect.height / 2f))
         {
             if (a.x > b.x)
             {
-                x = b.x + rect.width / 2f;
+                x = b.x + Rect.width / 2f;
                 y = b.y + yOffset;
             }
             else
             {
-                x = b.x - rect.width / 2f;
+                x = b.x - Rect.width / 2f;
                 y = b.y - yOffset;
             }
         }
         else
         {
-            var xOffset = (rect.height / 2f) / slope;
+            var xOffset = (Rect.height / 2f) / slope;
 
             if (a.y > b.y)
             {
                 x = b.x + xOffset;
-                y = b.y + rect.height / 2f;
+                y = b.y + Rect.height / 2f;
             }
             else
             {
                 x = b.x - xOffset;
-                y = b.y - rect.height / 2f;
+                y = b.y - Rect.height / 2f;
             }
         }
 
@@ -121,7 +121,7 @@ public class Node
                 {
                     if (e.button == 0)
                     {
-                        if (rect.Contains(e.mousePosition))
+                        if (Rect.Contains(e.mousePosition))
                         {
                             isDragged = true;
                             SetSelected(true);
@@ -139,7 +139,7 @@ public class Node
 
                     if (e.button == 1)
                     {
-                        if (!rect.Contains(e.mousePosition))
+                        if (!Rect.Contains(e.mousePosition))
                         {
                             SetSelected(false);
                         }
@@ -194,11 +194,11 @@ public class Node
 
         if (isSelected)
         {
-            style = selectedNodeStyle;
+            currentStyle = selectedStyle;
         }
         else
         {
-            style = defaultNodeStyle;
+            currentStyle = defaultStyle;
         }
 
         GUI.changed = true;
@@ -207,18 +207,36 @@ public class Node
     private void ProcessContextMenu()
     {
         GenericMenu genericMenu = new GenericMenu();
-        genericMenu.AddItem(new GUIContent("Remove node"), false, OnClickRemoveNode);
+        genericMenu.AddItem(new GUIContent("Remove node"), false, RemoveSelf);
         genericMenu.AddItem(new GUIContent("Connect"), false, ConnectNodeClicked);
         genericMenu.ShowAsContext();
     }
 
-    private void OnClickRemoveNode()
+    private void RemoveSelf()
     {
+        foreach (var c in Connections)
+        {
+            c.RemoveSelf();
+        }
+
         OnRemoveNode?.Invoke(this);
     }
 
     private void ConnectNodeClicked()
     {
         OnConnectClicked?.Invoke(this);
+    }
+
+    private void CreateStyle()
+    {
+        defaultStyle = new GUIStyle();
+        defaultStyle.normal.background = EditorGUIUtility.Load("builtin skins/darkskin/images/node1.png") as Texture2D;
+        defaultStyle.border = new RectOffset(12, 12, 12, 12);
+
+        selectedStyle = new GUIStyle();
+        selectedStyle.normal.background = EditorGUIUtility.Load("builtin skins/darkskin/images/node1 on.png") as Texture2D;
+        selectedStyle.border = new RectOffset(12, 12, 12, 12);
+
+        currentStyle = defaultStyle;
     }
 }

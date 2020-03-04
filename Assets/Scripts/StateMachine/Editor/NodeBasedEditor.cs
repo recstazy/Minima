@@ -6,12 +6,6 @@ using System.Linq;
 public class NodeBasedEditor : EditorWindow
 {
     private List<Node> nodes;
-    private List<Connection> connections;
-
-    private GUIStyle nodeStyle;
-    private GUIStyle selectedNodeStyle;
-    private GUIStyle inPointStyle;
-    private GUIStyle outPointStyle;
 
     private Node selectedInNode;
     private Node selectedOutNode;
@@ -32,14 +26,6 @@ public class NodeBasedEditor : EditorWindow
     private void OnEnable()
     {
         eventArgs = new NodeEditorEventArgs(this);
-
-        nodeStyle = new GUIStyle();
-        nodeStyle.normal.background = EditorGUIUtility.Load("builtin skins/darkskin/images/node1.png") as Texture2D;
-        nodeStyle.border = new RectOffset(12, 12, 12, 12);
-
-        selectedNodeStyle = new GUIStyle();
-        selectedNodeStyle.normal.background = EditorGUIUtility.Load("builtin skins/darkskin/images/node1 on.png") as Texture2D;
-        selectedNodeStyle.border = new RectOffset(12, 12, 12, 12);
     }
 
     private void OnGUI()
@@ -48,7 +34,6 @@ public class NodeBasedEditor : EditorWindow
         DrawGrid(100, 0.4f, Color.gray);
 
         DrawNodes();
-
         DrawConnectionLine(Event.current);
 
         ProcessNodeEvents(Event.current);
@@ -141,9 +126,9 @@ public class NodeBasedEditor : EditorWindow
         if (selectedInNode != null && selectedOutNode == null)
         {
             Handles.DrawBezier(
-                selectedInNode.rect.center,
+                selectedInNode.Rect.center,
                 e.mousePosition,
-                selectedInNode.rect.center,
+                selectedInNode.Rect.center,
                 e.mousePosition,
                 Color.white,
                 null,
@@ -183,7 +168,7 @@ public class NodeBasedEditor : EditorWindow
             nodes = new List<Node>();
         }
 
-        nodes.Add(new Node(mousePosition, 200, 50, nodeStyle, selectedNodeStyle, inPointStyle, outPointStyle, ConnectNodeClicked, RemoveNodeClicked));
+        nodes.Add(new Node(mousePosition, 200, 50, ConnectNodeClicked, RemoveNodeClicked));
     }
 
     private void ConnectNodeClicked(Node clickedNode)
@@ -215,41 +200,12 @@ public class NodeBasedEditor : EditorWindow
 
     private void RemoveNodeClicked(Node node)
     {
-        if (connections != null)
-        {
-            List<Connection> connectionsToRemove = new List<Connection>();
-
-            var areaIntersection = connections
-                .Select(c => c.InNode)
-                .Concat(connections.Select(c => c.OutNode))
-                .Where(n => n == node)
-                .ToList();
-
-            connectionsToRemove = connections.
-                Where(c => areaIntersection.Contains(c.InNode) || areaIntersection.Contains(c.OutNode))
-                .ToList();
-
-            for (int i = 0; i < connectionsToRemove.Count; i++)
-            {
-                var connection = connectionsToRemove[i];
-                connection.RemoveSelf();
-                connections.Remove(connection);
-            }
-
-            connectionsToRemove = null;
-        }
-
         nodes.Remove(node);
     }
 
     private void CreateConnection()
     {
-        if (connections == null)
-        {
-            connections = new List<Connection>();
-        }
-
-        connections.Add(new Connection(selectedInNode, selectedOutNode));
+        new Connection(selectedInNode, selectedOutNode);
     }
 
     private void ClearConnectionSelection()

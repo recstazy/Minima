@@ -16,8 +16,8 @@ public class Connection
 
     public void Draw()
     {
-        var inPoint = InNode.GetClosestPointOnRect(OutNode.rect.center);
-        var outPoint = OutNode.GetClosestPointOnRect(InNode.rect.center);
+        var inPoint = InNode.GetClosestPointOnRect(OutNode.Rect.center);
+        var outPoint = OutNode.GetClosestPointOnRect(InNode.Rect.center);
 
         Handles.DrawBezier(
                 inPoint,
@@ -29,7 +29,7 @@ public class Connection
                 2f
             );
 
-        if (Handles.Button((InNode.rect.center + OutNode.rect.center) * 0.5f, Quaternion.identity, 4, 8, Handles.RectangleHandleCap))
+        if (Handles.Button((InNode.Rect.center + OutNode.Rect.center) * 0.5f, Quaternion.identity, 4, 8, Handles.RectangleHandleCap))
         {
             RemoveSelf();
         }
