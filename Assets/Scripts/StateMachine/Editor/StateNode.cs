@@ -7,7 +7,7 @@ public class StateNode : Node
 {
     #region Fields
 
-    private State state;
+    private NodeContent content;
 
     #endregion
 
@@ -15,13 +15,14 @@ public class StateNode : Node
 
     #endregion
 
-    public StateNode(Vector2 position, float width, float height) : base(position, width, height)
+    public StateNode(Vector2 position) : base(position)
     {
-
+        content = new NodeContent(this);
     }
 
     public override void Draw()
     {
         base.Draw();
+        content.Draw();
     }
 }

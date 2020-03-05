@@ -3,16 +3,19 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-public class Node
+public class Node : IGraphObject
 {
     public event Action<Node> OnRemoveNode;
     public event Action<Node> OnConnectClicked;
 
     #region Fields
 
+    protected Vector2 defaultSize = new Vector2(200f, 50f);
     protected Rect rect;
+    protected float contentSizeMultiplier = 1f;
     protected bool isSelected;
     private bool isDragged;
+    private IGraphObject content;
     
     private GUIStyle currentStyle;
     private GUIStyle defaultStyle;
@@ -24,6 +27,7 @@ public class Node
 
     public Rect Rect { get => rect; }
     public string Title { get; private set; }
+    public IGraphObject Content { get => content; }
 
     public Connection[] Connections { get; private set; } = new Connection[0];
 
@@ -40,9 +44,9 @@ public class Node
 
     #endregion
 
-    public Node(Vector2 position, float width, float height)
+    public Node(Vector2 position)
     {
-        rect = new Rect(position.x, position.y, width, height);
+        rect = new Rect(position.x, position.y, defaultSize.x, defaultSize.y);
         CreateStyle();
     }
 
@@ -53,12 +57,34 @@ public class Node
 
     public virtual void Draw()
     {
+        UpdateRectToFitContent();
         GUI.Box(Rect, Title, currentStyle);
+        DrawContent();
+        DrawConnections();
+    }
 
+    private void DrawContent()
+    {
+        if (content != null)
+        {
+            content.Draw();
+        }
+    }
+
+    private void DrawConnections()
+    {
         // Draw only connections where this node is InNode
         foreach (var c in Connections.Where(c => c.InNode == this))
         {
             c.Draw();
+        }
+    }
+
+    public void AddContent(IGraphObject content)
+    {
+        if (content != null)
+        {
+            this.content = content;
         }
     }
 
@@ -212,14 +238,26 @@ public class Node
 
     private void CreateStyle()
     {
-        defaultStyle = new GUIStyle();
-        defaultStyle.normal.background = EditorGUIUtility.Load("builtin skins/darkskin/images/node1.png") as Texture2D;
-        defaultStyle.border = new RectOffset(12, 12, 12, 12);
+        defaultStyle = (GUIStyle)"flow node 0";
+        //defaultStyle.normal.background = EditorGUIUtility.Load("builtin skins/darkskin/images/node1.png") as Texture2D;
+        //defaultStyle.border = new RectOffset(12, 12, 12, 12);
 
-        selectedStyle = new GUIStyle();
-        selectedStyle.normal.background = EditorGUIUtility.Load("builtin skins/darkskin/images/node1 on.png") as Texture2D;
-        selectedStyle.border = new RectOffset(12, 12, 12, 12);
+        selectedStyle = (GUIStyle)"flow node 0 on";
+        //selectedStyle.normal.background = EditorGUIUtility.Load("builtin skins/darkskin/images/node1 on.png") as Texture2D;
+        //selectedStyle.border = new RectOffset(12, 12, 12, 12);
 
         currentStyle = defaultStyle;
+    }
+
+    private void UpdateRectToFitContent()
+    {
+        if (content != null)
+        {
+            rect.size = content.Rect.size * contentSizeMultiplier;
+        }
+        else
+        {
+            rect.size = defaultSize;
+        }
     }
 }
