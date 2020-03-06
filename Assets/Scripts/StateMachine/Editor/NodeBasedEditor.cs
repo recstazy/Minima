@@ -157,7 +157,7 @@ public class NodeBasedEditor : EditorWindow
     private void CreateNode(Vector2 position)
     {
         var node = new Node(position);
-        //node.AddContent(new NodeContent(node));
+        node.AddContent(new NodeContent(node));
 
         nodes.Add(node);
         node.OnConnectClicked += nodeConnector.ConnectNodeClicked;

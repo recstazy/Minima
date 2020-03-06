@@ -16,6 +16,8 @@ public class NodeContent : IGraphObject
 
     #region Properties
 
+    public Vector2 DefaultSize { get; } = new Vector2(200f, 50f);
+
     public Rect Rect
     {
         get
@@ -44,7 +46,7 @@ public class NodeContent : IGraphObject
     private void UpdateRect()
     {
         rect.center = parent.Rect.center;
-        rect.size = new Vector2(200f, 100f);
+        rect.size = new Vector2(200f, 50f);
     }
 
     private void CreateStyle()

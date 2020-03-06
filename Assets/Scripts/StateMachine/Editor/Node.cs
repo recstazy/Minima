@@ -10,7 +10,6 @@ public class Node : IGraphObject
 
     #region Fields
 
-    protected Vector2 defaultSize = new Vector2(200f, 50f);
     protected Rect rect;
     protected float contentSizeMultiplier = 1f;
     protected bool isSelected;
@@ -26,6 +25,7 @@ public class Node : IGraphObject
     #region Properties
 
     public Rect Rect { get => rect; }
+    public Vector2 DefaultSize { get; } = new Vector2(200f, 50f);
     public string Title { get; private set; }
     public IGraphObject Content { get => content; }
 
@@ -46,7 +46,7 @@ public class Node : IGraphObject
 
     public Node(Vector2 position)
     {
-        rect = new Rect(position.x, position.y, defaultSize.x, defaultSize.y);
+        rect = new Rect(position.x, position.y, DefaultSize.x, DefaultSize.y);
         CreateStyle();
     }
 
@@ -239,13 +239,7 @@ public class Node : IGraphObject
     private void CreateStyle()
     {
         defaultStyle = (GUIStyle)"flow node 0";
-        //defaultStyle.normal.background = EditorGUIUtility.Load("builtin skins/darkskin/images/node1.png") as Texture2D;
-        //defaultStyle.border = new RectOffset(12, 12, 12, 12);
-
         selectedStyle = (GUIStyle)"flow node 0 on";
-        //selectedStyle.normal.background = EditorGUIUtility.Load("builtin skins/darkskin/images/node1 on.png") as Texture2D;
-        //selectedStyle.border = new RectOffset(12, 12, 12, 12);
-
         currentStyle = defaultStyle;
     }
 
@@ -257,7 +251,7 @@ public class Node : IGraphObject
         }
         else
         {
-            rect.size = defaultSize;
+            rect.size = DefaultSize;
         }
     }
 }
