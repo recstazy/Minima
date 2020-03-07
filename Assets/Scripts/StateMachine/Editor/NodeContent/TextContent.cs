@@ -21,17 +21,18 @@ public class TextContent : NodeContent
     public TextContent(IGraphObject parent, string text) : base(parent)
     {
         Text = text;
+        DefaultSize = new Vector2(200f, defaultFontSize * 2);
     }
 
     public override void Draw()
     {
+        UpdateRect();
         GUI.Label(rect, Text, style);
+        GUI.changed = true;
     }
 
-    protected override void UpdateRect()
+    protected override void UpdateRectSize()
     {
-        rect.center = parent.Rect.center;
-
         if (Text.Length > 0)
         {
             int width = 0;
@@ -69,6 +70,7 @@ public class TextContent : NodeContent
         style.fontSize = defaultFontSize;
         style.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
         style.clipping = TextClipping.Overflow;
-        style.alignment = TextAnchor.MiddleCenter;
+        style.alignment = TextAnchor.MiddleLeft;
+        style.padding = new RectOffset(10, 10, 10, 10);
     }
 }

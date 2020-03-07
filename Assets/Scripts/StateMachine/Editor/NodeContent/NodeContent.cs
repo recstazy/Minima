@@ -15,13 +15,13 @@ public class NodeContent : IGraphObject
 
     #region Properties
 
-    public Vector2 DefaultSize { get; } = new Vector2(200f, 50f);
+    public Vector2 DefaultSize { get; set; } = new Vector2(200f, 50f);
+    public bool UseParentRectCenter { get; set; } = true;
 
     public Rect Rect
     {
         get
         {
-            UpdateRect();
             return rect;
         }
     }
@@ -38,19 +38,43 @@ public class NodeContent : IGraphObject
 
     public virtual void Draw()
     {
+        UpdateRect();
         GUI.Box(Rect, "", style);
+    }
+
+    public void SetRectPosition(Vector2 position)
+    {
+        if (!UseParentRectCenter)
+        {
+            rect.position = position;
+        }
     }
 
     protected virtual void UpdateRect()
     {
-        rect.center = parent.Rect.center;
+        UpdateRectCenter();
+        UpdateRectSize();
+    }
+
+    protected virtual void UpdateRectCenter()
+    {
+        if (UseParentRectCenter)
+        {
+            rect.center = parent.Rect.center;
+        }
+    }
+
+    protected virtual void UpdateRectSize()
+    {
         rect.size = DefaultSize;
     }
 
     protected virtual void CreateStyle()
     {
-        style = new GUIStyle();
-        style.normal.background = EditorGUIUtility.Load("builtin skins/darkskin/images/node1.png") as Texture2D;
-        style.border = new RectOffset(12, 12, 12, 12);
+        //style = new GUIStyle();
+        //style.normal.background = EditorGUIUtility.Load("builtin skins/darkskin/images/node1.png") as Texture2D;
+        //style.border = new RectOffset(12, 12, 12, 12);
+
+        style = (GUIStyle)"flow node 0";
     }
 }

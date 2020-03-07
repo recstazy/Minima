@@ -11,7 +11,7 @@ public class Node : IGraphObject
     #region Fields
 
     protected Rect rect;
-    protected float contentSizeMultiplier = 1f;
+    protected float contentSizeMultiplier = 1.1f;
     protected bool isSelected;
     private bool isDragged;
     private IGraphObject content;
@@ -28,6 +28,8 @@ public class Node : IGraphObject
     public Vector2 DefaultSize { get; } = new Vector2(200f, 50f);
     public string Title { get; private set; }
     public IGraphObject Content { get => content; }
+    public bool UseParentRectCenter { get; set; } = false;
+
 
     public Connection[] Connections { get; private set; } = new Connection[0];
 
@@ -253,5 +255,9 @@ public class Node : IGraphObject
         {
             rect.size = DefaultSize;
         }
+    }
+
+    public void SetRectPosition(Vector2 position)
+    {
     }
 }
