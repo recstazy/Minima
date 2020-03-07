@@ -71,10 +71,6 @@ public class NodeContent : IGraphObject
 
     protected virtual void CreateStyle()
     {
-        //style = new GUIStyle();
-        //style.normal.background = EditorGUIUtility.Load("builtin skins/darkskin/images/node1.png") as Texture2D;
-        //style.border = new RectOffset(12, 12, 12, 12);
-
         style = (GUIStyle)"flow node 0";
     }
 }

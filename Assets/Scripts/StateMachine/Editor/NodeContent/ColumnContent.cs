@@ -4,7 +4,7 @@ using System;
 using UnityEngine;
 using System.Linq;
 
-public class ColoumnContent : NodeContent
+public class ColumnContent : NodeContent
 {
     #region Fields
 
@@ -16,7 +16,7 @@ public class ColoumnContent : NodeContent
     
     #endregion
 
-    public ColoumnContent(IGraphObject parent) : base(parent)
+    public ColumnContent(IGraphObject parent) : base(parent)
     {
 
     }

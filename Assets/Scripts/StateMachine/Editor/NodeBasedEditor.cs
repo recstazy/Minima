@@ -157,6 +157,9 @@ public class NodeBasedEditor : EditorWindow
     private void CreateNode(Vector2 position)
     {
         var node = new Node(position);
+        var taskView = new TaskView(node, typeof(Minima.StateMachine.ExampleTask));
+        node.AddContent(taskView);
+
         nodes.Add(node);
         node.OnConnectClicked += nodeConnector.ConnectNodeClicked;
         node.OnRemoveNode += NodeRemoved;

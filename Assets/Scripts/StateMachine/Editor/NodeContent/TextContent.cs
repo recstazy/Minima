@@ -21,7 +21,7 @@ public class TextContent : NodeContent
     public TextContent(IGraphObject parent, string text) : base(parent)
     {
         Text = text;
-        DefaultSize = new Vector2(200f, defaultFontSize * 2);
+        DefaultSize = new Vector2(200f, defaultFontSize * 1.5f);
     }
 
     public override void Draw()
