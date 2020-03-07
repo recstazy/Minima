@@ -7,10 +7,9 @@ public class NodeContent : IGraphObject
 {
     #region Fields
 
-    private Rect rect;
-    private IGraphObject parent;
-    private string text = "text";
-    private GUIStyle style;
+    protected Rect rect;
+    protected IGraphObject parent;
+    protected GUIStyle style;
 
     #endregion
 
@@ -37,19 +36,18 @@ public class NodeContent : IGraphObject
         UpdateRect();
     }
 
-    public void Draw()
+    public virtual void Draw()
     {
         GUI.Box(Rect, "", style);
-        //GUI.Label(Rect, new GUIContent(text), style);
     }
 
-    private void UpdateRect()
+    protected virtual void UpdateRect()
     {
         rect.center = parent.Rect.center;
-        rect.size = new Vector2(200f, 50f);
+        rect.size = DefaultSize;
     }
 
-    private void CreateStyle()
+    protected virtual void CreateStyle()
     {
         style = new GUIStyle();
         style.normal.background = EditorGUIUtility.Load("builtin skins/darkskin/images/node1.png") as Texture2D;
