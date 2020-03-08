@@ -17,6 +17,7 @@ namespace Minima.StateMachine.Editor
         private Vector2 lastMousePosition;
         private Vector2 offset;
         private Vector2 drag;
+        private bool isDragging = false;
 
         #endregion
 
@@ -52,6 +53,7 @@ namespace Minima.StateMachine.Editor
             ProcessNodeEvents(Event.current);
             nodeConnector.ProcessEvents(Event.current);
             ProcessEvents(Event.current);
+
 
             if (GUI.changed)
             {
@@ -101,19 +103,31 @@ namespace Minima.StateMachine.Editor
 
             switch (e.type)
             {
-                case EventType.MouseDown:
+                case EventType.MouseDrag:
                     {
                         if (e.button == 1)
                         {
-                            contextMenu.ShowAsContext();
+                            if (!isDragging)
+                            {
+                                isDragging = true;
+                            }
+                            
+                            OnDrag(e.delta);
                         }
                         break;
                     }
-                case EventType.MouseDrag:
+                case EventType.MouseUp:
                     {
-                        if (e.button == 0)
+                        if (e.button == 1)
                         {
-                            OnDrag(e.delta);
+                            if (isDragging)
+                            {
+                                isDragging = false;
+                            }
+                            else
+                            {
+                                contextMenu.ShowAsContext();
+                            }
                         }
                         break;
                     }
@@ -122,7 +136,7 @@ namespace Minima.StateMachine.Editor
 
         private void ProcessNodeEvents(Event e)
         {
-            if (nodes != null)
+            if (nodes != null && !isDragging)
             {
                 for (int i = nodes.Count - 1; i >= 0; i--)
                 {
