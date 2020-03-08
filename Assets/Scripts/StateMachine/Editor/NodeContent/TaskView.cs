@@ -43,34 +43,9 @@ public class TaskView : ColumnContent
 
         foreach (var f in fields)
         {
-            AddFieldContent(f);
+            var field = new TaskFieldContent(this, f);
+            AddContent(field);
         }
     }
 
-    private void AddFieldContent(FieldInfo fieldInfo)
-    {
-        if (fieldInfo.FieldType == typeof(bool))
-        {
-            var boolean = new BoolFieldContent(this, fieldInfo);
-            AddContent(boolean);
-        }
-        else if (fieldInfo.FieldType == typeof(int))
-        {
-            AddInputField(fieldInfo);
-        }
-        else if (fieldInfo.FieldType == typeof(float))
-        {
-            AddInputField(fieldInfo);
-        }
-        else if (fieldInfo.FieldType == typeof(string))
-        {
-            AddInputField(fieldInfo);
-        }
-    }
-
-    private void AddInputField(FieldInfo fieldInfo)
-    {
-        var inputField = new InputFieldContent(this, fieldInfo);
-        AddContent(inputField);
-    }
 }

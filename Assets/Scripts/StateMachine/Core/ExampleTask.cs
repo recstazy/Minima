@@ -9,7 +9,7 @@ namespace Minima.StateMachine
         #region Fields
 
         [NodeEditable]
-        public bool boolField;
+        public bool boolFieldyeee1;
 
         [NodeEditable]
         public int intField = 10;

@@ -27,12 +27,15 @@ public class TextContent : NodeContent
     public override void Draw()
     {
         UpdateRect();
+        GUI.Box(rect, "", (GUIStyle)"flow node 0");
         GUI.Label(rect, Text, style);
         GUI.changed = true;
     }
 
-    protected override void UpdateRectSize()
+    public override Vector2 GetRawSize()
     {
+        var size = DefaultSize;
+
         if (Text.Length > 0)
         {
             int width = 0;
@@ -44,7 +47,7 @@ public class TextContent : NodeContent
                 width += info.advance;
             }
 
-            var size = new Vector2(width * rectSizeMultiplier, style.fontSize * rectSizeMultiplier);
+            size = new Vector2(width * rectSizeMultiplier, style.fontSize * rectSizeMultiplier);
 
             if (size.x < DefaultSize.x)
             {
@@ -58,10 +61,8 @@ public class TextContent : NodeContent
 
             rect.size = size;
         }
-        else
-        {
-            rect.size = DefaultSize;
-        }
+
+        return size;
     }
 
     protected override void CreateStyle()
@@ -70,7 +71,7 @@ public class TextContent : NodeContent
         style.fontSize = defaultFontSize;
         style.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
         style.clipping = TextClipping.Overflow;
-        style.alignment = TextAnchor.MiddleLeft;
+        style.alignment = TextAnchor.MiddleCenter;
         style.padding = new RectOffset(10, 10, 10, 10);
     }
 }

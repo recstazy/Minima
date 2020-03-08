@@ -17,6 +17,7 @@ public class NodeContent : IGraphObject
 
     public Vector2 DefaultSize { get; set; } = new Vector2(200f, 50f);
     public bool UseParentRectCenter { get; set; } = true;
+    public bool AutoUpdateSize { get; set; } = true;
 
     public Rect Rect
     {
@@ -50,6 +51,19 @@ public class NodeContent : IGraphObject
         }
     }
 
+    public void SetRectSize(Vector2 size)
+    {
+        if (!AutoUpdateSize)
+        {
+            rect.size = size;
+        }
+    }
+
+    public virtual Vector2 GetRawSize()
+    {
+        return rect.size;
+    }
+
     protected virtual void UpdateRect()
     {
         UpdateRectCenter();
@@ -66,7 +80,10 @@ public class NodeContent : IGraphObject
 
     protected virtual void UpdateRectSize()
     {
-        rect.size = DefaultSize;
+        if (AutoUpdateSize)
+        {
+            rect.size = GetRawSize();
+        }
     }
 
     protected virtual void CreateStyle()
