@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-[AttributeUsage(AttributeTargets.Field, Inherited = false, AllowMultiple = true)]
-public class NodeEditable : Attribute
+namespace Minima.StateMachine
 {
-    #region Fields
-    
-    #endregion
+    [AttributeUsage(AttributeTargets.Field, Inherited = false, AllowMultiple = true)]
+    public class NodeEditable : Attribute
+    {
+        #region Fields
 
-    #region Properties
-    
-    #endregion
+        #endregion
+
+        #region Properties
+
+        #endregion
+    }
 }

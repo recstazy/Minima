@@ -3,22 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-public class NodeEditorEventArgs
+namespace Minima.StateMachine
 {
-    #region Fields
-
-    NodeBasedEditor editor;
-
-    #endregion
-
-    #region Properties
-
-    public bool IsPerformingConnection { get => editor.IsPerformingConnection; }
-
-    #endregion
-
-    public NodeEditorEventArgs(NodeBasedEditor editor)
+    public class NodeEditorEventArgs
     {
-        this.editor = editor;
+        #region Fields
+
+        NodeBasedEditor editor;
+
+        #endregion
+
+        #region Properties
+
+        public bool IsPerformingConnection { get => editor.IsPerformingConnection; }
+
+        #endregion
+
+        public NodeEditorEventArgs(NodeBasedEditor editor)
+        {
+            this.editor = editor;
+        }
     }
 }

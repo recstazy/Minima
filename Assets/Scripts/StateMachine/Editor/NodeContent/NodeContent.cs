@@ -3,91 +3,94 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-public class NodeContent : IGraphObject
+namespace Minima.StateMachine
 {
-    #region Fields
-
-    protected Rect rect;
-    protected IGraphObject parent;
-    protected GUIStyle style;
-
-    #endregion
-
-    #region Properties
-
-    public Vector2 DefaultSize { get; set; } = new Vector2(200f, 50f);
-    public bool UseParentRectCenter { get; set; } = true;
-    public bool AutoUpdateSize { get; set; } = true;
-
-    public Rect Rect
+    public class NodeContent : IGraphObject
     {
-        get
+        #region Fields
+
+        protected Rect rect;
+        protected IGraphObject parent;
+        protected GUIStyle style;
+
+        #endregion
+
+        #region Properties
+
+        public Vector2 DefaultSize { get; set; } = new Vector2(200f, 50f);
+        public bool UseParentRectCenter { get; set; } = true;
+        public bool AutoUpdateSize { get; set; } = true;
+
+        public Rect Rect
         {
-            return rect;
+            get
+            {
+                return rect;
+            }
         }
-    }
 
-    #endregion
+        #endregion
 
-    public NodeContent(IGraphObject parent)
-    {
-        this.parent = parent;
-
-        CreateStyle();
-        UpdateRect();
-    }
-
-    public virtual void Draw()
-    {
-        UpdateRect();
-        GUI.Box(Rect, "", style);
-    }
-
-    public void SetRectPosition(Vector2 position)
-    {
-        if (!UseParentRectCenter)
+        public NodeContent(IGraphObject parent)
         {
-            rect.position = position;
-        }
-    }
+            this.parent = parent;
 
-    public void SetRectSize(Vector2 size)
-    {
-        if (!AutoUpdateSize)
+            CreateStyle();
+            UpdateRect();
+        }
+
+        public virtual void Draw()
         {
-            rect.size = size;
+            UpdateRect();
+            GUI.Box(Rect, "", style);
         }
-    }
 
-    public virtual Vector2 GetRawSize()
-    {
-        return rect.size;
-    }
-
-    protected virtual void UpdateRect()
-    {
-        UpdateRectCenter();
-        UpdateRectSize();
-    }
-
-    protected virtual void UpdateRectCenter()
-    {
-        if (UseParentRectCenter)
+        public void SetRectPosition(Vector2 position)
         {
-            rect.center = parent.Rect.center;
+            if (!UseParentRectCenter)
+            {
+                rect.position = position;
+            }
         }
-    }
 
-    protected virtual void UpdateRectSize()
-    {
-        if (AutoUpdateSize)
+        public void SetRectSize(Vector2 size)
         {
-            rect.size = GetRawSize();
+            if (!AutoUpdateSize)
+            {
+                rect.size = size;
+            }
         }
-    }
 
-    protected virtual void CreateStyle()
-    {
-        style = (GUIStyle)"flow node 0";
+        public virtual Vector2 GetRawSize()
+        {
+            return rect.size;
+        }
+
+        protected virtual void UpdateRect()
+        {
+            UpdateRectCenter();
+            UpdateRectSize();
+        }
+
+        protected virtual void UpdateRectCenter()
+        {
+            if (UseParentRectCenter)
+            {
+                rect.center = parent.Rect.center;
+            }
+        }
+
+        protected virtual void UpdateRectSize()
+        {
+            if (AutoUpdateSize)
+            {
+                rect.size = GetRawSize();
+            }
+        }
+
+        protected virtual void CreateStyle()
+        {
+            style = (GUIStyle)"flow node 0";
+        }
     }
 }

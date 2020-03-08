@@ -4,69 +4,72 @@ using System;
 using UnityEngine;
 using System.Linq;
 
-public class ColumnContent : NodeContent
+namespace Minima.StateMachine
 {
-    #region Fields
-
-    private NodeContent[] contents = new NodeContent[0];
-
-    #endregion
-
-    #region Properties
-    
-    #endregion
-
-    public ColumnContent(IGraphObject parent) : base(parent)
+    public class ColumnContent : NodeContent
     {
-    }
+        #region Fields
 
-    public void AddContent(NodeContent content)
-    {
-        contents = contents.ConcatOne(content);
-        content.UseParentRectCenter = false;
-        content.AutoUpdateSize = false;
-    }
+        private NodeContent[] contents = new NodeContent[0];
 
-    public override void Draw()
-    {
-        UpdateRect();
-        base.Draw();
-        DrawContents();
-    }
-        
-    protected override void UpdateRectSize()
-    {
-        if (contents.Length > 0)
+        #endregion
+
+        #region Properties
+
+        #endregion
+
+        public ColumnContent(IGraphObject parent) : base(parent)
         {
-            rect.width = contents.Max(c => c.GetRawSize().x);
+        }
 
-            float height = 0f;
+        public void AddContent(NodeContent content)
+        {
+            contents = contents.ConcatOne(content);
+            content.UseParentRectCenter = false;
+            content.AutoUpdateSize = false;
+        }
 
-            foreach (var c in contents)
+        public override void Draw()
+        {
+            UpdateRect();
+            base.Draw();
+            DrawContents();
+        }
+
+        protected override void UpdateRectSize()
+        {
+            if (contents.Length > 0)
             {
-                height += c.GetRawSize().y;
+                rect.width = contents.Max(c => c.GetRawSize().x);
+
+                float height = 0f;
+
+                foreach (var c in contents)
+                {
+                    height += c.GetRawSize().y;
+                }
+
+                rect.height = height;
             }
-
-            rect.height = height;
+            else
+            {
+                base.UpdateRectSize();
+            }
         }
-        else
-        {
-            base.UpdateRectSize();
-        }
-    }
 
-    private void DrawContents()
-    {
-        float lastOffset = 0f;
-
-        for (int i = 0; i < contents.Length; i++)
+        private void DrawContents()
         {
-            var content = contents[i];
-            var position = Rect.position + new Vector2(0f, lastOffset);
-            content.SetRectPosition(position);
-            content.SetRectSize(new Vector2(Rect.width, content.GetRawSize().y));
-            lastOffset += content.Rect.height;
-            content.Draw();
+            float lastOffset = 0f;
+
+            for (int i = 0; i < contents.Length; i++)
+            {
+                var content = contents[i];
+                var position = Rect.position + new Vector2(0f, lastOffset);
+                content.SetRectPosition(position);
+                content.SetRectSize(new Vector2(Rect.width, content.GetRawSize().y));
+                lastOffset += content.Rect.height;
+                content.Draw();
+            }
         }
     }
 }

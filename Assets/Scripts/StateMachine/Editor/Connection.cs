@@ -2,54 +2,57 @@
 using UnityEditor;
 using UnityEngine;
 
-public class Connection
+namespace Minima.StateMachine
 {
-    #region Properties
-
-    public Node InNode { get; private set; }
-    public Node OutNode { get; private set; }
-
-    #endregion
-
-    public Connection(Node inNode, Node outNode)
+    public class Connection
     {
-        InNode = inNode;
-        OutNode = outNode;
-        AddSelf();
-    }
+        #region Properties
 
-    public void Draw()
-    {
-        var inPoint = InNode.GetClosestPointOnRect(OutNode.Rect.center);
-        var outPoint = OutNode.GetClosestPointOnRect(InNode.Rect.center);
+        public Node InNode { get; private set; }
+        public Node OutNode { get; private set; }
 
-        Handles.DrawBezier(inPoint, outPoint, inPoint, outPoint, Color.white, null, 2f);
-        DrawArrowCap(inPoint, outPoint, 10f);
+        #endregion
 
-        if (Handles.Button((InNode.Rect.center + OutNode.Rect.center) * 0.5f, Quaternion.identity, 4, 8, Handles.RectangleHandleCap))
+        public Connection(Node inNode, Node outNode)
         {
-            RemoveSelf();
+            InNode = inNode;
+            OutNode = outNode;
+            AddSelf();
         }
-    }
 
-    public void AddSelf()
-    {
-        InNode.AddConnection(this);
-        OutNode.AddConnection(this);
-    }
+        public void Draw()
+        {
+            var inPoint = InNode.GetClosestPointOnRect(OutNode.Rect.center);
+            var outPoint = OutNode.GetClosestPointOnRect(InNode.Rect.center);
 
-    public void RemoveSelf()
-    {
-        InNode.RemoveConnection(this);
-        OutNode.RemoveConnection(this);
-    }
+            Handles.DrawBezier(inPoint, outPoint, inPoint, outPoint, Color.white, null, 2f);
+            DrawArrowCap(inPoint, outPoint, 10f);
 
-    private void DrawArrowCap(Vector2 origin, Vector2 target, float size)
-    {
-        Vector2 bisect = (target - origin).normalized * size;
-        Vector2 triangleBotomCenter = target - bisect;
-        Vector2 a = Vector2.Perpendicular(bisect / 2);
+            if (Handles.Button((InNode.Rect.center + OutNode.Rect.center) * 0.5f, Quaternion.identity, 4, 8, Handles.RectangleHandleCap))
+            {
+                RemoveSelf();
+            }
+        }
 
-        Handles.DrawPolyLine(target, triangleBotomCenter + a, triangleBotomCenter - a, target);
+        public void AddSelf()
+        {
+            InNode.AddConnection(this);
+            OutNode.AddConnection(this);
+        }
+
+        public void RemoveSelf()
+        {
+            InNode.RemoveConnection(this);
+            OutNode.RemoveConnection(this);
+        }
+
+        private void DrawArrowCap(Vector2 origin, Vector2 target, float size)
+        {
+            Vector2 bisect = (target - origin).normalized * size;
+            Vector2 triangleBotomCenter = target - bisect;
+            Vector2 a = Vector2.Perpendicular(bisect / 2);
+
+            Handles.DrawPolyLine(target, triangleBotomCenter + a, triangleBotomCenter - a, target);
+        }
     }
 }

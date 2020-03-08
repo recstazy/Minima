@@ -4,17 +4,14 @@ using UnityEngine;
 
 namespace Minima.StateMachine
 {
-    public class State
+    public class StateMachine : ScriptableObject
     {
         #region Fields
 
-        private string title = "State";
 
         #endregion
 
         #region Properties
-
-        public string Title { get => title; }
 
         #endregion
     }

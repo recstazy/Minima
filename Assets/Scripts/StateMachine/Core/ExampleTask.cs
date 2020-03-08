@@ -1,30 +1,28 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Minima.StateMachine;
 
-namespace Minima.StateMachine
+public class ExampleTask : Task
 {
-    public class ExampleTask : Task
-    {
-        #region Fields
+    #region Fields
 
-        [NodeEditable]
-        public bool boolField0123456789012345678901234567890123456789;
+    [NodeEditable]
+    public bool boolField;
 
-        [NodeEditable]
-        public int intField = 10;
+    [NodeEditable]
+    public int intField = 10;
 
-        [NodeEditable]
-        public float floatField = 10.2f;
+    [NodeEditable]
+    public float floatField = 10.2f;
 
-        [NodeEditable]
-        public string stringField = "qwerty";
+    [NodeEditable]
+    public string stringField = "qwerty";
 
-        #endregion
+    #endregion
 
-        #region Properties
+    #region Properties
 
-        #endregion
+    #endregion
 
-    }
 }

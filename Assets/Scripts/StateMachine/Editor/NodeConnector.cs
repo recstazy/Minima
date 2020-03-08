@@ -3,89 +3,92 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-public class NodeConnector
+namespace Minima.StateMachine
 {
-    #region Fields
-
-    private Node selectedInNode;
-    private Node selectedOutNode;
-
-    #endregion
-
-    #region Properties
-
-    public bool IsPerformingConnection { get; private set; }
-
-    #endregion
-
-    public void ProcessEvents(Event e)
+    public class NodeConnector
     {
-        DrawConnectionLine(e);
-        ProcessEvent(e);
-    }
+        #region Fields
 
-    public void ConnectNodeClicked(Node clickedNode)
-    {
-        IsPerformingConnection = true;
+        private Node selectedInNode;
+        private Node selectedOutNode;
 
-        if (selectedInNode == null)
+        #endregion
+
+        #region Properties
+
+        public bool IsPerformingConnection { get; private set; }
+
+        #endregion
+
+        public void ProcessEvents(Event e)
         {
-            selectedInNode = clickedNode;
-        }
-        else
-        {
-            selectedOutNode = clickedNode;
+            DrawConnectionLine(e);
+            ProcessEvent(e);
         }
 
-        if (selectedOutNode != null)
+        public void ConnectNodeClicked(Node clickedNode)
         {
-            if (selectedOutNode != selectedInNode)
+            IsPerformingConnection = true;
+
+            if (selectedInNode == null)
             {
-                CreateConnection();
+                selectedInNode = clickedNode;
+            }
+            else
+            {
+                selectedOutNode = clickedNode;
             }
 
-            ClearConnectionSelection();
-        }
-    }
-
-    private void DrawConnectionLine(Event e)
-    {
-        if (selectedInNode != null && selectedOutNode == null)
-        {
-            Handles.DrawBezier(
-                selectedInNode.Rect.center,
-                e.mousePosition,
-                selectedInNode.Rect.center,
-                e.mousePosition,
-                Color.white,
-                null,
-                2f
-            );
-
-            GUI.changed = true;
-        }
-    }
-
-    private void ProcessEvent(Event e)
-    {
-        if (e.type == EventType.MouseDown)
-        {
-            if (e.button == 0)
+            if (selectedOutNode != null)
             {
+                if (selectedOutNode != selectedInNode)
+                {
+                    CreateConnection();
+                }
+
                 ClearConnectionSelection();
             }
         }
-    }
 
-    private void CreateConnection()
-    {
-        new Connection(selectedInNode, selectedOutNode);
-    }
+        private void DrawConnectionLine(Event e)
+        {
+            if (selectedInNode != null && selectedOutNode == null)
+            {
+                Handles.DrawBezier(
+                    selectedInNode.Rect.center,
+                    e.mousePosition,
+                    selectedInNode.Rect.center,
+                    e.mousePosition,
+                    Color.white,
+                    null,
+                    2f
+                );
 
-    private void ClearConnectionSelection()
-    {
-        selectedInNode = null;
-        selectedOutNode = null;
-        IsPerformingConnection = false;
+                GUI.changed = true;
+            }
+        }
+
+        private void ProcessEvent(Event e)
+        {
+            if (e.type == EventType.MouseDown)
+            {
+                if (e.button == 0)
+                {
+                    ClearConnectionSelection();
+                }
+            }
+        }
+
+        private void CreateConnection()
+        {
+            new Connection(selectedInNode, selectedOutNode);
+        }
+
+        private void ClearConnectionSelection()
+        {
+            selectedInNode = null;
+            selectedOutNode = null;
+            IsPerformingConnection = false;
+        }
     }
 }

@@ -6,46 +6,49 @@ using System.Collections.Generic;
 using UnityEngine;
 using Minima.StateMachine;
 
-public class TaskView : ColumnContent
+namespace Minima.StateMachine
 {
-    #region Fields
-
-    private Type taskType;
-    private FieldInfo[] fields;
-
-    #endregion
-
-    #region Properties
-    
-    #endregion
-
-    public TaskView(IGraphObject parent, Type taskType) : base(parent)
+    public class TaskView : ColumnContent
     {
-        if (typeof(Task).IsAssignableFrom(taskType))
+        #region Fields
+
+        private Type taskType;
+        private FieldInfo[] fields;
+
+        #endregion
+
+        #region Properties
+
+        #endregion
+
+        public TaskView(IGraphObject parent, Type taskType) : base(parent)
         {
-            this.taskType = taskType;
-            Construct();
+            if (typeof(Task).IsAssignableFrom(taskType))
+            {
+                this.taskType = taskType;
+                Construct();
+            }
+            else
+            {
+                Debug.LogError(taskType.ToString() + " is not a Task");
+            }
         }
-        else
+
+        private void Construct()
         {
-            Debug.LogError(taskType.ToString() + " is not a Task");
+            var title = new TextContent(this, taskType.Name);
+            AddContent(title);
+
+            fields = taskType.GetFields()
+                .Where(f => f.GetCustomAttribute<NodeEditable>() != null)
+                .ToArray();
+
+            foreach (var f in fields)
+            {
+                var field = new TaskFieldContent(this, f);
+                AddContent(field);
+            }
         }
+
     }
-
-    private void Construct()
-    {
-        var title = new TextContent(this, taskType.Name);
-        AddContent(title);
-
-        fields = taskType.GetFields()
-            .Where(f => f.GetCustomAttribute<NodeEditable>() != null)
-            .ToArray();
-
-        foreach (var f in fields)
-        {
-            var field = new TaskFieldContent(this, f);
-            AddContent(field);
-        }
-    }
-
 }

@@ -3,26 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-public class StateNode : Node
+namespace Minima.StateMachine
 {
-    #region Fields
-
-    private NodeContent content;
-
-    #endregion
-
-    #region Properties
-
-    #endregion
-
-    public StateNode(Vector2 position) : base(position)
+    public class StateNode : Node
     {
-        content = new NodeContent(this);
-    }
+        #region Fields
 
-    public override void Draw()
-    {
-        base.Draw();
-        content.Draw();
+        private NodeContent content;
+
+        #endregion
+
+        #region Properties
+
+        #endregion
+
+        public StateNode(Vector2 position) : base(position)
+        {
+            content = new NodeContent(this);
+        }
+
+        public override void Draw()
+        {
+            base.Draw();
+            content.Draw();
+        }
     }
 }
