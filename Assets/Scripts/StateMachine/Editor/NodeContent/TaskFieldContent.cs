@@ -15,10 +15,10 @@ public class TaskFieldContent : NodeContent
 
     protected Rect nameRect;
     protected Rect valueRect;
-    //protected float nameToValueRectDevision = 0.6f;
     protected int inputFieldWidth = 50;
     protected int fontSize = 12;
     protected object value = new object();
+    protected string name;
 
     GUIStyle inputFieldStyle;
 
@@ -33,6 +33,8 @@ public class TaskFieldContent : NodeContent
     public TaskFieldContent(IGraphObject parent, FieldInfo fieldInfo) : base(parent)
     {
         field = fieldInfo;
+        name = field.Name;
+        CropName();
         CreateStyle();
         InitializeValue();
         DefaultSize = new Vector2(200f, 20f);
@@ -68,7 +70,7 @@ public class TaskFieldContent : NodeContent
 
         if (field != null)
         {
-            GUI.Label(nameRect, field.Name, style);
+            GUI.Label(nameRect, name, style);
             DrawInputField();
         }
     }
@@ -79,8 +81,6 @@ public class TaskFieldContent : NodeContent
 
         if (field != null)
         {
-            string name = field.Name;
-
             if (name.Length > 0)
             {
                 int width = 0;
@@ -174,11 +174,11 @@ public class TaskFieldContent : NodeContent
         }
     }
 
-    private void SetContentsPositions()
+    private void CropName()
     {
-    }
-
-    protected virtual void UpdateContentsSizes()
-    {
+        if (name.Length > 30)
+        {
+            name = name.Remove(30);
+        }
     }
 }
