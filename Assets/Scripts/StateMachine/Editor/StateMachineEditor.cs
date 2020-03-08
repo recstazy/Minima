@@ -3,7 +3,7 @@ using UnityEditor;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Minima.StateMachine
+namespace Minima.StateMachine.Editor
 {
     public class StateMachineEditor : EditorWindow
     {
@@ -158,9 +158,7 @@ namespace Minima.StateMachine
 
         private void CreateNode(Vector2 position)
         {
-            var node = new Node(position);
-            var taskView = new TaskView(node, typeof(ExampleTask));
-            node.AddContent(taskView);
+            var node = new TaskNode(position);
 
             nodes.Add(node);
             node.OnConnectClicked += nodeConnector.ConnectNodeClicked;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-namespace Minima.StateMachine
+namespace Minima.StateMachine.Editor
 {
     public class NodeContent : IGraphObject
     {
@@ -63,7 +63,7 @@ namespace Minima.StateMachine
 
         public virtual Vector2 GetRawSize()
         {
-            return rect.size;
+            return DefaultSize;
         }
 
         protected virtual void UpdateRect()

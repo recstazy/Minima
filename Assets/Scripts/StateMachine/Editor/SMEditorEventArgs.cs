@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-namespace Minima.StateMachine
+namespace Minima.StateMachine.Editor
 {
     public class SMEditorEventArgs
     {

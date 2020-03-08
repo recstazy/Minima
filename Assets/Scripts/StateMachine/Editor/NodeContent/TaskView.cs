@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Minima.StateMachine;
 
-namespace Minima.StateMachine
+namespace Minima.StateMachine.Editor
 {
     public class TaskView : ColumnContent
     {

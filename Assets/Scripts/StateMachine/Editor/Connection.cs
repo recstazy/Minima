@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Minima.StateMachine
+namespace Minima.StateMachine.Editor
 {
     public class Connection
     {

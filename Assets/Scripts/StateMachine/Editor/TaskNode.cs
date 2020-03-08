@@ -5,11 +5,11 @@ using UnityEditor;
 
 namespace Minima.StateMachine.Editor
 {
-    public class StateNode : Node
+    public class TaskNode : Node
     {
         #region Fields
 
-        private NodeContent content;
+        private TaskProvider taskProvider;
 
         #endregion
 
@@ -17,15 +17,19 @@ namespace Minima.StateMachine.Editor
 
         #endregion
 
-        public StateNode(Vector2 position) : base(position)
+        public TaskNode(Vector2 position) : base(position) 
         {
-            content = new NodeContent(this);
+            taskProvider = new TaskProvider(this);
         }
 
         public override void Draw()
         {
             base.Draw();
-            content.Draw();
+
+            if (taskProvider != null)
+            {
+                taskProvider.Draw();
+            }
         }
     }
 }

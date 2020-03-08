@@ -4,7 +4,7 @@ using System;
 using UnityEngine;
 using System.Linq;
 
-namespace Minima.StateMachine
+namespace Minima.StateMachine.Editor
 {
     public class ColumnContent : NodeContent
     {

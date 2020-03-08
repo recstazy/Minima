@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-namespace Minima.StateMachine
+namespace Minima.StateMachine.Editor
 {
     public class Node : IGraphObject
     {
@@ -84,7 +84,7 @@ namespace Minima.StateMachine
             }
         }
 
-        public void AddContent(IGraphObject content)
+        public void SetContent(IGraphObject content)
         {
             if (content != null)
             {

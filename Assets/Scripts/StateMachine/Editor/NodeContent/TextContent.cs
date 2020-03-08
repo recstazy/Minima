@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Minima.StateMachine
+namespace Minima.StateMachine.Editor
 {
     public class TextContent : NodeContent
     {

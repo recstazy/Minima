@@ -5,7 +5,7 @@ using System;
 using UnityEngine;
 using UnityEditor;
 
-namespace Minima.StateMachine
+namespace Minima.StateMachine.Editor
 {
     public class TaskFieldContent : NodeContent
     {
