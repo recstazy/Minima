@@ -112,7 +112,7 @@ namespace Minima.StateMachine
             return Helpers.GetClosestPointOnRect(origin, Rect);
         }
 
-        public bool ProcessEvents(Event e, NodeEditorEventArgs eventArgs)
+        public bool ProcessEvents(Event e, SMEditorEventArgs eventArgs)
         {
             switch (e.type)
             {
@@ -146,7 +146,7 @@ namespace Minima.StateMachine
             return false;
         }
 
-        private void ProcessMouseDown(Event e, NodeEditorEventArgs eventArgs)
+        private void ProcessMouseDown(Event e, SMEditorEventArgs eventArgs)
         {
             if (e.button == 0)
             {
@@ -184,7 +184,7 @@ namespace Minima.StateMachine
             }
         }
 
-        private void ProcessKeyUp(Event e, NodeEditorEventArgs eventArgs)
+        private void ProcessKeyUp(Event e, SMEditorEventArgs eventArgs)
         {
             if (isSelected && !eventArgs.IsPerformingConnection)
             {

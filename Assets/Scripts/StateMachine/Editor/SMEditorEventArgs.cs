@@ -5,11 +5,11 @@ using UnityEditor;
 
 namespace Minima.StateMachine
 {
-    public class NodeEditorEventArgs
+    public class SMEditorEventArgs
     {
         #region Fields
 
-        NodeBasedEditor editor;
+        StateMachineEditor editor;
 
         #endregion
 
@@ -19,7 +19,7 @@ namespace Minima.StateMachine
 
         #endregion
 
-        public NodeEditorEventArgs(NodeBasedEditor editor)
+        public SMEditorEventArgs(StateMachineEditor editor)
         {
             this.editor = editor;
         }

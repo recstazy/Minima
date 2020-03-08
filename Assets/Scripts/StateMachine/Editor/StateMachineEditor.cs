@@ -5,12 +5,12 @@ using System.Linq;
 
 namespace Minima.StateMachine
 {
-    public class NodeBasedEditor : EditorWindow
+    public class StateMachineEditor : EditorWindow
     {
         #region Fields
 
         private List<Node> nodes = new List<Node>();
-        private NodeEditorEventArgs eventArgs;
+        private SMEditorEventArgs eventArgs;
         private NodeConnector nodeConnector;
         private GenericMenu contextMenu;
 
@@ -26,16 +26,16 @@ namespace Minima.StateMachine
 
         #endregion
 
-        [MenuItem("Window/Node Based Editor")]
+        [MenuItem("Window/State Machine Editor")]
         private static void OpenWindow()
         {
-            NodeBasedEditor window = GetWindow<NodeBasedEditor>();
-            window.titleContent = new GUIContent("Node Based Editor");
+            StateMachineEditor window = GetWindow<StateMachineEditor>();
+            window.titleContent = new GUIContent("State Machine Editor");
         }
 
         private void OnEnable()
         {
-            eventArgs = new NodeEditorEventArgs(this);
+            eventArgs = new SMEditorEventArgs(this);
             nodeConnector = new NodeConnector();
             CreateContextMenu();
         }
