@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace Minima.StateMachine
 {
-    public enum NodeType { State, Condition }
+    public enum NodeType { Task, Condition }
 
     [System.Serializable]
     public class Node
@@ -18,15 +19,40 @@ namespace Minima.StateMachine
         private Vector2 position;
 
         [SerializeField]
-        private Task task;
+        private Task[] tasks = new Task[0];
 
         [SerializeField]
-        private Node[] connections;
+        private Node[] connections = new Node[0];
 
         #endregion
 
         #region Properties
 
+        public NodeType NodeType { get => nodeType; set => nodeType = value; }
+        public Vector2 Position { get => position; set => position = value; }
+        public Task[] Tasks { get => tasks; private set => tasks = value; }
+        public Node[] Connections { get => connections; private set => connections = value; }
+
         #endregion
+
+        public void AddTask(Task task)
+        {
+            tasks = tasks.ConcatOne(task);
+        }
+
+        public void RemoveTask(Task task)
+        {
+            tasks = tasks.Remove(task);
+        }
+
+        public void AddConnectionTo(Node node)
+        {
+            connections = connections.ConcatOne(node);
+        }
+
+        public void RemoveConnectionTo(Node node)
+        {
+            connections = connections.Remove(node);
+        }
     }
 }

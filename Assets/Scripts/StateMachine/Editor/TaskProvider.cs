@@ -54,7 +54,7 @@ namespace Minima.StateMachine.Editor
 
         private static void CreateDropDownMenu()
         {
-            var types = GetTaskTypes(NodeType.State);
+            var types = GetTaskTypes(NodeType.Task);
 
             menu = null;
             taskTypes = null;

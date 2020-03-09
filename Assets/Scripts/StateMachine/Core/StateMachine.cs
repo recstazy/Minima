@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEditor;
 
@@ -11,12 +12,24 @@ namespace Minima.StateMachine
         #region Fields
 
         [SerializeField]
-        private Node[] nodes;
+        private Node[] nodes = new Node[0];
 
         #endregion
 
         #region Properties
 
+        public Node[] Nodes { get => nodes; }
+
         #endregion
+
+        public void AddNode(Node node)
+        {
+            nodes = nodes.ConcatOne(node);
+        }
+
+        public void RemoveNode(Node node)
+        {
+            nodes = nodes.Remove(node);
+        }
     }
 }

@@ -8,6 +8,9 @@ namespace Minima.StateMachine.Editor
 {
     public class ColumnContent : NodeContent
     {
+        public event Action<NodeContent> OnContentAdded;
+        public event Action<NodeContent> OnContentRemoved;
+
         #region Fields
 
         private NodeContent[] contents = new NodeContent[0];
@@ -22,19 +25,21 @@ namespace Minima.StateMachine.Editor
         {
         }
 
-        public void AddContent(NodeContent content)
+        public virtual void AddContent(NodeContent content)
         {
             contents = contents.ConcatOne(content);
-            content.OnRemoveContent += RemoveContent;
+            content.OnRemoveContentClicked += RemoveContent;
             content.UseParentRectCenter = false;
             content.AutoUpdateSize = false;
+            OnContentAdded?.Invoke(content);
         }
 
-        public void RemoveContent(NodeContent content)
+        public virtual void RemoveContent(NodeContent content)
         {
-            content.OnRemoveContent -= RemoveContent;
+            content.OnRemoveContentClicked -= RemoveContent;
             int index = Array.IndexOf(contents, content);
             contents = contents.RemoveAt(index);
+            OnContentRemoved.Invoke(content);
         }
 
         public override void Draw()

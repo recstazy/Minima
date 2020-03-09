@@ -8,7 +8,7 @@ namespace Minima.StateMachine.Editor
 {
     public class NodeContent : IGraphObject
     {
-        public event Action<NodeContent> OnRemoveContent;
+        public event Action<NodeContent> OnRemoveContentClicked;
 
         #region Fields
 
@@ -117,7 +117,7 @@ namespace Minima.StateMachine.Editor
 
         protected void CallOnRemove()
         {
-            OnRemoveContent?.Invoke(this);
+            OnRemoveContentClicked?.Invoke(this);
         }
 
         protected virtual void CreateStyle()

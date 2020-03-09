@@ -26,31 +26,44 @@ namespace Minima.StateMachine.Editor
 
         #region Properties
 
+        public NodeType NodeType { get; protected set; }
         public Rect Rect { get => rect; }
         public Vector2 DefaultSize { get; } = new Vector2(200f, 50f);
         public string Title { get; private set; }
         public ColumnContent Content { get => content; }
         public bool UseParentRectCenter { get; set; } = false;
-
+        public Minima.StateMachine.Node SMNode { get; private set; }
 
         public Connection[] Connections { get; private set; } = new Connection[0];
 
         public Node[] ConnectedNodes
         {
-            get
-            {
-                return Connections
+            get => Connections
                     .Select(c => c.InNode)
                     .Concat(Connections.Select(c => c.OutNode))
                     .ToArray();
-            }
+        }
+
+        public Node[] ForwardConnected
+        {
+            get => Connections
+                .Where(c => c.InNode == this)
+                .Select(c => c.OutNode).ToArray();
         }
 
         #endregion
 
         public Node(Vector2 position)
         {
+            SMNode = new Minima.StateMachine.Node();
             rect = new Rect(position.x, position.y, DefaultSize.x, DefaultSize.y);
+            CreateStyle();
+        }
+
+        public Node(Minima.StateMachine.Node node)
+        {
+            SMNode = node;
+            rect = new Rect(node.Position.x, node.Position.y, DefaultSize.x, DefaultSize.y);
             CreateStyle();
         }
 
@@ -100,16 +113,13 @@ namespace Minima.StateMachine.Editor
         public void AddConnection(Connection connection)
         {
             Connections = Connections.ConcatOne(connection);
+            SMNode.AddConnectionTo(connection.OutNode.SMNode);
         }
 
         public void RemoveConnection(Connection connection)
         {
-            var index = Array.IndexOf(Connections, connection);
-
-            if (index >= 0)
-            {
-                Connections = Connections.RemoveAt(index);
-            }
+            Connections = Connections.Remove(connection);
+            SMNode.RemoveConnectionTo(connection.OutNode.SMNode);
         }
 
         public Vector2 GetClosestPointOnRect(Vector2 origin)
@@ -137,6 +147,7 @@ namespace Minima.StateMachine.Editor
                 case EventType.MouseUp:
                     {
                         isDragged = false;
+                        SMNode.Position = rect.position;
                         break;
                     }
                 case EventType.MouseDrag:
@@ -161,7 +172,12 @@ namespace Minima.StateMachine.Editor
 
         private bool ProcessContentEvents(Event e, SMEditorEventArgs eventArgs)
         {
-            return Content.ProcessEvent(e, eventArgs);
+            if (content != null)
+            {
+                return Content.ProcessEvent(e, eventArgs);
+            }
+
+            return false;
         }
 
         private void ProcessMouseDown(Event e, SMEditorEventArgs eventArgs)

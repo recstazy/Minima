@@ -20,6 +20,8 @@ namespace Minima.StateMachine.Editor
 
         #region Properties
 
+        public Task Task { get => task; }
+
         #endregion
 
         public TaskView(IGraphObject parent, Task task) : base(parent)

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
-public static class ListExtentions
+public static class EnumerableExtentions
 {
     private static Random random = new Random();
 
@@ -24,6 +24,18 @@ public static class ListExtentions
         var copy = array.ToList();
         copy.RemoveAt(index);
         return copy.ToArray();
+    }
+
+    public static T[] Remove<T>(this T[] array, T item)
+    {
+        int index = Array.IndexOf(array, item);
+
+        if (index.InBounds(0, array.Length))
+        {
+            return array.RemoveAt(index);
+        }
+
+        return array;
     }
 
     public static T[] AddUniq<T>(this T[] array, T item)

@@ -9,6 +9,7 @@ namespace Minima.StateMachine.Editor
     {
         #region Fields
 
+        private StateMachineIO stateMachineIO = new StateMachineIO();
         private List<Node> nodes = new List<Node>();
         private SMEditorEventArgs eventArgs;
         private NodeConnector nodeConnector;
@@ -29,7 +30,7 @@ namespace Minima.StateMachine.Editor
         #endregion
 
         [MenuItem("Window/State Machine Editor")]
-        private static void OpenWindow()
+        public static void OpenWindow()
         {
             StateMachineEditor window = GetWindow<StateMachineEditor>();
             window.titleContent = new GUIContent("State Machine Editor");
@@ -40,6 +41,11 @@ namespace Minima.StateMachine.Editor
             eventArgs = new SMEditorEventArgs(this);
             nodeConnector = new NodeConnector();
             CreateContextMenu();
+            OpenAssetData();
+        }
+
+        private void OnDisable()
+        {
         }
 
         private void OnGUI()
@@ -58,6 +64,19 @@ namespace Minima.StateMachine.Editor
             if (GUI.changed)
             {
                 Repaint();
+            }
+        }
+
+        private void OpenAssetData()
+        {
+            if (stateMachineIO.IsAssetOpened)
+            {
+                nodes = stateMachineIO.GetNodes().ToList();
+
+                foreach (var n in nodes)
+                {
+                    BindToNode(n);
+                }
             }
         }
 
@@ -180,13 +199,25 @@ namespace Minima.StateMachine.Editor
             var node = new TaskNode(position);
 
             nodes.Add(node);
-            node.OnConnectClicked += nodeConnector.ConnectNodeClicked;
-            node.OnRemoveNode += NodeRemoved;
+            stateMachineIO.AddNode(node);
+            BindToNode(node);
         }
 
         private void NodeRemoved(Node node)
         {
             nodes.Remove(node);
+            stateMachineIO.RemoveNode(node);
+            UnbindFromNode(node);
+        }
+
+        private void BindToNode(Node node)
+        {
+            node.OnConnectClicked += nodeConnector.ConnectNodeClicked;
+            node.OnRemoveNode += NodeRemoved;
+        }
+
+        private void UnbindFromNode(Node node)
+        {
             node.OnConnectClicked -= nodeConnector.ConnectNodeClicked;
             node.OnRemoveNode -= NodeRemoved;
         }
