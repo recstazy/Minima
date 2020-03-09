@@ -28,7 +28,7 @@ namespace Minima.StateMachine.Editor
             Handles.DrawBezier(inPoint, outPoint, inPoint, outPoint, Color.white, null, 2f);
             DrawArrowCap(inPoint, outPoint, 10f);
 
-            if (Handles.Button((InNode.Rect.center + OutNode.Rect.center) * 0.5f, Quaternion.identity, 4, 8, Handles.RectangleHandleCap))
+            if (Handles.Button((inPoint + outPoint) * 0.5f, Quaternion.identity, 4, 8, Handles.RectangleHandleCap))
             {
                 RemoveSelf();
             }
