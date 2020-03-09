@@ -20,6 +20,10 @@ namespace Minima.StateMachine.Editor
         public TaskNode(Vector2 position) : base(position) 
         {
             taskProvider = new TaskProvider(this);
+            taskProvider.UseParentRectCenter = false;
+            taskProvider.AutoUpdateSize = false;
+            taskProvider.OnTaskSelected += TaskCreated;
+            AddContent(taskProvider);
         }
 
         public override void Draw()
@@ -30,6 +34,14 @@ namespace Minima.StateMachine.Editor
             {
                 taskProvider.Draw();
             }
+        }
+
+        private void TaskCreated(Task task)
+        {
+            var taskView = new TaskView(this, task);
+            taskView.UseParentRectCenter = false;
+            taskView.AutoUpdateSize = false;
+            AddContent(taskView);
         }
     }
 }

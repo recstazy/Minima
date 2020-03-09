@@ -16,7 +16,7 @@ namespace Minima.StateMachine.Editor
         protected float contentSizeMultiplier = 1.1f;
         protected bool isSelected;
         private bool isDragged;
-        private IGraphObject content;
+        private ColumnContent content;
 
         private GUIStyle currentStyle;
         private GUIStyle defaultStyle;
@@ -29,7 +29,7 @@ namespace Minima.StateMachine.Editor
         public Rect Rect { get => rect; }
         public Vector2 DefaultSize { get; } = new Vector2(200f, 50f);
         public string Title { get; private set; }
-        public IGraphObject Content { get => content; }
+        public ColumnContent Content { get => content; }
         public bool UseParentRectCenter { get; set; } = false;
 
 
@@ -84,11 +84,16 @@ namespace Minima.StateMachine.Editor
             }
         }
 
-        public void SetContent(IGraphObject content)
+        public void AddContent(NodeContent content)
         {
+            if (this.content == null)
+            {
+                this.content = new ColumnContent(this);
+            }
+
             if (content != null)
             {
-                this.content = content;
+                Content.AddContent(content);
             }
         }
 

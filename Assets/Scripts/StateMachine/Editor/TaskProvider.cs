@@ -10,6 +10,8 @@ namespace Minima.StateMachine.Editor
 {
     public class TaskProvider : NodeContent
     {
+        public event Action<Task> OnTaskSelected;
+
         #region Fields
 
         private int lastSelectedIndex = 0;
@@ -27,6 +29,7 @@ namespace Minima.StateMachine.Editor
         #region Static
 
         private static GUIContent[] menu;
+        private static Type[] taskTypes;
 
         public static Type[] GetTaskTypes(NodeType nodeType)
         {
@@ -54,13 +57,18 @@ namespace Minima.StateMachine.Editor
             var types = GetTaskTypes(NodeType.State);
 
             menu = null;
+            taskTypes = null;
+
             menu = new GUIContent[types.Length + 1];
             menu[0] = new GUIContent("None");
-
+            
             for (int i = 0; i < types.Length; i++)
             {
                 menu[i + 1] = new GUIContent(types[i].Name);
             }
+
+            taskTypes = new Type[1];
+            taskTypes = taskTypes.Concat(types).ToArray();
         }
 
         #endregion
@@ -71,6 +79,8 @@ namespace Minima.StateMachine.Editor
             {
                 CreateDropDownMenu();
             }
+
+            DefaultSize = new Vector2(DefaultSize.x, 20f);
         }
 
         public override void Draw()
@@ -94,13 +104,17 @@ namespace Minima.StateMachine.Editor
 
         private void IndexChanged()
         {
-            Debug.Log("index changed");
+            if (currentIndex != 0 && currentIndex < taskTypes.Length)
+            {
+                var task = CreateTask(taskTypes[currentIndex]);
+                OnTaskSelected(task);
+            }
         }
 
-        protected override void UpdateRectSize()
+        private Task CreateTask(Type type)
         {
-            base.UpdateRectSize();
-            rect.height = parent.Rect.height / 3;
+            var taskInstance = Activator.CreateInstance(type) as Task;
+            return taskInstance;
         }
 
         protected override void UpdateRect()

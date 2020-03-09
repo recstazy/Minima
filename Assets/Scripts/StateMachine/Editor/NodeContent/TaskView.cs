@@ -13,6 +13,7 @@ namespace Minima.StateMachine.Editor
         #region Fields
 
         private Type taskType;
+        private Task task;
         private FieldInfo[] fields;
 
         #endregion
@@ -21,17 +22,11 @@ namespace Minima.StateMachine.Editor
 
         #endregion
 
-        public TaskView(IGraphObject parent, Type taskType) : base(parent)
+        public TaskView(IGraphObject parent, Task task) : base(parent)
         {
-            if (typeof(Task).IsAssignableFrom(taskType))
-            {
-                this.taskType = taskType;
-                Construct();
-            }
-            else
-            {
-                Debug.LogError(taskType.ToString() + " is not a Task");
-            }
+            taskType = task.GetType();
+            this.task = task;
+            Construct();
         }
 
         private void Construct()
@@ -49,6 +44,5 @@ namespace Minima.StateMachine.Editor
                 AddContent(field);
             }
         }
-
     }
 }

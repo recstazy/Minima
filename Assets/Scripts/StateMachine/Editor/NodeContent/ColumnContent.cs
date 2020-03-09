@@ -38,9 +38,19 @@ namespace Minima.StateMachine.Editor
 
         protected override void UpdateRectSize()
         {
+            if (AutoUpdateSize)
+            {
+                rect.size = GetRawSize();
+            }
+        }
+
+        public override Vector2 GetRawSize()
+        {
+            Vector2 size = DefaultSize;
+
             if (contents.Length > 0)
             {
-                rect.width = contents.Max(c => c.GetRawSize().x);
+                size.x = contents.Max(c => c.GetRawSize().x);
 
                 float height = 0f;
 
@@ -49,12 +59,10 @@ namespace Minima.StateMachine.Editor
                     height += c.GetRawSize().y;
                 }
 
-                rect.height = height;
+                size.y = height;
             }
-            else
-            {
-                base.UpdateRectSize();
-            }
+
+            return size;
         }
 
         private void DrawContents()
