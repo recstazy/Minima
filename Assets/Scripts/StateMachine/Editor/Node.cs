@@ -158,6 +158,7 @@ namespace Minima.StateMachine.Editor
                     if (eventArgs.IsPerformingConnection)
                     {
                         ConnectNodeClicked();
+                        e.Use();
                     }
                 }
                 else

@@ -18,6 +18,7 @@ namespace Minima.StateMachine.Editor
         private Vector2 offset;
         private Vector2 drag;
         private bool isDragging = false;
+        private bool isHoldingRightMouse = false;
 
         #endregion
 
@@ -53,7 +54,6 @@ namespace Minima.StateMachine.Editor
             ProcessNodeEvents(Event.current);
             nodeConnector.ProcessEvents(Event.current);
             ProcessEvents(Event.current);
-
 
             if (GUI.changed)
             {
@@ -103,16 +103,21 @@ namespace Minima.StateMachine.Editor
 
             switch (e.type)
             {
-                case EventType.MouseDrag:
+                case EventType.MouseDown:
                     {
                         if (e.button == 1)
                         {
-                            if (!isDragging)
-                            {
-                                isDragging = true;
-                            }
-                            
+                            isHoldingRightMouse = true;
+                        }
+                        break;
+                    }
+                case EventType.MouseDrag:
+                    {
+                        if (e.button == 1 && isHoldingRightMouse)
+                        {
+                            isDragging = true;
                             OnDrag(e.delta);
+
                         }
                         break;
                     }
@@ -120,14 +125,14 @@ namespace Minima.StateMachine.Editor
                     {
                         if (e.button == 1)
                         {
-                            if (isDragging)
-                            {
-                                isDragging = false;
-                            }
-                            else
+                            isHoldingRightMouse = false;
+
+                            if (!isDragging)
                             {
                                 contextMenu.ShowAsContext();
                             }
+
+                            isDragging = false;
                         }
                         break;
                     }
