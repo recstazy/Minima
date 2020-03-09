@@ -77,6 +77,13 @@ namespace Minima.StateMachine.Editor
                     ClearConnectionSelection();
                 }
             }
+            else if (e.type == EventType.KeyDown)
+            {
+                if (e.keyCode == KeyCode.Escape)
+                {
+                    ClearConnectionSelection();
+                }
+            }
         }
 
         private void CreateConnection()

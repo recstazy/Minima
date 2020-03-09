@@ -165,6 +165,15 @@ namespace Minima.StateMachine.Editor
                         ConnectNodeClicked();
                         e.Use();
                     }
+                    else
+                    {
+                        if (e.modifiers == EventModifiers.Control)
+                        {
+                            ConnectNodeClicked();
+                            e.Use();
+                            GUI.changed = true;
+                        }
+                    }
                 }
                 else
                 {
@@ -194,11 +203,6 @@ namespace Minima.StateMachine.Editor
         {
             if (isSelected && !eventArgs.IsPerformingConnection)
             {
-                if (e.keyCode == KeyCode.C)
-                {
-                    ConnectNodeClicked();
-                    GUI.changed = true;
-                }
                 if (e.keyCode == KeyCode.Delete)
                 {
                     RemoveSelf();
