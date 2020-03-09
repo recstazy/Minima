@@ -97,9 +97,15 @@ namespace Minima.StateMachine.Editor
                     {
                         currentIndex = lastSelectedIndex;
                         IndexChanged();
+                        lastSelectedIndex = 0;
                     }
                 }
             }
+        }
+
+        public override bool ProcessEvent(Event e, SMEditorEventArgs eventArgs)
+        {
+            return false;
         }
 
         private void IndexChanged()

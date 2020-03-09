@@ -119,6 +119,14 @@ namespace Minima.StateMachine.Editor
 
         public bool ProcessEvents(Event e, SMEditorEventArgs eventArgs)
         {
+            bool used = ProcessContentEvents(e, eventArgs);
+
+            if (used)
+            {
+                e.Use();
+                return true;
+            }
+
             switch (e.type)
             {
                 case EventType.MouseDown:
@@ -149,6 +157,11 @@ namespace Minima.StateMachine.Editor
             }
 
             return false;
+        }
+
+        private bool ProcessContentEvents(Event e, SMEditorEventArgs eventArgs)
+        {
+            return Content.ProcessEvent(e, eventArgs);
         }
 
         private void ProcessMouseDown(Event e, SMEditorEventArgs eventArgs)

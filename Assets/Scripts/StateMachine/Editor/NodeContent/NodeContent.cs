@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEditor;
 
@@ -7,11 +8,14 @@ namespace Minima.StateMachine.Editor
 {
     public class NodeContent : IGraphObject
     {
+        public event Action<NodeContent> OnRemoveContent;
+
         #region Fields
 
         protected Rect rect;
         protected IGraphObject parent;
         protected GUIStyle style;
+        protected GenericMenu contextMenu;
 
         #endregion
 
@@ -36,6 +40,7 @@ namespace Minima.StateMachine.Editor
             this.parent = parent;
 
             CreateStyle();
+            CreateContextMenu();
             UpdateRect();
         }
 
@@ -43,6 +48,28 @@ namespace Minima.StateMachine.Editor
         {
             UpdateRect();
             GUI.Box(Rect, "", style);
+        }
+
+        public virtual bool ProcessEvent(Event e, SMEditorEventArgs eventArgs)
+        {
+            bool used = false;
+
+            if (e.type == EventType.MouseUp)
+            {
+                if (e.button == 1)
+                {
+                    if (rect.Contains(e.mousePosition))
+                    {
+                        if (contextMenu != null)
+                        {
+                            contextMenu.ShowAsContext();
+                            used = true;
+                        }
+                    }
+                }
+            }
+
+            return used;
         }
 
         public void SetRectPosition(Vector2 position)
@@ -88,9 +115,20 @@ namespace Minima.StateMachine.Editor
             }
         }
 
+        protected void CallOnRemove()
+        {
+            OnRemoveContent?.Invoke(this);
+        }
+
         protected virtual void CreateStyle()
         {
             style = (GUIStyle)"flow node 0";
+        }
+
+        protected virtual void CreateContextMenu()
+        {
+            contextMenu = new GenericMenu();
+            contextMenu.AddItem(new GUIContent("Remove" + this.ToString()), false, CallOnRemove);
         }
     }
 }

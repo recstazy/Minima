@@ -34,6 +34,11 @@ namespace Minima.StateMachine.Editor
             GUI.changed = true;
         }
 
+        public override bool ProcessEvent(Event e, SMEditorEventArgs eventArgs)
+        {
+            return false;
+        }
+
         public override Vector2 GetRawSize()
         {
             var size = DefaultSize;

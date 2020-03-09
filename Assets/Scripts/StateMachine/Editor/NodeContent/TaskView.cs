@@ -27,6 +27,7 @@ namespace Minima.StateMachine.Editor
             taskType = task.GetType();
             this.task = task;
             Construct();
+            CreateContextMenu();
         }
 
         private void Construct()
@@ -42,6 +43,20 @@ namespace Minima.StateMachine.Editor
             {
                 var field = new TaskFieldContent(this, f);
                 AddContent(field);
+            }
+        }
+
+        public override bool ProcessEvent(Event e, SMEditorEventArgs eventArgs)
+        {
+            return base.ProcessEvent(e, eventArgs);
+        }
+
+        protected override void CreateContextMenu()
+        {
+            if (taskType != null)
+            {
+                contextMenu = new UnityEditor.GenericMenu();
+                contextMenu.AddItem(new GUIContent("Remove " + taskType.Name), false, CallOnRemove);
             }
         }
     }

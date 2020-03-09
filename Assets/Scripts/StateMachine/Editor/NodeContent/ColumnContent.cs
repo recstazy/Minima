@@ -25,8 +25,16 @@ namespace Minima.StateMachine.Editor
         public void AddContent(NodeContent content)
         {
             contents = contents.ConcatOne(content);
+            content.OnRemoveContent += RemoveContent;
             content.UseParentRectCenter = false;
             content.AutoUpdateSize = false;
+        }
+
+        public void RemoveContent(NodeContent content)
+        {
+            content.OnRemoveContent -= RemoveContent;
+            int index = Array.IndexOf(contents, content);
+            contents = contents.RemoveAt(index);
         }
 
         public override void Draw()
@@ -34,6 +42,28 @@ namespace Minima.StateMachine.Editor
             UpdateRect();
             base.Draw();
             DrawContents();
+        }
+
+        public override bool ProcessEvent(Event e, SMEditorEventArgs eventArgs)
+        {
+            bool used = false; 
+
+            for (int i = 0; i < contents.Length; i++)
+            {
+                used = contents[i].ProcessEvent(e, eventArgs);
+
+                if (used)
+                {
+                    break;
+                }
+            }
+
+            if (!used)
+            {
+                used = base.ProcessEvent(e, eventArgs);
+            }
+
+            return used;
         }
 
         protected override void UpdateRectSize()
@@ -78,6 +108,11 @@ namespace Minima.StateMachine.Editor
                 lastOffset += content.Rect.height;
                 content.Draw();
             }
+        }
+
+        protected override void CreateContextMenu()
+        {
+            return;
         }
     }
 }

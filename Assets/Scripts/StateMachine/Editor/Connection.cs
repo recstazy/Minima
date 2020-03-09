@@ -25,7 +25,7 @@ namespace Minima.StateMachine.Editor
             var inPoint = InNode.GetClosestPointOnRect(OutNode.Rect.center);
             var outPoint = OutNode.GetClosestPointOnRect(InNode.Rect.center);
 
-            Handles.DrawBezier(inPoint, outPoint, inPoint, outPoint, Color.white, null, 2f);
+            Handles.DrawBezier(inPoint, outPoint, inPoint, outPoint, Color.white, null, 3f);
             DrawArrowCap(inPoint, outPoint, 10f);
 
             if (Handles.Button((inPoint + outPoint) * 0.5f, Quaternion.identity, 4, 8, Handles.RectangleHandleCap))

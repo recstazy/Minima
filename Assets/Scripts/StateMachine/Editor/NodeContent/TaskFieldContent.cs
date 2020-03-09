@@ -77,6 +77,11 @@ namespace Minima.StateMachine.Editor
             }
         }
 
+        public override bool ProcessEvent(Event e, SMEditorEventArgs eventArgs)
+        {
+            return false;
+        }
+
         public override Vector2 GetRawSize()
         {
             var size = DefaultSize;
