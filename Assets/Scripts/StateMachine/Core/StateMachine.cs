@@ -12,7 +12,10 @@ namespace Minima.StateMachine
         #region Fields
 
         [SerializeField]
-        private Node[] nodes = new Node[0];
+        private uint maxId;
+
+        [SerializeField]
+        private Node[] nodes;
 
         #endregion
 
@@ -24,11 +27,23 @@ namespace Minima.StateMachine
 
         public void AddNode(Node node)
         {
+            if (nodes == null)
+            {
+                nodes = new Node[0];
+            }
+
             nodes = nodes.ConcatOne(node);
+            maxId++;
+            node.SetId(maxId);
         }
 
         public void RemoveNode(Node node)
         {
+            if (nodes == null)
+            {
+                nodes = new Node[0];
+            }
+
             nodes = nodes.Remove(node);
         }
     }

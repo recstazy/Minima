@@ -112,11 +112,8 @@ namespace Minima.StateMachine.Editor
 
         public void AddConnection(Connection connection)
         {
-            if (!ForwardConnected.Contains(connection.OutNode))
-            {
-                Connections = Connections.ConcatOne(connection);
-                SMNode.UpdateConnections(ForwardConnected.Select(n => n.SMNode).ToArray());
-            }
+            Connections = Connections.ConcatOne(connection);
+            SMNode.AddConnectionTo(connection.OutNode.SMNode);
         }
 
         public void RemoveConnection(Connection connection)
@@ -293,7 +290,20 @@ namespace Minima.StateMachine.Editor
         {
             if (content != null)
             {
-                rect.size = content.Rect.size * contentSizeMultiplier;
+                if (content.Rect.height < DefaultSize.y)
+                {
+                    rect.height = DefaultSize.y;
+                    rect.width = content.Rect.width * contentSizeMultiplier;
+                }
+                else if (content.Rect.width < DefaultSize.x)
+                {
+                    rect.width = DefaultSize.x;
+                    rect.height = content.Rect.height * contentSizeMultiplier;
+                }
+                else
+                {
+                    rect.size = content.Rect.size * contentSizeMultiplier;
+                }
             }
             else
             {

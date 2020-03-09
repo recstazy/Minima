@@ -7,22 +7,25 @@ namespace Minima.StateMachine
 {
     public enum NodeType { Task, Condition }
 
-    [System.Serializable]
+    [Serializable]
     public class Node
     {
         #region Fields
 
-        //[SerializeField]
+        [SerializeField]
+        private uint id;
+
+        [SerializeField]
         private NodeType nodeType;
 
-        //[SerializeField]
+        [SerializeField]
         private Vector2 position;
 
-        //[SerializeField]
+        [SerializeField]
         private Task[] tasks = new Task[0];
 
-        //[SerializeField]
-        private Node[] connections = new Node[0];
+        [SerializeField]
+        private uint[] connections = new uint[0];
 
         [SerializeField]
         private int connectionsCount;
@@ -31,12 +34,18 @@ namespace Minima.StateMachine
 
         #region Properties
 
+        public uint ID { get => id; }
         public NodeType NodeType { get => nodeType; set => nodeType = value; }
         public Vector2 Position { get => position; set => position = value; }
         public Task[] Tasks { get => tasks; private set => tasks = value; }
-        public Node[] Connections { get => connections; private set => connections = value; }
+        public uint[] Connections { get => connections; private set => connections = value; }
 
         #endregion
+
+        public void SetId(uint id)
+        {
+            this.id = id;
+        }
 
         public void AddTask(Task task)
         {
@@ -48,21 +57,23 @@ namespace Minima.StateMachine
             tasks = tasks.Remove(task);
         }
 
-        public void UpdateConnections(Node[] connections)
-        {
-            this.connections = connections;
-            connectionsCount = connections.Length;
-        }
-
         public void AddConnectionTo(Node node)
         {
-            connections = connections.ConcatOne(node);
+            if (node.ID != this.id && !connections.Contains(node.ID))
+            {
+                connections = connections.ConcatOne(node.ID);
+            }
+
             connectionsCount = connections.Length;
         }
 
         public void RemoveConnectionTo(Node node)
         {
-            connections = connections.Remove(node);
+            if (connections.Contains(node.ID))
+            {
+                connections = connections.Remove(node.ID);
+            }
+
             connectionsCount = connections.Length;
         }
     }

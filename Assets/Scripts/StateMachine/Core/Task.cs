@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Minima.StateMachine
 {
+    [System.Serializable]
     public class Task
     {
         #region Fields

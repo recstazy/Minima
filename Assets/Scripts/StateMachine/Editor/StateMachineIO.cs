@@ -22,19 +22,6 @@ namespace Minima.StateMachine.Editor
         public StateMachine OpenedAsset { get => openedAsset; }
         public bool IsAssetOpened { get => openedAsset != null; }
 
-        public Node[] Nodes
-        {
-            get
-            {
-                if (nodes == null)
-                {
-                    GetNodes();
-                }
-
-                return nodes;
-            }
-        }
-
         #endregion
 
         #region Static
@@ -78,11 +65,17 @@ namespace Minima.StateMachine.Editor
             return nodes;
         }
 
+        public void SetDirty()
+        {
+            EditorUtility.SetDirty(openedAsset);
+        }
+
         public void AddNode(Node node)
         {
             if (IsAssetOpened)
             {
                 openedAsset.AddNode(node.SMNode);
+                SetDirty();
             }
         }
 
@@ -91,6 +84,7 @@ namespace Minima.StateMachine.Editor
             if (IsAssetOpened)
             {
                 openedAsset.RemoveNode(node.SMNode);
+                SetDirty();
             }
         }
 
@@ -100,7 +94,7 @@ namespace Minima.StateMachine.Editor
             {
                 foreach (var connectedSMNode in n.SMNode.Connections)
                 {
-                    var secondNode = nodes.FirstOrDefault(nd => nd.SMNode == connectedSMNode);
+                    var secondNode = nodes.FirstOrDefault(nd => nd.SMNode.ID == connectedSMNode);
 
                     if (secondNode != null)
                     {

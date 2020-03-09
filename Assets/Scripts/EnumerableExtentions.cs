@@ -38,6 +38,18 @@ public static class EnumerableExtentions
         return array;
     }
 
+    public static bool Contains<T>(this T[] array, T item)
+    {
+        int index = Array.IndexOf(array, item);
+
+        if (index.InBounds(0, array.Length))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     public static T[] AddUniq<T>(this T[] array, T item)
     {
         if (!array.Contains(item))

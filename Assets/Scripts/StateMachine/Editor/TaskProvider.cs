@@ -131,9 +131,12 @@ namespace Minima.StateMachine.Editor
 
         private void UpdateDropDownRect()
         {
-            dropDownRect.center = rect.center;
-            dropDownRect.width = rect.width;
-            dropDownRect.height = menu.Length * 15;
+            if (menu != null)
+            {
+                dropDownRect.center = rect.center;
+                dropDownRect.width = rect.width;
+                dropDownRect.height = menu.Length * 15;
+            }
         }
 
         protected override void CreateStyle()

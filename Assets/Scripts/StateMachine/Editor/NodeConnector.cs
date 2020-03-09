@@ -88,7 +88,10 @@ namespace Minima.StateMachine.Editor
 
         private void CreateConnection()
         {
-            new Connection(selectedInNode, selectedOutNode);
+            if (!selectedInNode.ForwardConnected.Contains(selectedOutNode))
+            {
+                new Connection(selectedInNode, selectedOutNode);
+            }
         }
 
         private void ClearConnectionSelection()
