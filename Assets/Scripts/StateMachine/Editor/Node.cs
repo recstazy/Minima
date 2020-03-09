@@ -112,8 +112,11 @@ namespace Minima.StateMachine.Editor
 
         public void AddConnection(Connection connection)
         {
-            Connections = Connections.ConcatOne(connection);
-            SMNode.AddConnectionTo(connection.OutNode.SMNode);
+            if (!ForwardConnected.Contains(connection.OutNode))
+            {
+                Connections = Connections.ConcatOne(connection);
+                SMNode.UpdateConnections(ForwardConnected.Select(n => n.SMNode).ToArray());
+            }
         }
 
         public void RemoveConnection(Connection connection)

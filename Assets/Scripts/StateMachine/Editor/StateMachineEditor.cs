@@ -46,6 +46,11 @@ namespace Minima.StateMachine.Editor
 
         private void OnDisable()
         {
+            foreach (var n in nodes)
+            {
+                UnbindFromNode(n);
+                nodes = null;
+            }
         }
 
         private void OnGUI()

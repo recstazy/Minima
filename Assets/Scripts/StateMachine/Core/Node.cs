@@ -12,17 +12,20 @@ namespace Minima.StateMachine
     {
         #region Fields
 
-        [SerializeField]
+        //[SerializeField]
         private NodeType nodeType;
 
-        [SerializeField]
+        //[SerializeField]
         private Vector2 position;
 
-        [SerializeField]
+        //[SerializeField]
         private Task[] tasks = new Task[0];
 
-        [SerializeField]
+        //[SerializeField]
         private Node[] connections = new Node[0];
+
+        [SerializeField]
+        private int connectionsCount;
 
         #endregion
 
@@ -45,14 +48,22 @@ namespace Minima.StateMachine
             tasks = tasks.Remove(task);
         }
 
+        public void UpdateConnections(Node[] connections)
+        {
+            this.connections = connections;
+            connectionsCount = connections.Length;
+        }
+
         public void AddConnectionTo(Node node)
         {
             connections = connections.ConcatOne(node);
+            connectionsCount = connections.Length;
         }
 
         public void RemoveConnectionTo(Node node)
         {
             connections = connections.Remove(node);
+            connectionsCount = connections.Length;
         }
     }
 }
