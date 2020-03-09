@@ -15,5 +15,6 @@ namespace Minima.StateMachine
         #region Properties
 
         #endregion
+
     }
 }

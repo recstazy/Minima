@@ -21,6 +21,7 @@ namespace Minima.StateMachine.Editor
         protected int fontSize = 12;
         protected object value = new object();
         protected string name;
+        protected Task task;
 
         GUIStyle inputFieldStyle;
 
@@ -32,10 +33,11 @@ namespace Minima.StateMachine.Editor
 
         #endregion
 
-        public TaskFieldContent(IGraphObject parent, FieldInfo fieldInfo) : base(parent)
+        public TaskFieldContent(IGraphObject parent, FieldInfo fieldInfo, Task task) : base(parent)
         {
             field = fieldInfo;
             name = field.Name;
+            this.task = task;
             CropName();
             CreateStyle();
             InitializeValue();
@@ -44,26 +46,7 @@ namespace Minima.StateMachine.Editor
 
         private void InitializeValue()
         {
-            if (field.FieldType == typeof(int))
-            {
-                value = 0;
-            }
-            else if (field.FieldType == typeof(float))
-            {
-                value = 0f;
-            }
-            else if (field.FieldType == typeof(double))
-            {
-                value = 0;
-            }
-            else if (field.FieldType == typeof(string))
-            {
-                value = "";
-            }
-            else if (field.FieldType == typeof(bool))
-            {
-                value = false;
-            }
+            value = field.GetValue(task);
         }
 
         public override void Draw()
@@ -177,7 +160,6 @@ namespace Minima.StateMachine.Editor
             else if (field.FieldType == typeof(bool))
             {
                 value = EditorGUI.Toggle(valueRect, (bool)value, inputFieldStyle);
-
             }
         }
 

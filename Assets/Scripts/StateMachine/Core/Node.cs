@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 
 namespace Minima.StateMachine
 {
@@ -22,13 +23,16 @@ namespace Minima.StateMachine
         private Vector2 position;
 
         [SerializeField]
-        private Task[] tasks = new Task[0];
-
-        [SerializeField]
         private uint[] connections = new uint[0];
 
         [SerializeField]
         private int connectionsCount;
+
+        [SerializeField]
+        private int tasksCount;
+
+        [SerializeField]
+        private Task[] tasks = new Task[0];
 
         #endregion
 
@@ -50,11 +54,13 @@ namespace Minima.StateMachine
         public void AddTask(Task task)
         {
             tasks = tasks.ConcatOne(task);
+            tasksCount = tasks.Length;
         }
 
         public void RemoveTask(Task task)
         {
             tasks = tasks.Remove(task);
+            tasksCount = tasks.Length;
         }
 
         public void AddConnectionTo(Node node)
@@ -75,6 +81,58 @@ namespace Minima.StateMachine
             }
 
             connectionsCount = connections.Length;
+        }
+
+        //private void ParseTasks()
+        //{
+        //    if (taskInfo.Length > 0)
+        //    {
+        //        foreach (var t in taskInfo)
+        //        {
+        //            var type = Type.GetType(t.TypeName);
+
+        //            if (type != null && type == typeof(Task))
+        //            {
+        //                var task = Activator.CreateInstance(type) as Task;
+
+        //                foreach (var f in t.Fields)
+        //                {
+        //                    var field = type.GetField(f.name);
+        //                    field.SetValue(task, GetValue(field.FieldType, f.value));
+        //                }
+
+        //                tasks = tasks.ConcatOne(task);
+        //            }
+        //        }
+        //    }
+
+        //    tasksCount = tasks.Length;
+        //}
+
+        private object GetValue(Type type, string value)
+        {
+            if (type == typeof(string))
+            {
+                return value;
+            }
+            else if (type == typeof(int))
+            {
+                return int.Parse(value, System.Globalization.NumberStyles.Integer);
+            }
+            else if (type == typeof(float))
+            {
+                return float.Parse(value, System.Globalization.NumberStyles.Float);
+            }
+            else if (type == typeof(double))
+            {
+                return double.Parse(value, System.Globalization.NumberStyles.Number);
+            }
+            else if (type == typeof(bool))
+            {
+                return bool.Parse(value);
+            }
+
+            return value;
         }
     }
 }

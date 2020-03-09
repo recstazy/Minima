@@ -12,10 +12,10 @@ namespace Minima.StateMachine
         #region Fields
 
         [SerializeField]
-        private uint maxId;
+        private uint maxId = 0;
 
         [SerializeField]
-        private Node[] nodes;
+        private Node[] nodes = new Node[0];
 
         #endregion
 

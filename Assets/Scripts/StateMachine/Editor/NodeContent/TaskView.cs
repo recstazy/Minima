@@ -43,7 +43,7 @@ namespace Minima.StateMachine.Editor
 
             foreach (var f in fields)
             {
-                var field = new TaskFieldContent(this, f);
+                var field = new TaskFieldContent(this, f, task);
                 AddContent(field);
             }
         }

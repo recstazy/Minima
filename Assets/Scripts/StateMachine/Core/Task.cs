@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Reflection;
+using System;
+using System.Linq;
 
 namespace Minima.StateMachine
 {
-    [System.Serializable]
+    [Serializable]
     public class Task
     {
         #region Fields
