@@ -22,7 +22,6 @@ namespace Minima.StateMachine.Editor
 
         public bool IsActive { get; set; } = true;
 
-
         #endregion
 
         #region Static
@@ -68,6 +67,10 @@ namespace Minima.StateMachine.Editor
 
         public TaskProvider(IGraphObject parent) : base(parent) 
         {
+            if (menu == null)
+            {
+                CreateDropDownMenu();
+            }
         }
 
         public override void Draw()
