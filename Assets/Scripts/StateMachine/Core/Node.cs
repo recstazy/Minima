@@ -63,7 +63,12 @@ namespace Minima.StateMachine
         public void AddTask(Task task)
         {
             tasks = tasks.ConcatOne(task);
-            taskInfo = taskInfo.ConcatOne(new TaskInfo(task));
+
+            if (task.TaskInfo == null)
+            {
+                taskInfo = taskInfo.ConcatOne(new TaskInfo(task));
+            }
+            
             tasksCount = tasks.Length;
         }
 
@@ -96,7 +101,6 @@ namespace Minima.StateMachine
 
         ~Node()
         {
-            Debug.Log("~Node");
             tasks = null;
         }
     }
