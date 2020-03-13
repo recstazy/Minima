@@ -160,6 +160,18 @@ namespace Minima.StateMachine.Editor
                         }
                         break;
                     }
+                case EventType.KeyUp:
+                    {
+                        if (e.modifiers == EventModifiers.Control)
+                        {
+                            if (e.keyCode == KeyCode.R)
+                            {
+                                AssetDatabase.Refresh();
+                            }
+                        }
+
+                        break;
+                    }
             }
         }
 

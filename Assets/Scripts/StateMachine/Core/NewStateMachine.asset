@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fa364cbb3de61a4687b9d9281bd5acd, type: 3}
+  m_Name: NewStateMachine
+  m_EditorClassIdentifier: 
+  maxId: 3
+  nodes:
+  - id: 1
+    nodeType: 0
+    position: {x: 36, y: 126}
+    connections: 03000000
+    connectionsCount: 1
+    tasksCount: 1
+    taskInfo:
+    - typeName: ExampleTask
+      fields: []
+      json: '{"boolField":false,"intField":10,"floatField":10.199999809265137,"stringField":"qwerty"}'
+  - id: 2
+    nodeType: 0
+    position: {x: 324, y: 149}
+    connections: 
+    connectionsCount: 0
+    tasksCount: 1
+    taskInfo:
+    - typeName: ExampleTaskThree
+      fields: []
+      json: '{"boolFieldTwo":false,"intFieldTwo":5,"floatFieldTwo":0.10000000149011612,"stringFieldTwo":"asdf"}'
+  - id: 3
+    nodeType: 0
+    position: {x: 194, y: 325}
+    connections: 02000000
+    connectionsCount: 1
+    tasksCount: 1
+    taskInfo:
+    - typeName: ExampleTaskTwo
+      fields: []
+      json: '{"boolFieldTwo":false,"intFieldTwo":5,"floatFieldTwo":0.10000000149011612,"stringFieldTwo":"asdf"}'

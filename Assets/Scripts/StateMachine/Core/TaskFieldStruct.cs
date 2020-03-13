@@ -10,6 +10,9 @@ namespace Minima.StateMachine
         #region Fields
 
         [SerializeField]
+        public string type;
+
+        [SerializeField]
         public string name;
 
         [SerializeField]
@@ -21,6 +24,7 @@ namespace Minima.StateMachine
         {
             this.name = name;
             this.value = value.ToString();
+            type = typeof(object).ToString();
         }
     }
 }

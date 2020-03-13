@@ -7,16 +7,16 @@ public class ExampleTask : Task
 {
     #region Fields
 
-    [NodeEditable]
+    [SerializeField]
     public bool boolField;
 
-    [NodeEditable]
+    [SerializeField]
     public int intField = 10;
 
-    [NodeEditable]
+    [SerializeField]
     public float floatField = 10.2f;
 
-    [NodeEditable]
+    [SerializeField]
     public string stringField = "qwerty";
 
     #endregion

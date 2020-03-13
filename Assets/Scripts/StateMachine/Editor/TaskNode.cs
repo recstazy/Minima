@@ -23,6 +23,7 @@ namespace Minima.StateMachine.Editor
             SMNode.NodeType = NodeType.Task;
             AddTaskProvider();
             Content.OnContentAdded += ContentAdded;
+
             Content.OnContentRemoved += ContentRemoved;
         }
 

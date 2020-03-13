@@ -26,7 +26,16 @@ namespace Minima.StateMachine.Editor
 
         public TaskView(IGraphObject parent, Task task) : base(parent)
         {
-            taskType = task.GetType();
+
+            if (Task!= null && Task.TaskInfo != null)
+            {
+                taskType = Type.GetType(task.TaskInfo.TypeName);
+            }
+            else
+            {
+                taskType = task.GetType();
+            }
+            
             this.task = task;
             Construct();
             CreateContextMenu();
@@ -38,7 +47,7 @@ namespace Minima.StateMachine.Editor
             AddContent(title);
 
             fields = taskType.GetFields()
-                .Where(f => f.GetCustomAttribute<NodeEditable>() != null)
+                .Where(f => f.GetCustomAttribute<SerializeField>() != null)
                 .ToArray();
 
             foreach (var f in fields)

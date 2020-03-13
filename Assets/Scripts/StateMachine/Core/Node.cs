@@ -32,7 +32,10 @@ namespace Minima.StateMachine
         private int tasksCount;
 
         [SerializeField]
-        private Task[] tasks = new Task[0];
+        private TaskInfo[] taskInfo = new TaskInfo[0];
+
+        [NonSerialized]
+        private Task[] tasks;
 
         #endregion
 
@@ -43,8 +46,14 @@ namespace Minima.StateMachine
         public Vector2 Position { get => position; set => position = value; }
         public Task[] Tasks { get => tasks; private set => tasks = value; }
         public uint[] Connections { get => connections; private set => connections = value; }
+        public TaskInfo[] TaskInfo { get => taskInfo; }
 
         #endregion
+
+        public Node()
+        {
+            tasks = new Task[0];
+        }
 
         public void SetId(uint id)
         {
@@ -54,12 +63,14 @@ namespace Minima.StateMachine
         public void AddTask(Task task)
         {
             tasks = tasks.ConcatOne(task);
+            taskInfo = taskInfo.ConcatOne(new TaskInfo(task));
             tasksCount = tasks.Length;
         }
 
         public void RemoveTask(Task task)
         {
             tasks = tasks.Remove(task);
+            taskInfo = taskInfo.Remove(task.TaskInfo);
             tasksCount = tasks.Length;
         }
 
@@ -83,56 +94,10 @@ namespace Minima.StateMachine
             connectionsCount = connections.Length;
         }
 
-        //private void ParseTasks()
-        //{
-        //    if (taskInfo.Length > 0)
-        //    {
-        //        foreach (var t in taskInfo)
-        //        {
-        //            var type = Type.GetType(t.TypeName);
-
-        //            if (type != null && type == typeof(Task))
-        //            {
-        //                var task = Activator.CreateInstance(type) as Task;
-
-        //                foreach (var f in t.Fields)
-        //                {
-        //                    var field = type.GetField(f.name);
-        //                    field.SetValue(task, GetValue(field.FieldType, f.value));
-        //                }
-
-        //                tasks = tasks.ConcatOne(task);
-        //            }
-        //        }
-        //    }
-
-        //    tasksCount = tasks.Length;
-        //}
-
-        private object GetValue(Type type, string value)
+        ~Node()
         {
-            if (type == typeof(string))
-            {
-                return value;
-            }
-            else if (type == typeof(int))
-            {
-                return int.Parse(value, System.Globalization.NumberStyles.Integer);
-            }
-            else if (type == typeof(float))
-            {
-                return float.Parse(value, System.Globalization.NumberStyles.Float);
-            }
-            else if (type == typeof(double))
-            {
-                return double.Parse(value, System.Globalization.NumberStyles.Number);
-            }
-            else if (type == typeof(bool))
-            {
-                return bool.Parse(value);
-            }
-
-            return value;
+            Debug.Log("~Node");
+            tasks = null;
         }
     }
 }

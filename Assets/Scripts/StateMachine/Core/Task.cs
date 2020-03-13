@@ -16,6 +16,8 @@ namespace Minima.StateMachine
 
         #region Properties
 
+        public TaskInfo TaskInfo { get; set; }
+
         #endregion
     }
 }
