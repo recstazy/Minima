@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 
 namespace Minima.StateMachine.Editor
@@ -10,6 +11,11 @@ namespace Minima.StateMachine.Editor
         #region Fields
 
         private StateMachineIO stateMachineIO = new StateMachineIO();
+        private int lastAssetId;
+
+        private bool initialized = false;
+        private bool shouldReintialize = false;
+
         private List<Node> nodes = new List<Node>();
         private SMEditorEventArgs eventArgs;
         private NodeConnector nodeConnector;
@@ -42,14 +48,60 @@ namespace Minima.StateMachine.Editor
 
         private void OnEnable()
         {
-            eventArgs = new SMEditorEventArgs(this);
-            nodeConnector = new NodeConnector();
-            CreateContextMenu();
-            OpenAssetData();
+            shouldReintialize = true; 
         }
 
         private void OnDisable()
         {
+            Dispose();
+        }
+
+        private void OnGUI()
+        {
+            if (initialized)
+            {
+                lastMousePosition = Event.current.mousePosition;
+
+                DrawGrid(20, 0.2f, Color.gray);
+                DrawGrid(100, 0.4f, Color.gray);
+
+                DrawNodes();
+
+                ProcessNodeEvents(Event.current);
+                nodeConnector.ProcessEvents(Event.current);
+                ProcessEvents(Event.current);
+
+                if (GUI.changed)
+                {
+                    Repaint();
+                }
+
+                if (StateMachineIO.AssetId != lastAssetId)
+                {
+                    Dispose();
+                    shouldReintialize = true;
+                }
+            }
+            else if(shouldReintialize)
+            {
+                Initialize();
+            }
+        }
+
+        private void Initialize()
+        {
+            eventArgs = new SMEditorEventArgs(this);
+            nodeConnector = new NodeConnector();
+            CreateContextMenu();
+            OpenAssetData();
+            initialized = true;
+            shouldReintialize = false;
+        }
+
+        private void Dispose()
+        {
+            initialized = false;
+
             foreach (var n in nodes)
             {
                 UnbindFromNode(n);
@@ -58,36 +110,18 @@ namespace Minima.StateMachine.Editor
             nodes = null;
         }
 
-        private void OnGUI()
-        {
-            lastMousePosition = Event.current.mousePosition;
-
-            DrawGrid(20, 0.2f, Color.gray);
-            DrawGrid(100, 0.4f, Color.gray);
-
-            DrawNodes();
-
-            ProcessNodeEvents(Event.current);
-            nodeConnector.ProcessEvents(Event.current);
-            ProcessEvents(Event.current);
-
-            if (GUI.changed)
-            {
-                Repaint();
-            }
-        }
-
         private void OpenAssetData()
         {
             bool canGetNodes = stateMachineIO.IsAssetOpened;
 
             if (!canGetNodes)
             {
-                canGetNodes = stateMachineIO.TryOpenLastAsset();
+                canGetNodes = stateMachineIO.TryOpenAssetByID(lastAssetId);
             }
 
             if (canGetNodes)
             {
+                lastAssetId = StateMachineIO.AssetId;
                 nodes = stateMachineIO.GetNodes().ToList();
 
                 foreach (var n in nodes)
@@ -170,18 +204,6 @@ namespace Minima.StateMachine.Editor
 
                             isDragging = false;
                         }
-                        break;
-                    }
-                case EventType.KeyUp:
-                    {
-                        if (e.modifiers == EventModifiers.Control)
-                        {
-                            if (e.keyCode == KeyCode.R)
-                            {
-                                AssetDatabase.Refresh();
-                            }
-                        }
-
                         break;
                     }
             }

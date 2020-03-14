@@ -27,13 +27,14 @@ namespace Minima.StateMachine.Editor
         #region Static
 
         private static StateMachine openedAsset;
-        private static int lastOpenedAsset;
+        public static int AssetId { get; private set; }
 
         [OnOpenAsset(1)]
         private static bool AssetOpened(int instanceID, int line)
         {
             if (TryOpenAsset(instanceID))
             {
+                AssetId = instanceID;
                 StateMachineEditor.OpenWindow();
                 return true;
             }
@@ -48,7 +49,6 @@ namespace Minima.StateMachine.Editor
             if (instance is StateMachine)
             {
                 openedAsset = instance as StateMachine;
-                lastOpenedAsset = id;
                 return true;
             }
 
@@ -63,14 +63,11 @@ namespace Minima.StateMachine.Editor
 
         #endregion
 
-        public bool TryOpenLastAsset()
+        public bool TryOpenAssetByID(int id)
         {
-            if (lastOpenedAsset > 0)
+            if (TryOpenAsset(id))
             {
-                if (TryOpenAsset(lastOpenedAsset))
-                {
-                    return true;
-                }
+                return true;
             }
 
             return false;
