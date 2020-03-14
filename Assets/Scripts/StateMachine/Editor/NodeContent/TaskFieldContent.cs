@@ -17,9 +17,11 @@ namespace Minima.StateMachine.Editor
 
         protected Rect nameRect;
         protected Rect valueRect;
-        protected int inputFieldWidth = 50;
+        protected int inputFieldWidth = 100;
         protected int fontSize = 12;
         protected object value = new object();
+        protected object lastValue;
+        private UnityEngine.Object objectValue;
         protected string name;
         protected Task task;
 
@@ -42,11 +44,12 @@ namespace Minima.StateMachine.Editor
             CreateStyle();
             InitializeValue();
             DefaultSize = new Vector2(200f, 20f);
-        }
 
-        private void InitializeValue()
-        {
-            value = field.GetValue(task);
+            if (value is UnityEngine.Object)
+            {
+                inputFieldWidth = 150;
+                DefaultSize = new Vector2(200f, 16f);
+            }
         }
 
         public override void Draw()
@@ -57,6 +60,12 @@ namespace Minima.StateMachine.Editor
             {
                 GUI.Label(nameRect, name, style);
                 DrawInputField();
+
+                if (value != lastValue)
+                {
+                    lastValue = value;
+                    ValueChanged();
+                }
             }
         }
 
@@ -160,6 +169,27 @@ namespace Minima.StateMachine.Editor
             else if (field.FieldType == typeof(bool))
             {
                 value = EditorGUI.Toggle(valueRect, (bool)value, inputFieldStyle);
+            }
+            else if (typeof(UnityEngine.Object).IsAssignableFrom(field.FieldType))
+            {
+                value = EditorGUI.ObjectField(valueRect, objectValue, field.FieldType, true);
+                objectValue = value as UnityEngine.Object;
+            }
+        }
+
+        protected void ValueChanged()
+        {
+            field.SetValue(task, value);
+            task.UpdateInfo();
+        }
+
+        private void InitializeValue()
+        {
+            value = field.GetValue(task);
+
+            if (value is UnityEngine.Object)
+            {
+                objectValue = value as UnityEngine.Object;
             }
         }
 

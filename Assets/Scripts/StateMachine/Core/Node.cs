@@ -26,12 +26,6 @@ namespace Minima.StateMachine
         private uint[] connections = new uint[0];
 
         [SerializeField]
-        private int connectionsCount;
-
-        [SerializeField]
-        private int tasksCount;
-
-        [SerializeField]
         private TaskInfo[] taskInfo = new TaskInfo[0];
 
         [NonSerialized]
@@ -60,6 +54,11 @@ namespace Minima.StateMachine
             this.id = id;
         }
 
+        public void SetTasks(Task[] tasks)
+        {
+            this.tasks = tasks;
+        }
+
         public void AddTask(Task task)
         {
             tasks = tasks.ConcatOne(task);
@@ -68,15 +67,12 @@ namespace Minima.StateMachine
             {
                 taskInfo = taskInfo.ConcatOne(new TaskInfo(task));
             }
-            
-            tasksCount = tasks.Length;
         }
 
         public void RemoveTask(Task task)
         {
             tasks = tasks.Remove(task);
             taskInfo = taskInfo.Remove(task.TaskInfo);
-            tasksCount = tasks.Length;
         }
 
         public void AddConnectionTo(Node node)
@@ -85,8 +81,6 @@ namespace Minima.StateMachine
             {
                 connections = connections.ConcatOne(node.ID);
             }
-
-            connectionsCount = connections.Length;
         }
 
         public void RemoveConnectionTo(Node node)
@@ -95,8 +89,6 @@ namespace Minima.StateMachine
             {
                 connections = connections.Remove(node.ID);
             }
-
-            connectionsCount = connections.Length;
         }
 
         ~Node()

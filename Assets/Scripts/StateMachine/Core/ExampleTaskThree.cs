@@ -19,6 +19,9 @@ public class ExampleTaskThree : Task
     [SerializeField]
     public string stringFieldTwo = "asdf";
 
+    [SerializeField]
+    public MonoBehaviour behaviour;
+
     #endregion
 
     #region Properties

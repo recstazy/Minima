@@ -29,12 +29,16 @@ namespace Minima.StateMachine.Editor
 
         #endregion
 
+        #region Static
+
         [MenuItem("Window/State Machine Editor")]
         public static void OpenWindow()
         {
             StateMachineEditor window = GetWindow<StateMachineEditor>();
             window.titleContent = new GUIContent("State Machine Editor");
         }
+
+        #endregion
 
         private void OnEnable()
         {
@@ -49,8 +53,9 @@ namespace Minima.StateMachine.Editor
             foreach (var n in nodes)
             {
                 UnbindFromNode(n);
-                nodes = null;
             }
+
+            nodes = null;
         }
 
         private void OnGUI()
@@ -74,7 +79,14 @@ namespace Minima.StateMachine.Editor
 
         private void OpenAssetData()
         {
-            if (stateMachineIO.IsAssetOpened)
+            bool canGetNodes = stateMachineIO.IsAssetOpened;
+
+            if (!canGetNodes)
+            {
+                canGetNodes = stateMachineIO.TryOpenLastAsset();
+            }
+
+            if (canGetNodes)
             {
                 nodes = stateMachineIO.GetNodes().ToList();
 

@@ -19,5 +19,17 @@ namespace Minima.StateMachine
         public TaskInfo TaskInfo { get; set; }
 
         #endregion
+
+        public void UpdateInfo()
+        {
+            if (TaskInfo != null)
+            {
+                TaskInfo.UpdateInfo(this);
+            }
+            else
+            {
+                TaskInfo = new TaskInfo(this);
+            }
+        }
     }
 }

@@ -26,7 +26,6 @@ namespace Minima.StateMachine.Editor
 
         public TaskView(IGraphObject parent, Task task) : base(parent)
         {
-
             if (Task!= null && Task.TaskInfo != null)
             {
                 taskType = Type.GetType(task.TaskInfo.TypeName);
