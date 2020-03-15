@@ -60,7 +60,7 @@ namespace Minima.StateMachine.Editor
             taskTypes = null;
 
             menu = new GUIContent[types.Length + 1];
-            menu[0] = new GUIContent("None");
+            menu[0] = new GUIContent("Add task");
             
             for (int i = 0; i < types.Length; i++)
             {

@@ -44,7 +44,7 @@ namespace Minima.StateMachine
         public Task CreateTaskInstance()
         {
             var task = JsonUtility.FromJson(json, Type.GetType(typeName)) as Task;
-            DeserializeUnityObjects(task);
+            //DeserializeUnityObjects(task);
             task.TaskInfo = this;
             return task;
         }

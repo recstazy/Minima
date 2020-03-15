@@ -12,19 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fa364cbb3de61a4687b9d9281bd5acd, type: 3}
   m_Name: NewStateMachine
   m_EditorClassIdentifier: 
-  maxId: 3
+  maxId: 2
   nodes:
+  - id: 1
+    nodeType: 0
+    position: {x: 31, y: 44}
+    connections: 02000000
+    taskInfo:
+    - typeName: ExampleTaskThree
+      json: '{"boolFieldTwo":false,"intFieldTwo":5,"floatFieldTwo":0.10000000149011612,"stringFieldTwo":"asdf","behaviour":{"instanceID":0}}'
   - id: 2
     nodeType: 0
-    position: {x: 342, y: 222}
+    position: {x: 401, y: 202}
     connections: 
     taskInfo:
     - typeName: ExampleTask
-      json: '{"boolField":true,"intField":15,"floatField":0.20000000298023225,"stringField":"mmm"}'
-  - id: 3
-    nodeType: 0
-    position: {x: 627, y: 221}
-    connections: 
-    taskInfo:
-    - typeName: ExampleTaskThree
-      json: '{"boolFieldTwo":false,"intFieldTwo":4,"floatFieldTwo":0.1599999964237213,"stringFieldTwo":"qweewq","behaviour":{"instanceID":13460}}'
+      json: '{"boolField":false,"intField":10,"floatField":10.199999809265137,"stringField":"qwerty"}'
