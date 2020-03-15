@@ -34,7 +34,6 @@ namespace Minima.StateMachine.Editor
         {
             if (TryOpenAsset(instanceID))
             {
-                AssetId = instanceID;
                 StateMachineEditor.OpenWindow();
                 return true;
             }
@@ -49,6 +48,7 @@ namespace Minima.StateMachine.Editor
             if (instance is StateMachine)
             {
                 openedAsset = instance as StateMachine;
+                AssetId = id;
                 return true;
             }
 
