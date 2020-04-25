@@ -161,15 +161,7 @@ namespace Minima.StateMachine.Editor
 
         private Node GetEditorNode(Minima.StateMachine.Node node)
         {
-            var type = node.NodeType;
-
-            if (type == NodeType.State)
-            {
-                return new TaskNode(node);
-            }
-
-            Debug.LogError("No implementation of creating " + type.ToString());
-            return null;
+            return new TaskNode(node);
         }
     }
 }
