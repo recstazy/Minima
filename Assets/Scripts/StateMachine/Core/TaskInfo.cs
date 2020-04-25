@@ -44,42 +44,8 @@ namespace Minima.StateMachine
         public Task CreateTaskInstance()
         {
             var task = JsonUtility.FromJson(json, Type.GetType(typeName)) as Task;
-            //DeserializeUnityObjects(task);
             task.TaskInfo = this;
             return task;
-        }
-
-        private void DeserializeUnityObjects(Task task)
-        {
-            var type = Type.GetType(typeName);
-            var serializedObjects = type.GetFields()
-                .Where(f => f.GetCustomAttribute(typeof(SerializeField)) != null)
-                .Where(f => typeof(UnityEngine.Object).IsAssignableFrom(f.FieldType));
-
-            foreach (var o in serializedObjects)
-            {
-                var id = GetInstanceId(o.Name);
-                var instance = EditorUtility.InstanceIDToObject(id);
-                o.SetValue(task, instance);
-            }
-        }
-
-        private int GetInstanceId(string name)
-        {
-            var leftPart = "\"" + name + "\":{\"instanceID\":";
-            var regex = new Regex(leftPart + ".*}");
-            var match = regex.Match(json);
-            
-            if (match.Success)
-            {
-                var cleared = match.Value
-                    .Replace("}", "")
-                    .Replace(leftPart, "");
-
-                var id = int.Parse(cleared);
-                return id;
-            }
-            return 0;
         }
     }
 }
