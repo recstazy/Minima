@@ -9,7 +9,7 @@ namespace Minima.StateMachine.Editor
     {
         #region Fields
 
-        private TaskProvider taskProvider;
+        protected TaskProvider taskProvider;
 
         #endregion
 
@@ -29,10 +29,19 @@ namespace Minima.StateMachine.Editor
         public TaskNode(Minima.StateMachine.Node node) : base(node)
         {
             NodeType = node.NodeType;
-            AddTaskProvider();
+
+            if (SMNode.TasksEditable)
+            {
+                AddTaskProvider();
+            }
+            
             CreateTasks();
-            Content.OnContentAdded += ContentAdded;
-            Content.OnContentRemoved += ContentRemoved;
+
+            if (SMNode.TasksEditable)
+            {
+                Content.OnContentAdded += ContentAdded;
+                Content.OnContentRemoved += ContentRemoved;
+            }
         }
 
         public override void Draw()
@@ -54,7 +63,7 @@ namespace Minima.StateMachine.Editor
             AddContent(taskProvider);
         }
 
-        private void CreateTasks()
+        protected void CreateTasks()
         {
             foreach (var t in SMNode.Tasks)
             {
@@ -62,7 +71,7 @@ namespace Minima.StateMachine.Editor
             }
         }
 
-        private void TaskCreated(Task task)
+        protected void TaskCreated(Task task)
         {
             var taskView = new TaskView(this, task);
             taskView.UseParentRectCenter = false;

@@ -12,12 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fa364cbb3de61a4687b9d9281bd5acd, type: 3}
   m_Name: NewStateMachine 1
   m_EditorClassIdentifier: 
-  maxId: 1
+  maxId: 2
   nodes:
   - id: 1
     nodeType: 0
-    position: {x: 110, y: 99}
+    position: {x: 86, y: 81}
     connections: 
     taskInfo:
-    - typeName: ExampleTaskTwo
-      json: '{"boolFieldTwo":false,"intFieldTwo":4,"floatFieldTwo":0.1599999964237213,"stringFieldTwo":"pppp"}'
+    - typeName: Minima.StateMachine.EntryTask
+      json: '{}'
+    tasksEditable: 0
+  - id: 2
+    nodeType: 0
+    position: {x: 211, y: 195}
+    connections: 
+    taskInfo: []
+    tasksEditable: 1

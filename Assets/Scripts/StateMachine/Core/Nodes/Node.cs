@@ -28,6 +28,9 @@ namespace Minima.StateMachine
         [SerializeField]
         private TaskInfo[] taskInfo = new TaskInfo[0];
 
+        [SerializeField]
+        protected bool tasksEditable = true;
+
         [NonSerialized]
         private Task[] tasks;
 
@@ -36,17 +39,20 @@ namespace Minima.StateMachine
         #region Properties
 
         public uint ID { get => id; }
+        public string Title { get; protected set; }
         public NodeType NodeType { get => nodeType; set => nodeType = value; }
         public Vector2 Position { get => position; set => position = value; }
         public Task[] Tasks { get => tasks; private set => tasks = value; }
         public uint[] Connections { get => connections; private set => connections = value; }
         public TaskInfo[] TaskInfo { get => taskInfo; }
+        public bool TasksEditable { get => tasksEditable; }
 
         #endregion
 
         public Node()
         {
             tasks = new Task[0];
+            Title = NodeType.ToString();
         }
 
         public void SetId(uint id)
@@ -54,25 +60,31 @@ namespace Minima.StateMachine
             this.id = id;
         }
 
-        public void SetTasks(Task[] tasks)
+        public virtual void SetTasks(Task[] tasks)
         {
             this.tasks = tasks;
         }
 
-        public void AddTask(Task task)
+        public virtual void AddTask(Task task)
         {
-            tasks = tasks.ConcatOne(task);
-
-            if (task.TaskInfo == null)
+            if (TasksEditable)
             {
-                taskInfo = taskInfo.ConcatOne(new TaskInfo(task));
+                tasks = tasks.ConcatOne(task);
+
+                if (task.TaskInfo == null)
+                {
+                    taskInfo = taskInfo.ConcatOne(new TaskInfo(task));
+                }
             }
         }
 
-        public void RemoveTask(Task task)
+        public virtual void RemoveTask(Task task)
         {
-            tasks = tasks.Remove(task);
-            taskInfo = taskInfo.Remove(task.TaskInfo);
+            if (TasksEditable)
+            {
+                tasks = tasks.Remove(task);
+                taskInfo = taskInfo.Remove(task.TaskInfo);
+            }
         }
 
         public void AddConnectionTo(Node node)

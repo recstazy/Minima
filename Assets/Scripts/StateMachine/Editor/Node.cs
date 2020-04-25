@@ -75,7 +75,7 @@ namespace Minima.StateMachine.Editor
         public virtual void Draw()
         {
             UpdateRectToFitContent();
-            GUI.Box(Rect, Title, currentStyle);
+            GUI.Box(Rect, "", currentStyle);
             DrawContent();
             DrawConnections();
         }
@@ -284,6 +284,7 @@ namespace Minima.StateMachine.Editor
             defaultStyle = (GUIStyle)"flow node 0";
             selectedStyle = (GUIStyle)"flow node 0 on";
             currentStyle = defaultStyle;
+            Title = SMNode.Title;
         }
 
         private void UpdateRectToFitContent()

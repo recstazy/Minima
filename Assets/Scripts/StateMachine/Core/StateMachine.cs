@@ -25,6 +25,11 @@ namespace Minima.StateMachine
 
         #endregion
 
+        public StateMachine()
+        {
+            AddNode(new EntryNode());
+        }
+
         public void AddNode(Node node)
         {
             if (nodes == null)

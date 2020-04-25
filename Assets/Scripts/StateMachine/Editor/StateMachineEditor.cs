@@ -112,8 +112,11 @@ namespace Minima.StateMachine.Editor
                 UnbindFromNode(n);
             }
 
-            nodeProvider.OnNodeCreated -= NodeCreated;
-
+            if (nodeProvider != null)
+            {
+                nodeProvider.OnNodeCreated -= NodeCreated;
+            }
+            
             nodes = null;
         }
 

@@ -53,11 +53,11 @@ namespace Minima.StateMachine.Editor
             string addGroupName = "Add";
 
             contextMenu = new GenericMenu();
-            contextMenu.AddItem(new GUIContent(addGroupName + "/Task node"), false, AddTaskNodeCliced);
+            contextMenu.AddItem(new GUIContent(addGroupName + "/State node"), false, AddStateNodeClicked);
             contextMenu.AddItem(new GUIContent(addGroupName + "/Condition node"), false, AddConditionNodeClicked);
         }
 
-        private void AddTaskNodeCliced()
+        private void AddStateNodeClicked()
         {
             var node = new TaskNode(lastMousePosition, NodeType.State);
             CallNodeCreated(node);

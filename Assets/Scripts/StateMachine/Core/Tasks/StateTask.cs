@@ -14,5 +14,14 @@ namespace Minima.StateMachine
 
         #endregion
 
+        public virtual void OnStateEnter()
+        {
+
+        }
+
+        public virtual void OnStateExit()
+        {
+
+        }
     }
 }
