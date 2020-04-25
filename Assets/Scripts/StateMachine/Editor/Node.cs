@@ -310,9 +310,5 @@ namespace Minima.StateMachine.Editor
                 rect.size = DefaultSize;
             }
         }
-
-        public void SetRectPosition(Vector2 position)
-        {
-        }
     }
 }

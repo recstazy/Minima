@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Minima.StateMachine;
 
-public class ExampleTask : Task
+public class ExampleTask : StateTask
 {
     #region Fields
 

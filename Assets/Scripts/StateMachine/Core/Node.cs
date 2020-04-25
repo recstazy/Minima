@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Minima.StateMachine
 {
-    public enum NodeType { Task, Condition }
+    public enum NodeType { State, Condition }
 
     [Serializable]
     public class Node

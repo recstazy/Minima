@@ -19,6 +19,7 @@ namespace Minima.StateMachine.Editor
         private List<Node> nodes = new List<Node>();
         private SMEditorEventArgs eventArgs;
         private NodeConnector nodeConnector;
+        private NodeProvider nodeProvider;
         private GenericMenu contextMenu;
 
         private Vector2 lastMousePosition;
@@ -32,6 +33,7 @@ namespace Minima.StateMachine.Editor
         #region Properties
 
         public bool IsPerformingConnection { get => nodeConnector.IsPerformingConnection; }
+        public bool IsDragging { get => isDragging; }
 
         #endregion
 
@@ -69,6 +71,7 @@ namespace Minima.StateMachine.Editor
 
                 ProcessNodeEvents(Event.current);
                 nodeConnector.ProcessEvents(Event.current);
+                nodeProvider.ProcessEvents(Event.current, eventArgs);
                 ProcessEvents(Event.current);
 
                 if (GUI.changed)
@@ -92,7 +95,9 @@ namespace Minima.StateMachine.Editor
         {
             eventArgs = new SMEditorEventArgs(this);
             nodeConnector = new NodeConnector();
-            CreateContextMenu();
+            nodeProvider = new NodeProvider();
+            nodeProvider.OnNodeCreated += NodeCreated;
+
             OpenAssetData();
             initialized = true;
             shouldReintialize = false;
@@ -106,6 +111,8 @@ namespace Minima.StateMachine.Editor
             {
                 UnbindFromNode(n);
             }
+
+            nodeProvider.OnNodeCreated -= NodeCreated;
 
             nodes = null;
         }
@@ -187,7 +194,6 @@ namespace Minima.StateMachine.Editor
                         {
                             isDragging = true;
                             OnDrag(e.delta);
-
                         }
                         break;
                     }
@@ -196,12 +202,6 @@ namespace Minima.StateMachine.Editor
                         if (e.button == 1)
                         {
                             isHoldingRightMouse = false;
-
-                            if (!isDragging)
-                            {
-                                contextMenu.ShowAsContext();
-                            }
-
                             isDragging = false;
                         }
                         break;
@@ -240,15 +240,8 @@ namespace Minima.StateMachine.Editor
             GUI.changed = true;
         }
 
-        private void AddNodeClicked()
+        private void NodeCreated(Node node)
         {
-            CreateNode(lastMousePosition);
-        }
-
-        private void CreateNode(Vector2 position)
-        {
-            var node = new TaskNode(position);
-
             nodes.Add(node);
             stateMachineIO.AddNode(node);
             BindToNode(node);
@@ -271,12 +264,6 @@ namespace Minima.StateMachine.Editor
         {
             node.OnConnectClicked -= nodeConnector.ConnectNodeClicked;
             node.OnRemoveNode -= NodeRemoved;
-        }
-
-        private void CreateContextMenu()
-        {
-            contextMenu = new GenericMenu();
-            contextMenu.AddItem(new GUIContent("Add node"), false, AddNodeClicked);
         }
     }
 }

@@ -16,6 +16,7 @@ namespace Minima.StateMachine.Editor
         #region Properties
 
         public bool IsPerformingConnection { get => editor.IsPerformingConnection; }
+        public bool IsDragging { get => editor.IsDragging; }
 
         #endregion
 

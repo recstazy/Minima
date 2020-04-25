@@ -163,7 +163,7 @@ namespace Minima.StateMachine.Editor
         {
             var type = node.NodeType;
 
-            if (type == NodeType.Task)
+            if (type == NodeType.State)
             {
                 return new TaskNode(node);
             }

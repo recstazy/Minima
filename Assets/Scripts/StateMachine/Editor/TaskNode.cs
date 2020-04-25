@@ -17,19 +17,18 @@ namespace Minima.StateMachine.Editor
 
         #endregion
 
-        public TaskNode(Vector2 position) : base(position) 
+        public TaskNode(Vector2 position, NodeType nodeType) : base(position) 
         {
-            NodeType = NodeType.Task;
-            SMNode.NodeType = NodeType.Task;
+            NodeType = nodeType;
+            SMNode.NodeType = nodeType;
             AddTaskProvider();
             Content.OnContentAdded += ContentAdded;
-
             Content.OnContentRemoved += ContentRemoved;
         }
 
         public TaskNode(Minima.StateMachine.Node node) : base(node)
         {
-            NodeType = NodeType.Task;
+            NodeType = node.NodeType;
             AddTaskProvider();
             CreateTasks();
             Content.OnContentAdded += ContentAdded;
@@ -48,7 +47,7 @@ namespace Minima.StateMachine.Editor
 
         private void AddTaskProvider()
         {
-            taskProvider = new TaskProvider(this);
+            taskProvider = new TaskProvider(this, SMNode.NodeType);
             taskProvider.UseParentRectCenter = false;
             taskProvider.AutoUpdateSize = false;
             taskProvider.OnTaskSelected += TaskCreated;
