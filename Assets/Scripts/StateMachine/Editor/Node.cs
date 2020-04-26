@@ -35,6 +35,8 @@ namespace Minima.StateMachine.Editor
         public Minima.StateMachine.Node SMNode { get; private set; }
 
         public Connection[] Connections { get; private set; } = new Connection[0];
+        public int InputsCount { get; private set; }
+        public int OutputsCount { get; private set; }
 
         public Node[] ConnectedNodes
         {
@@ -44,7 +46,7 @@ namespace Minima.StateMachine.Editor
                     .ToArray();
         }
 
-        public Node[] ForwardConnected
+        public Node[] Outputs
         {
             get => Connections
                 .Where(c => c.InNode == this)
@@ -53,9 +55,9 @@ namespace Minima.StateMachine.Editor
 
         #endregion
 
-        public Node(Vector2 position)
+        public Node(Vector2 position, NodeType nodeType)
         {
-            SMNode = new Minima.StateMachine.Node();
+            SMNode = new Minima.StateMachine.Node(nodeType);
             rect = new Rect(position.x, position.y, DefaultSize.x, DefaultSize.y);
             CreateStyle();
         }
@@ -114,12 +116,30 @@ namespace Minima.StateMachine.Editor
         {
             Connections = Connections.ConcatOne(connection);
             SMNode.AddConnectionTo(connection.OutNode.SMNode);
+
+            if (connection.OutNode == this)
+            {
+                InputsCount++;
+            }
+            else
+            {
+                OutputsCount++;
+            }
         }
 
         public void RemoveConnection(Connection connection)
         {
             Connections = Connections.Remove(connection);
             SMNode.RemoveConnectionTo(connection.OutNode.SMNode);
+
+            if (connection.OutNode == this)
+            {
+                InputsCount--;
+            }
+            else
+            {
+                OutputsCount--;
+            }
         }
 
         public Vector2 GetClosestPointOnRect(Vector2 origin)

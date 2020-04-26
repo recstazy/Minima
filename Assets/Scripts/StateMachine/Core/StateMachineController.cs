@@ -13,7 +13,8 @@ namespace Minima.StateMachine
         private StateMachine stateMachine;
 
         private Node currentState;
-        private Node[] currentConditions;
+        private Node[] connectedConditions;
+        private ConditionTask[] currentConditions;
         private Node[] nextStates;
         private List<Node> stateNodes;
 
@@ -37,12 +38,25 @@ namespace Minima.StateMachine
             CurrentStateEnter();
         }
 
+        private void Update()
+        {
+            if (currentState != null)
+            {
+                foreach (var t in currentState.Tasks)
+                {
+                    t.TaskUpdate();
+                }
+
+                foreach(var c in currentConditions)
+                {
+                    c.TaskUpdate();
+                }
+            }
+        }
+
         private void CurrentStateEnter()
         {
-            var currentConnected = GetCurrentConnected();
-
-            nextStates = currentConnected.Where(c => c.NodeType == NodeType.State).ToArray();
-            currentConditions = currentConnected.Where(c => c.NodeType == NodeType.Condition).ToArray();
+            InitCurrentState();
 
             foreach (var t in currentState.Tasks)
             {
@@ -58,6 +72,23 @@ namespace Minima.StateMachine
             }
         }
 
+        private void InitCurrentState()
+        {
+            var currentConnected = GetCurrentConnected();
+
+            nextStates = currentConnected.Where(c => c.NodeType == NodeType.State).ToArray();
+            connectedConditions = currentConnected.Where(c => c.NodeType == NodeType.Condition).ToArray();
+
+            if (connectedConditions != null && connectedConditions.Length > 0)
+            {
+                SetCurrentConditionTasks();
+            }
+            else
+            {
+
+            }
+        }
+
         private Node[] GetCurrentConnected()
         {
             var result = currentState.Connections
@@ -67,6 +98,14 @@ namespace Minima.StateMachine
                 .ToArray();
 
             return result;
+        }
+
+        private void SetCurrentConditionTasks()
+        {
+            foreach (var c in connectedConditions)
+            {
+                currentConditions = currentConditions.Concat(c.Tasks.Select(t => t as ConditionTask)).ToArray();
+            }
         }
     }
 }

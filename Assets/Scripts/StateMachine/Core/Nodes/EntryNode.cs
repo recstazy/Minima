@@ -14,11 +14,17 @@ namespace Minima.StateMachine
 
         #endregion
 
-        public EntryNode()
+        public EntryNode() : base(NodeType.State)
         {
             AddTask(new EntryTask());
             tasksEditable = false;
             Title = "Entry";
+        }
+
+        protected override void InitInOut()
+        {
+            maxInputs = 0;
+            maxOutputs = 1;
         }
     }
 }

@@ -32,11 +32,24 @@ namespace Minima.StateMachine.Editor
 
             if (selectedInNode == null)
             {
-                selectedInNode = clickedNode;
+                if (clickedNode.OutputsCount < clickedNode.SMNode.MaxOutputs)
+                {
+                    selectedInNode = clickedNode;
+                } 
+                else
+                {
+                    ClearConnectionSelection();
+                }
             }
             else
             {
-                selectedOutNode = clickedNode;
+                if (clickedNode.InputsCount < clickedNode.SMNode.MaxInputs)
+                {
+                    if (selectedInNode.OutputsCount < selectedInNode.SMNode.MaxOutputs)
+                    {
+                        selectedOutNode = clickedNode;
+                    }
+                }
             }
 
             if (selectedOutNode != null)
@@ -88,7 +101,7 @@ namespace Minima.StateMachine.Editor
 
         private void CreateConnection()
         {
-            if (!selectedInNode.ForwardConnected.Contains(selectedOutNode))
+            if (!selectedInNode.Outputs.Contains(selectedOutNode))
             {
                 new Connection(selectedInNode, selectedOutNode);
             }

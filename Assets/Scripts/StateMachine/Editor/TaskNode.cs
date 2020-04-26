@@ -17,10 +17,9 @@ namespace Minima.StateMachine.Editor
 
         #endregion
 
-        public TaskNode(Vector2 position, NodeType nodeType) : base(position) 
+        public TaskNode(Vector2 position, NodeType nodeType) : base(position, nodeType) 
         {
             NodeType = nodeType;
-            SMNode.NodeType = nodeType;
             AddTaskProvider();
             Content.OnContentAdded += ContentAdded;
             Content.OnContentRemoved += ContentRemoved;

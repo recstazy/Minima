@@ -31,5 +31,10 @@ namespace Minima.StateMachine
                 TaskInfo = new TaskInfo(this);
             }
         }
+
+        public virtual void TaskUpdate()
+        {
+
+        }
     }
 }
