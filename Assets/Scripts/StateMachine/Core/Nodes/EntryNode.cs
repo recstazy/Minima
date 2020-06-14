@@ -23,8 +23,16 @@ namespace Minima.StateMachine
 
         protected override void InitInOut()
         {
-            maxInputs = 0;
-            maxOutputs = 1;
+            var ioSettings = new NodeIOSettings();
+
+            ioSettings.MaxInputStates = 0;
+            ioSettings.MaxOutputStates = 1;
+
+            ioSettings.MaxInputConditions = 0;
+            ioSettings.MaxOutputConditions = 1;
+
+            ioSettings.OneTypePerTime = true;
+            IOSettings = ioSettings;
         }
     }
 }

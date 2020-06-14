@@ -3,24 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using Minima.StateMachine;
 
-public class ExampleTaskThree : ConditionTask
+public class ExampleStateTask : StateTask
 {
     #region Fields
 
     [SerializeField]
-    public bool boolFieldTwo;
+    public bool boolField;
 
     [SerializeField]
-    public int intFieldTwo = 5;
+    public int intField = 10;
 
     [SerializeField]
-    public float floatFieldTwo = 0.1f;
+    public float floatField = 10.2f;
 
     [SerializeField]
-    public string stringFieldTwo = "asdf";
-
-    [SerializeField]
-    public MonoBehaviour behaviour;
+    public string stringField = "qwerty";
 
     #endregion
 

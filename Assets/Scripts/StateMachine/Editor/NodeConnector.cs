@@ -9,8 +9,8 @@ namespace Minima.StateMachine.Editor
     {
         #region Fields
 
-        private Node selectedInNode;
-        private Node selectedOutNode;
+        private Node selectedOutput;
+        private Node selectedInput;
 
         #endregion
 
@@ -30,12 +30,12 @@ namespace Minima.StateMachine.Editor
         {
             IsPerformingConnection = true;
 
-            if (selectedInNode == null)
+            if (selectedOutput == null)
             {
-                if (clickedNode.OutputsCount < clickedNode.SMNode.MaxOutputs)
+                if (CanConnect(clickedNode))
                 {
-                    selectedInNode = clickedNode;
-                } 
+                    selectedOutput = clickedNode;
+                }
                 else
                 {
                     ClearConnectionSelection();
@@ -43,18 +43,15 @@ namespace Minima.StateMachine.Editor
             }
             else
             {
-                if (clickedNode.InputsCount < clickedNode.SMNode.MaxInputs)
+                if (CanConnect(clickedNode))
                 {
-                    if (selectedInNode.OutputsCount < selectedInNode.SMNode.MaxOutputs)
-                    {
-                        selectedOutNode = clickedNode;
-                    }
+                    selectedInput = clickedNode;
                 }
             }
 
-            if (selectedOutNode != null)
+            if (selectedInput != null)
             {
-                if (selectedOutNode != selectedInNode)
+                if (selectedInput != selectedOutput)
                 {
                     CreateConnection();
                 }
@@ -63,14 +60,76 @@ namespace Minima.StateMachine.Editor
             }
         }
 
+        private bool CanConnect(Node node)
+        {
+            var ioSettings = node.SMNode.IOSettings;
+
+            if (selectedOutput == null)
+            {
+                bool outputStatesAvailable = node.OutputStates < ioSettings.MaxOutputStates;
+                bool outputConditionsAvailable = node.OutputConditions < ioSettings.MaxOutputConditions;
+
+                if (ioSettings.OneTypePerTime)
+                {
+                    return outputStatesAvailable && outputConditionsAvailable;
+                }
+                else
+                {
+                    return outputStatesAvailable || outputConditionsAvailable;
+                }
+            }
+            else
+            {
+                var outIoSettings = selectedOutput.SMNode.IOSettings;
+
+                bool inCanBeConnected = false;
+                bool outCanBeConnected = false;
+
+                if (node.NodeType == NodeType.State)
+                {
+                    if (selectedOutput.OutputStates < outIoSettings.MaxOutputStates)
+                    {
+                        outCanBeConnected = true;
+                    }
+
+                }
+                else if (node.NodeType == NodeType.Condition)
+                {
+                    if (selectedOutput.OutputConditions < outIoSettings.MaxOutputConditions)
+                    {
+                        outCanBeConnected = true;
+                    }
+                }
+
+                if (selectedOutput.NodeType == NodeType.State)
+                {
+                    if (node.InputStates < ioSettings.MaxInputStates)
+                    {
+                        inCanBeConnected = true;
+                    }
+                }
+                else if (selectedOutput.NodeType == NodeType.Condition)
+                {
+                    if (node.InputConditions < ioSettings.MaxInputConditions)
+                    {
+                        inCanBeConnected = true;
+                    }
+                }
+
+                return inCanBeConnected && outCanBeConnected;
+            }
+
+            return false;
+        }
+
         private void DrawConnectionLine(Event e)
         {
-            if (selectedInNode != null && selectedOutNode == null)
+            if (selectedOutput != null && selectedInput == null)
             {
                 Handles.DrawBezier(
-                    selectedInNode.Rect.center,
+                    selectedOutput.Rect.center,
                     e.mousePosition,
-                    selectedInNode.Rect.center,
+                    selectedOutput.Rect.center,
                     e.mousePosition,
                     Color.white,
                     null,
@@ -101,16 +160,16 @@ namespace Minima.StateMachine.Editor
 
         private void CreateConnection()
         {
-            if (!selectedInNode.Outputs.Contains(selectedOutNode))
+            if (!selectedOutput.Outputs.Contains(selectedInput))
             {
-                new Connection(selectedInNode, selectedOutNode);
+                new Connection(selectedOutput, selectedInput);
             }
         }
 
         private void ClearConnectionSelection()
         {
-            selectedInNode = null;
-            selectedOutNode = null;
+            selectedOutput = null;
+            selectedInput = null;
             IsPerformingConnection = false;
         }
     }

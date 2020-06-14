@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Minima.StateMachine;
 
-public class ExampleTaskTwo : StateTask
+public class ExampleConditionTask : ConditionTask
 {
     #region Fields
 
@@ -18,6 +18,9 @@ public class ExampleTaskTwo : StateTask
 
     [SerializeField]
     public string stringFieldTwo = "asdf";
+
+    [SerializeField]
+    public MonoBehaviour behaviour;
 
     #endregion
 

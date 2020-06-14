@@ -10,21 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2fa364cbb3de61a4687b9d9281bd5acd, type: 3}
-  m_Name: NewStateMachine 1
+  m_Name: NewStateMachine
   m_EditorClassIdentifier: 
-  maxId: 2
+  maxId: 1
   nodes:
   - id: 1
     nodeType: 0
-    position: {x: 86, y: 81}
+    position: {x: 0, y: 0}
     connections: 
     taskInfo:
     - typeName: Minima.StateMachine.EntryTask
       json: '{}'
     tasksEditable: 0
-  - id: 2
-    nodeType: 0
-    position: {x: 211, y: 195}
-    connections: 
-    taskInfo: []
-    tasksEditable: 1

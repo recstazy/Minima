@@ -31,12 +31,6 @@ namespace Minima.StateMachine
         [SerializeField]
         protected bool tasksEditable = true;
 
-        [SerializeField]
-        protected int maxInputs;
-
-        [SerializeField]
-        protected int maxOutputs;
-
         [NonSerialized]
         private Task[] tasks;
 
@@ -52,8 +46,7 @@ namespace Minima.StateMachine
         public uint[] Connections { get => connections; private set => connections = value; }
         public TaskInfo[] TaskInfo { get => taskInfo; }
         public bool TasksEditable { get => tasksEditable; }
-        public int MaxInputs { get => maxInputs; }
-        public int MaxOutputs { get => maxOutputs; }
+        public NodeIOSettings IOSettings { get; protected set; }
 
         #endregion
 
@@ -115,16 +108,27 @@ namespace Minima.StateMachine
 
         protected virtual void InitInOut()
         {
+            var ioSettings = new NodeIOSettings();
+
             if (NodeType == NodeType.State)
             {
-                maxInputs = int.MaxValue;
-                maxOutputs = int.MaxValue;
+                ioSettings.MaxInputStates = int.MaxValue;
+                ioSettings.MaxOutputStates = 1;
+
+                ioSettings.MaxInputConditions = int.MaxValue;
+                ioSettings.MaxOutputConditions = int.MaxValue;
             }
             else if (NodeType == NodeType.Condition)
             {
-                maxInputs = int.MaxValue;
-                maxOutputs = 1;
+                ioSettings.MaxInputStates = int.MaxValue;
+                ioSettings.MaxOutputStates = 1;
+
+                ioSettings.MaxInputConditions = int.MaxValue;
+                ioSettings.MaxOutputConditions = 1;
             }
+
+            ioSettings.OneTypePerTime = true;
+            IOSettings = ioSettings;
         }
 
         ~Node()

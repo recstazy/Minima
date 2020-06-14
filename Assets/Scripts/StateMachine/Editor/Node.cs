@@ -35,22 +35,24 @@ namespace Minima.StateMachine.Editor
         public Minima.StateMachine.Node SMNode { get; private set; }
 
         public Connection[] Connections { get; private set; } = new Connection[0];
-        public int InputsCount { get; private set; }
-        public int OutputsCount { get; private set; }
+        public int InputStates { get; private set; }
+        public int OutputStates { get; private set; }
+        public int InputConditions { get; private set; }
+        public int OutputConditions { get; private set; }
 
         public Node[] ConnectedNodes
         {
             get => Connections
-                    .Select(c => c.InNode)
-                    .Concat(Connections.Select(c => c.OutNode))
+                    .Select(c => c.Output)
+                    .Concat(Connections.Select(c => c.Input))
                     .ToArray();
         }
 
         public Node[] Outputs
         {
             get => Connections
-                .Where(c => c.InNode == this)
-                .Select(c => c.OutNode).ToArray();
+                .Where(c => c.Output == this)
+                .Select(c => c.Input).ToArray();
         }
 
         #endregion
@@ -93,7 +95,7 @@ namespace Minima.StateMachine.Editor
         private void DrawConnections()
         {
             // Draw only connections where this node is InNode
-            foreach (var c in Connections.Where(c => c.InNode == this))
+            foreach (var c in Connections.Where(c => c.Output == this))
             {
                 c.Draw();
             }
@@ -115,31 +117,15 @@ namespace Minima.StateMachine.Editor
         public void AddConnection(Connection connection)
         {
             Connections = Connections.ConcatOne(connection);
-            SMNode.AddConnectionTo(connection.OutNode.SMNode);
-
-            if (connection.OutNode == this)
-            {
-                InputsCount++;
-            }
-            else
-            {
-                OutputsCount++;
-            }
+            SMNode.AddConnectionTo(connection.Input.SMNode);
+            ChangeConncectionsCount(connection, true);
         }
 
         public void RemoveConnection(Connection connection)
         {
             Connections = Connections.Remove(connection);
-            SMNode.RemoveConnectionTo(connection.OutNode.SMNode);
-
-            if (connection.OutNode == this)
-            {
-                InputsCount--;
-            }
-            else
-            {
-                OutputsCount--;
-            }
+            SMNode.RemoveConnectionTo(connection.Input.SMNode);
+            ChangeConncectionsCount(connection, false);
         }
 
         public Vector2 GetClosestPointOnRect(Vector2 origin)
@@ -292,6 +278,34 @@ namespace Minima.StateMachine.Editor
 
             OnRemoveNode?.Invoke(this);
             GUI.changed = true;
+        }
+
+        private void ChangeConncectionsCount(Connection connection, bool increment)
+        {
+            var term = increment ? 1 : -1;
+
+            if (connection.Input == this)
+            {
+                if (connection.Output.NodeType == NodeType.State)
+                {
+                    InputStates += term;
+                }
+                else if (connection.Output.NodeType == NodeType.Condition)
+                {
+                    InputConditions += term;
+                }
+            }
+            else
+            {
+                if (connection.Input.NodeType == NodeType.State)
+                {
+                    OutputStates += term;
+                }
+                else if (connection.Input.NodeType == NodeType.Condition)
+                {
+                    OutputConditions += term;
+                }
+            }
         }
 
         private void ConnectNodeClicked()

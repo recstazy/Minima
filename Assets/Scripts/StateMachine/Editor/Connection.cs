@@ -8,27 +8,27 @@ namespace Minima.StateMachine.Editor
     {
         #region Properties
 
-        public Node InNode { get; private set; }
-        public Node OutNode { get; private set; }
+        public Node Output { get; private set; }
+        public Node Input { get; private set; }
 
         #endregion
 
-        public Connection(Node inNode, Node outNode)
+        public Connection(Node output, Node input)
         {
-            InNode = inNode;
-            OutNode = outNode;
+            Output = output;
+            Input = input;
             AddSelf();
         }
 
         public void Draw()
         {
-            var inPoint = InNode.GetClosestPointOnRect(OutNode.Rect.center);
-            var outPoint = OutNode.GetClosestPointOnRect(InNode.Rect.center);
+            var startPoint = Output.GetClosestPointOnRect(Input.Rect.center);
+            var endPoint = Input.GetClosestPointOnRect(Output.Rect.center);
 
-            Handles.DrawBezier(inPoint, outPoint, inPoint, outPoint, Color.white, null, 3f);
-            DrawArrowCap(inPoint, outPoint, 10f);
+            Handles.DrawBezier(startPoint, endPoint, startPoint, endPoint, Color.white, null, 3f);
+            DrawArrowCap(startPoint, endPoint, 10f);
 
-            if (Handles.Button((inPoint + outPoint) * 0.5f, Quaternion.identity, 4, 8, Handles.RectangleHandleCap))
+            if (Handles.Button((startPoint + endPoint) * 0.5f, Quaternion.identity, 4, 8, Handles.RectangleHandleCap))
             {
                 RemoveSelf();
             }
@@ -36,14 +36,14 @@ namespace Minima.StateMachine.Editor
 
         public void AddSelf()
         {
-            InNode.AddConnection(this);
-            OutNode.AddConnection(this);
+            Output.AddConnection(this);
+            Input.AddConnection(this);
         }
 
         public void RemoveSelf()
         {
-            InNode.RemoveConnection(this);
-            OutNode.RemoveConnection(this);
+            Output.RemoveConnection(this);
+            Input.RemoveConnection(this);
         }
 
         private void DrawArrowCap(Vector2 origin, Vector2 target, float size)
